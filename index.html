@@ -3,12 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="google-site-verification" content="9x-_hTOkmrjADkTX5qBPDI2QNIMCrp3LEuD5lxw-ZnI" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Movie Land">
 <title>MAGICAL MOVIE LAND</title>
 <meta name="description" content="Watch free HD cartoon movies online. No ads, fast streaming on MAGICAL MOVIE LAND.">
 <meta name="keywords" content="cartoon movies, free movies online, HD movies, Magical Movie Land">
 <link rel="icon" href="https://files.catbox.moe/nstkne.png" type="image/png">
-<link rel="apple-touch-icon" href="https://files.catbox.moe/nstkne.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <script>
@@ -461,6 +467,7 @@ html.light .mml-auth-menu-item:hover { background:rgba(0,0,0,.07); }
     The best platform to stream latest Movies and Cartoons with high-quality subtitles.
     Enjoy your favorite content for free on Magical Movie Land.
   </p>
+  <p class="footer-text" style="margin-bottom:16px"><a class="link-pink" href="#/privacy">Privacy Policy</a></p>
   <div class="social-icons">
     <a href="https://www.facebook.com/share/1BbGBZ8ddZ/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
     <a href="https://t.me/YourUsername" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
@@ -528,12 +535,13 @@ html.light .mml-auth-menu-item:hover { background:rgba(0,0,0,.07); }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getFirestore, collection, getDocs, doc, getDoc, setDoc, addDoc,
-  serverTimestamp, arrayUnion, arrayRemove
+  serverTimestamp, arrayUnion, arrayRemove, deleteDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
   onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence,
-  sendPasswordResetEmail, updateProfile
+  sendPasswordResetEmail, updateProfile,
+  deleteUser, reauthenticateWithCredential, EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 /* =========================================================
@@ -820,6 +828,19 @@ const aboutPage = () => app.innerHTML = `
       <p>Welcome to <strong>MAGICAL MOVIE LAND</strong>, your number one source for high-quality Sinhala dubbed and subtitled cartoons and movies. We’re dedicated to giving you the very best of animated content, with a focus on quality, speed, and a great user experience.</p>
       <p>Founded in 2026, MAGICAL MOVIE LAND has come a long way from its beginnings. Our passion for providing localized entertainment for Sri Lankan fans drove us to build this platform so that everyone can enjoy their favorite characters in their own language.</p>
       <p>We hope you enjoy our platform as much as we enjoy offering it to you. If you have any questions or comments, please don’t hesitate to <a href="#/contact">Contact Us</a>.</p>
+    </div>
+  </div>`;
+
+const privacyPage = () => app.innerHTML = `
+  <div class="box">
+    <h1 class="title-bar">Privacy Policy</h1>
+    <div class="about-text">
+      <p><strong>MAGICAL MOVIE LAND</strong> ඔබේ පෞද්ගලිකත්වයට ගරු කරයි. මෙම policy එකෙන් අපි එකතු කරන දත්ත සහ ඒවා භාවිතා කරන ආකාරය විස්තර කරයි.</p>
+      <p><strong>අපි එකතු කරන දත්ත:</strong> Account එකක් සාදන විට Username, Email, නම, (ඔබ දැමුවොත්) profile photo, සහ ඔබේ My List / Seen List. Movie requests යවන විට ඔබ ලබාදෙන නම සහ විස්තර.</p>
+      <p><strong>භාවිතය:</strong> මේ දත්ත භාවිතා කරන්නේ login කිරීමට, ඔබේ profile සහ lists පෙන්වීමට සහ requests සැකසීමට පමණි. අපි ඒවා විකුණන්නේ හෝ ad සඳහා බෙදාගන්නේ නැහැ.</p>
+      <p><strong>ගබඩා කිරීම:</strong> දත්ත ගබඩා වන්නේ Google Firebase (Authentication සහ Firestore) මගිනි.</p>
+      <p><strong>Account මකා දැමීම:</strong> App/Site එකේ Profile → Settings → "Delete Account" මගින් ඔබේ account එක සහ ඒ හා සම්බන්ධ දත්ත ස්ථිරවම මකා දැමිය හැක.</p>
+      <p><strong>සම්බන්ධ වන්න:</strong> <a href="mailto:magicalmovieland@gmail.com">magicalmovieland@gmail.com</a></p>
     </div>
   </div>`;
 
@@ -1411,6 +1432,7 @@ function profilePage() {
           ${tab === 'links' ? '<div class="empty-note">No shared links yet.</div>' : ''}
           ${tab === 'settings' ? `
             <button class="settings-item" id="pfChangePw"><span><i class="fa fa-key left"></i> Change Password</span><i class="fa fa-chevron-right right"></i></button>
+            <button class="settings-item danger" id="pfDelete"><span><i class="fa fa-user-xmark left"></i> Delete Account</span><i class="fa fa-chevron-right right"></i></button>
             <button class="settings-item danger" id="pfLogout"><span><i class="fa fa-right-from-bracket left"></i> Logout</span><i class="fa fa-chevron-right right"></i></button>` : ''}
         </div>
       </div>`;
@@ -1448,6 +1470,24 @@ function profilePage() {
       try { await sendPasswordResetEmail(auth, currentUser.email); alert('Password reset link එකක් ' + currentUser.email + ' වලට යවලා තියෙනවා.'); }
       catch (err) { alert('Error: ' + err.message); }
     });
+    $('#pfDelete')?.addEventListener('click', async () => {
+      if (!confirm('ඔබේ account එක සහ දත්ත ස්ථිරවම මැකෙනවා. ඉදිරියට යනවාද?')) return;
+      const pw = prompt('තහවුරු කරන්න ඔබේ Password එක දාන්න:');
+      if (!pw) return;
+      const user = currentUser;
+      try {
+        await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, pw));
+        const uname = normUsername((userDoc && userDoc.username) || user.displayName);
+        await deleteDoc(doc(db, 'users', user.uid));
+        if (uname) await deleteDoc(doc(db, 'usernames', uname)).catch(() => {});
+        await deleteUser(user);
+        alert('Account එක මකා දැමුවා.');
+        location.hash = '#/home';
+      } catch (err) {
+        console.error(err);
+        alert(['auth/wrong-password', 'auth/invalid-credential'].includes(err.code) ? 'Password එක වැරදියි.' : 'Error: ' + err.message);
+      }
+    });
     $('#pfLogout')?.addEventListener('click', async () => {
       if (!confirm('Logout කරන්න ස්ථිර ද?')) return;
       await signOut(auth); location.hash = '#/home';
@@ -1469,6 +1509,7 @@ const routes = {
   request:  { nav: 'request',  render: requestPage },
   chanels:  { nav: 'chanels',  render: channelsPage },
   about:    { nav: 'about',    render: aboutPage },
+  privacy:  { nav: '',         render: privacyPage },
   contact:  { nav: 'contact',  render: contactPage },
   settings: { nav: 'settings', render: settingsPage },
   profile:  { nav: 'profile',  render: profilePage },
@@ -1508,6 +1549,11 @@ window.addEventListener('hashchange', router);
 
 loadMovies();
 router();
+
+/* PWA — service worker */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW register failed', e)));
+}
 </script>
 </body>
 </html>
