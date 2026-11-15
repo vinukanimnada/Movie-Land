@@ -92,17 +92,34 @@ header#mainHeader {
 
 /* ===== SEARCH ===== */
 .search-box {
-  position:fixed; top:60px; left:0; width:100%; background:var(--bg-alt);
-  padding:12px 15px; display:none; z-index:999; border-bottom:1px solid var(--border);
+  position:fixed; top:60px; left:0; width:100%; padding:12px 15px; display:none; z-index:999;
+  background:transparent; border:none; pointer-events:none; /* bar එක පිටිපස්සේ background නෑ */
 }
-.search-box.active { display:flex; align-items:center; gap:8px; }
+.search-box.active { display:flex; align-items:center; gap:10px; }
+.search-box > * { pointer-events:auto; }
 .search-box input {
-  flex:1; height:45px; background:var(--card); border:none; border-radius:25px;
-  padding:0 20px; color:var(--text); font-size:16px; outline:none;
+  flex:1; height:46px; border-radius:26px; padding:0 20px; color:#fff; font-size:16px; outline:none;
+  position:relative;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.06));
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.4), inset 0 -1px 0 rgba(255,255,255,.08);
+  transition:border-color .2s, box-shadow .2s;
 }
-.search-box input::placeholder { color:var(--text-faint); }
-#closeSearch { font-size:22px; color:var(--text-faint); cursor:pointer; }
-#closeSearch:hover { color:#ff2d95; }
+.search-box input:focus { border-color:rgba(255,95,171,.7); box-shadow:0 8px 24px rgba(0,0,0,.35), 0 0 0 3px rgba(255,45,149,.2), inset 0 1px 0 rgba(255,255,255,.4); }
+.search-box input::placeholder { color:rgba(255,255,255,.6); }
+.search-box #closeSearch {
+  width:42px; height:42px; flex-shrink:0; display:flex; align-items:center; justify-content:center; border-radius:50%;
+  font-size:18px; color:#fff;
+  background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.06));
+  -webkit-backdrop-filter:blur(24px) saturate(180%); backdrop-filter:blur(24px) saturate(180%);
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.4);
+}
+html.light .search-box input, html.light .search-box #closeSearch { background:linear-gradient(135deg,rgba(255,255,255,.8),rgba(255,255,255,.5)); border-color:rgba(255,255,255,.9); color:#111; box-shadow:0 8px 24px rgba(0,0,0,.15), inset 0 1px 0 #fff; }
+html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
+#closeSearch { cursor:pointer; }
 .home-search-results {
   position:fixed; top:129px; left:0; width:100%; background:var(--bg-alt);
   max-height:calc(100vh - 129px - 66px); overflow-y:auto; display:none; z-index:998;
