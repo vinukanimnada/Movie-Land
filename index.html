@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="si" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="google-site-verification" content="9x-_hTOkmrjADkTX5qBPDI2QNIMCrp3LEuD5lxw-ZnI" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAGICAL MOVIE LAND</title>
+<meta name="description" content="Watch free HD cartoon movies online. No ads, fast streaming on MAGICAL MOVIE LAND.">
+<meta name="keywords" content="cartoon movies, free movies online, HD movies, Magical Movie Land">
+<link rel="icon" href="https://files.catbox.moe/nstkne.png" type="image/png">
+<link rel="apple-touch-icon" href="https://files.catbox.moe/nstkne.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<script>
+/* Theme එක page එක render වෙන්න කලින් set කරනවා (flash නැතුව) */
+(function(){
+  var t = 'dark';
+  try { t = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
+  document.documentElement.className = t;
+})();
+</script>
+
+<style>
+/* =========================================================
+   MAGICAL MOVIE LAND — single stylesheet
+   ========================================================= */
+html.dark {
+  --bg:#0a0a0a; --bg-alt:#111; --card:#1a1a1a; --card-2:#222;
+  --text:#fff; --text-dim:#aaa; --text-faint:#777; --border:#222;
+}
+html.light {
+  --bg:#f4f4f4; --bg-alt:#ffffff; --card:#f5f5f5; --card-2:#e8e8e8;
+  --text:#111; --text-dim:#444; --text-faint:#888; --border:#ddd;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family:'Segoe UI', Tahoma, sans-serif;
+  padding-top:60px; padding-bottom:66px; overflow-x:hidden;
+}
+a { text-decoration:none; color:inherit; }
+img { display:block; }
+.hidden { display:none !important; }
+
+/* ===== HEADER ===== */
+header#mainHeader {
+  background:var(--bg-alt); padding:0 8px 0 12px;
+  display:flex; justify-content:space-between; align-items:center;
+  position:fixed; top:0; left:0; right:0; z-index:1002;
+  border-bottom:1px solid var(--border); height:60px;
+}
+.header-left, .header-right { display:flex; align-items:center; }
+.header-right i { font-size:20px; margin-left:20px; cursor:pointer; color:var(--text); }
+.logo a { display:flex; align-items:center; }
+.logo svg { height:46px; width:auto; display:block; }
+.back-btn { font-size:20px; cursor:pointer; margin-right:14px; color:var(--text); }
+
+.mml-auth-btn {
+  width:38px; height:38px; min-width:38px; border-radius:50%;
+  background:#ff2d95; color:#fff; cursor:pointer; border:none;
+  flex-shrink:0; margin-left:14px; padding:0; position:relative; overflow:hidden;
+  font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:center;
+}
+.mml-auth-btn i { margin:0 !important; font-size:16px !important; color:#fff !important; }
+.mml-auth-btn img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+
+.menu-toggle {
+  background:none; border:none; cursor:pointer; width:30px; height:30px;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  gap:5px; margin-right:14px;
+}
+.menu-toggle span { display:block; width:24px; height:2px; background:var(--text); border-radius:2px; transition:all .3s ease-in-out; transform-origin:center; }
+.menu-toggle.active span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+.menu-toggle.active span:nth-child(2) { opacity:0; transform:scale(0); }
+.menu-toggle.active span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  position:fixed; top:60px; left:-230px; width:210px; height:calc(100% - 60px);
+  background:var(--bg-alt); z-index:1001; transition:left .3s ease;
+  padding:8px 0; box-shadow:2px 0 12px rgba(0,0,0,.4);
+  overflow-y:auto; overflow-x:hidden; overscroll-behavior:contain;
+  scrollbar-width:thin; scrollbar-color:rgba(255,45,149,.4) transparent;
+}
+.sidebar.active { left:0; }
+.sidebar ul { list-style:none; }
+.sidebar li a { display:flex; align-items:center; gap:12px; padding:14px 22px; color:var(--text-dim); font-size:15px; }
+.sidebar li a i { width:18px; text-align:center; color:#ff2d95; }
+.sidebar li a:hover, .sidebar li.active a { background:rgba(255,45,149,.1); color:var(--text); }
+.overlay { position:fixed; inset:60px 0 0 0; background:rgba(0,0,0,.6); z-index:1000; display:none; }
+.overlay.active { display:block; }
+
+/* ===== SEARCH ===== */
+.search-box {
+  position:fixed; top:60px; left:0; width:100%; background:var(--bg-alt);
+  padding:12px 15px; display:none; z-index:999; border-bottom:1px solid var(--border);
+}
+.search-box.active { display:flex; align-items:center; gap:8px; }
+.search-box input {
+  flex:1; height:45px; background:var(--card); border:none; border-radius:25px;
+  padding:0 20px; color:var(--text); font-size:16px; outline:none;
+}
+.search-box input::placeholder { color:var(--text-faint); }
+#closeSearch { font-size:22px; color:var(--text-faint); cursor:pointer; }
+#closeSearch:hover { color:#ff2d95; }
+.home-search-results {
+  position:fixed; top:129px; left:0; width:100%; background:var(--bg-alt);
+  max-height:calc(100vh - 129px - 66px); overflow-y:auto; display:none; z-index:998;
+  border-bottom:1px solid var(--border);
+}
+.home-search-results.active { display:block; }
+.home-result-item { display:flex; gap:12px; padding:12px 15px; border-bottom:1px solid var(--border); }
+.home-result-item:hover { background:var(--card); }
+.home-result-poster { width:50px; height:75px; border-radius:4px; object-fit:cover; flex-shrink:0; background:var(--card-2); }
+.home-result-info { flex:1; overflow:hidden; }
+.home-result-title { font-size:15px; font-weight:600; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.home-result-meta { font-size:13px; color:var(--text-dim); }
+.home-result-type { font-size:11px; color:#ff2d95; margin-top:2px; font-weight:600; }
+.home-no-result { text-align:center; color:var(--text-faint); padding:30px 20px; font-size:14px; }
+
+/* ===== PAGE BASICS ===== */
+.page-title-center { text-align:center; color:#ff2d95; margin:20px 0 20px; font-size:24px; }
+.page-h1 { font-size:20px; margin:20px 15px 10px; padding-left:12px; border-left:4px solid #ff2d95; }
+.empty-note { text-align:center; color:var(--text-faint); padding:50px 20px; font-size:14px; grid-column:1/-1; }
+.load-more-wrap { text-align:center; padding:6px 0 20px; }
+
+/* ===== GRID / CARDS ===== */
+.movie-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:10px; }
+@media (min-width:768px) { .movie-grid { grid-template-columns:repeat(5,1fr); gap:12px; padding:20px; } }
+.movie-card { position:relative; border-radius:6px; overflow:hidden; background:var(--card); cursor:pointer; transition:transform .2s; aspect-ratio:2/3; display:block; }
+.movie-card:hover { transform:scale(1.05); }
+.movie-card img { width:100%; height:100%; object-fit:cover; background:var(--card-2); }
+.quality-badge { position:absolute; top:5px; left:5px; background:#e50914; padding:2px 5px; font-size:10px; font-weight:700; border-radius:3px; color:#fff; z-index:3; text-transform:uppercase; line-height:1; }
+.rating-badge { position:absolute; top:5px; right:5px; background:#ffc107; color:#000; padding:2px 5px; font-size:10px; font-weight:700; border-radius:3px; z-index:3; line-height:1; }
+.movie-title { position:absolute; bottom:0; left:0; right:0; padding:20px 6px 6px; font-size:12px; font-weight:500; color:#fff; background:linear-gradient(to top,rgba(0,0,0,.95) 50%,transparent); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; z-index:2; line-height:1.2; }
+
+/* ===== HOME ===== */
+.hero { position:relative; height:180px; overflow:hidden; background:var(--card); margin:12px 15px; border-radius:16px; display:none; }
+.hero.has-banners { display:block; }
+.hero-slide { position:absolute; inset:0; opacity:0; transition:opacity .6s ease; background:#111; }
+.hero-slide.active { opacity:1; }
+.hero-slide img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.hero-dots { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:2; }
+.hero-dots .dot { width:8px; height:8px; background:rgba(255,255,255,.5); border-radius:50%; cursor:pointer; transition:.3s; box-shadow:0 0 3px rgba(0,0,0,.6); }
+.hero-dots .dot.active { background:#ff2d95; width:20px; border-radius:10px; }
+.trending { padding:10px 0 5px; }
+.trending.is-empty { display:none; }
+.section-header { display:flex; align-items:center; justify-content:space-between; padding:0 15px; margin-bottom:4px; }
+.section-header h2 { font-size:18px; position:relative; padding-left:12px; }
+.section-header h2::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:4px; height:26px; background:#ff2d95; border-radius:2px; }
+.view-all { font-size:11px; color:#fff; font-weight:600; letter-spacing:.5px; background:#ff2d95; padding:4px 10px; border-radius:10px; }
+
+/* ===== BUTTONS ===== */
+.btn { display:inline-flex; align-items:center; gap:8px; border:none; border-radius:6px; padding:12px 22px; font-size:15px; font-weight:600; cursor:pointer; transition:transform .15s, opacity .15s; color:var(--text); }
+.btn:active { transform:scale(.97); }
+.btn-primary { background:#ff2d95; color:#fff; }
+.btn-secondary { background:rgba(128,128,128,.2); }
+.btn-outline { background:transparent; border:1px solid var(--text-faint); }
+.btn-back { background:rgba(128,128,128,.15); border:1px solid #4dc3ff; }
+.btn-back i { color:#4dc3ff; }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+
+/* ===== STATIC PAGES ===== */
+.box { background:var(--card); margin:15px; padding:15px; border-radius:6px; }
+.about-text { font-size:15px; line-height:1.7; color:var(--text-dim); }
+.about-text p { margin-bottom:15px; }
+.about-text strong { color:var(--text); }
+.about-text a, .link-pink { color:#ff2d95; }
+.title-bar { display:flex; align-items:center; gap:10px; font-size:22px; font-weight:700; margin-bottom:15px; }
+.title-bar::before { content:''; width:4px; height:24px; background:#ff2d95; border-radius:2px; }
+
+.join-wrapper { text-align:center; padding:50px 20px; max-width:600px; margin:0 auto; }
+.join-wrapper h1 { font-size:30px; margin-bottom:15px; }
+.join-wrapper p { font-size:16px; color:var(--text-dim); margin-bottom:35px; line-height:1.6; }
+.channel-btn { display:inline-block; color:#fff; padding:15px 30px; border-radius:8px; font-size:16px; font-weight:700; margin:10px; transition:transform .2s; }
+.channel-btn:hover { transform:scale(1.05); }
+.channel-btn i { margin-right:8px; }
+.btn-tg { background:#0088cc; } .btn-wa { background:#25D366; }
+
+.contact-container { max-width:600px; margin:40px auto; padding:0 20px; text-align:center; }
+.contact-title { font-size:28px; font-weight:700; margin-bottom:25px; display:flex; align-items:center; justify-content:center; gap:12px; }
+.contact-title::before { content:''; width:4px; height:30px; background:#ff2d95; border-radius:2px; }
+.contact-text { font-size:15px; line-height:1.7; color:var(--text-dim); margin:0 auto 35px; max-width:500px; }
+.whatsapp-btn { display:inline-flex; align-items:center; gap:10px; background:#25D366; color:#fff; padding:14px 32px; border-radius:50px; font-size:16px; font-weight:600; transition:.3s; box-shadow:0 4px 15px rgba(37,211,102,.4); margin-bottom:40px; }
+.whatsapp-btn:hover { background:#1ebe5b; transform:translateY(-2px); }
+.email-text { font-size:14px; color:var(--text-faint); margin-bottom:8px; }
+.email-address { font-size:15px; margin-bottom:30px; }
+.website-btn { display:inline-block; background:var(--card-2); padding:10px 24px; border-radius:25px; font-size:14px; border:1px solid var(--border); transition:.3s; }
+.website-btn:hover { border-color:#ff2d95; }
+@media (max-width:600px) { .whatsapp-btn { width:100%; justify-content:center; } }
+
+/* ===== REQUEST FORM ===== */
+.request-box { background:var(--card); border-radius:10px; padding:20px; max-width:500px; margin:15px auto; }
+.form-group { margin-bottom:15px; }
+.form-group label { display:block; font-size:13px; margin-bottom:6px; color:var(--text-dim); font-weight:600; }
+.form-group input, .form-group select, .form-group textarea {
+  width:100%; padding:12px; background:var(--bg-alt); border:1px solid var(--border);
+  border-radius:6px; color:var(--text); font-size:14px; font-family:inherit;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline:none; border-color:#ff2d95; }
+.form-group textarea { resize:vertical; min-height:80px; }
+.btn-submit { width:100%; padding:14px; background:linear-gradient(135deg,#ff2d95,#ff6b9d); border:none; border-radius:6px; color:#fff; font-size:15px; font-weight:700; cursor:pointer; margin-top:10px; }
+.btn-submit:disabled { opacity:.5; cursor:not-allowed; }
+.alert { padding:12px; border-radius:6px; margin-bottom:15px; font-size:13px; display:none; }
+.alert.success { background:rgba(34,197,94,.1); border:1px solid #22c55e; color:#22c55e; }
+.alert.error { background:rgba(220,38,38,.1); border:1px solid #dc2626; color:#ef4444; }
+.info-text { font-size:12px; color:var(--text-faint); text-align:center; margin-top:15px; line-height:1.5; }
+.hp-field { position:absolute; left:-9999px; opacity:0; height:0; }
+
+/* ===== WATCH ===== */
+.details-hero { position:relative; width:100%; min-height:230px; background-size:cover; background-position:center; background-color:#000; display:flex; align-items:flex-end; padding:20px 15px; }
+.details-hero::before { content:''; position:absolute; inset:0; background:linear-gradient(to top,var(--bg) 5%,rgba(10,10,10,.55) 55%,rgba(10,10,10,.35)); }
+.details-hero-inner { position:relative; z-index:2; display:flex; gap:16px; align-items:flex-end; width:100%; }
+.details-poster { width:110px; height:160px; border-radius:8px; object-fit:cover; flex-shrink:0; box-shadow:0 8px 24px rgba(0,0,0,.5); border:2px solid rgba(255,255,255,.15); background:var(--card-2); }
+.details-title-block { flex:1; min-width:0; }
+.details-title { font-size:22px; font-weight:700; color:#fff; line-height:1.25; margin-bottom:6px; text-shadow:0 2px 6px rgba(0,0,0,.6); }
+.details-meta { display:flex; flex-wrap:wrap; gap:8px; font-size:12.5px; color:#ddd; }
+.details-meta span { background:rgba(255,255,255,.12); padding:3px 9px; border-radius:20px; }
+.details-meta .rating { background:rgba(255,45,149,.25); color:#ff9dc7; font-weight:700; }
+.details-body { padding:18px 15px; }
+.details-actions { display:flex; gap:10px; flex-wrap:wrap; }
+.details-desc-label { font-size:15px; font-weight:700; margin-bottom:6px; }
+.details-desc { font-size:14px; line-height:1.7; color:var(--text-dim); }
+.player-wrap { padding:0 15px 15px; display:none; }
+.player-wrap.active { display:block; }
+.player-container { position:relative; width:100%; padding-top:56.25%; background:#000; border-radius:8px; overflow:hidden; }
+.player-container iframe, .player-container video { position:absolute; inset:0; width:100%; height:100%; border:none; }
+.player-msg { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; text-align:center; padding:20px; }
+.now-playing-label { font-size:13px; color:var(--text-faint); margin:8px 0 0; }
+.player-poster { position:absolute; inset:0; background-size:cover; background-position:center; background-color:#000; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+.player-poster::before { content:''; position:absolute; inset:0; background:rgba(0,0,0,.4); }
+.player-play-btn { position:relative; z-index:2; width:72px; height:72px; border-radius:50%; background:#ff2d95; display:flex; align-items:center; justify-content:center; box-shadow:0 0 0 10px rgba(255,45,149,.22),0 8px 26px rgba(255,45,149,.55); animation:playPulse 2s ease-in-out infinite; }
+.player-play-btn i { color:#fff; font-size:26px; margin-left:4px; }
+@keyframes playPulse { 0%,100% { box-shadow:0 0 0 10px rgba(255,45,149,.22),0 8px 26px rgba(255,45,149,.55); } 50% { box-shadow:0 0 0 16px rgba(255,45,149,.12),0 8px 26px rgba(255,45,149,.55); } }
+.episodes-wrap { padding:0 15px 10px; }
+.sec-title { font-size:16px; font-weight:700; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.cast-bar { width:4px; height:20px; background:#ff2d95; border-radius:2px; display:inline-block; flex-shrink:0; }
+.season-select { background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:6px; padding:8px 12px; margin-bottom:12px; font-size:14px; }
+.episode-item { display:flex; align-items:center; gap:12px; background:var(--card); border-radius:8px; padding:10px 12px; margin-bottom:8px; cursor:pointer; border:1px solid transparent; }
+.episode-item:hover { background:var(--card-2); }
+.episode-item.playing { border-color:#ff2d95; background:rgba(255,45,149,.08); }
+.episode-num { width:34px; height:34px; flex-shrink:0; border-radius:50%; background:rgba(255,45,149,.15); color:#ff2d95; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+.episode-info { flex:1; min-width:0; }
+.episode-title { font-size:14px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.episode-sub { font-size:12px; color:var(--text-faint); }
+.episode-play-icon { color:var(--text-faint); font-size:16px; }
+.episode-item.playing .episode-play-icon { color:#ff2d95; }
+.cast-wrap { padding:4px 15px 10px; }
+.cast-scroll { display:flex; gap:18px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none; }
+.cast-scroll::-webkit-scrollbar { display:none; }
+.cast-item { flex:0 0 auto; width:84px; text-align:center; }
+.cast-photo { width:78px; height:78px; border-radius:50%; object-fit:cover; border:2px solid var(--border); margin:0 auto 8px; background:var(--card); }
+.cast-name { font-size:12.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cast-role { font-size:11px; color:var(--text-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:2px; }
+.trailer-modal { position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px; }
+.trailer-modal.active { display:flex; }
+.trailer-modal-inner { width:100%; max-width:900px; position:relative; }
+.trailer-close { position:absolute; top:-44px; right:0; font-size:28px; color:#fff; cursor:pointer; background:rgba(255,255,255,.1); width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+@media (min-width:700px) { .details-poster { width:150px; height:220px; } }
+
+/* ===== PROFILE ===== */
+.profile-wrap { max-width:480px; margin:0 auto; padding:18px 15px 40px; }
+.profile-loggedout { text-align:center; padding:70px 20px; }
+.profile-loggedout > i { font-size:42px; color:#ff2d95; margin-bottom:16px; }
+.profile-loggedout h2 { font-size:18px; margin-bottom:8px; }
+.profile-loggedout p { font-size:13.5px; color:var(--text-faint); margin-bottom:20px; }
+.profile-card { background:var(--card); border-radius:14px; padding:30px 20px 24px; text-align:center; margin-bottom:14px; }
+.profile-avatar-wrap { position:relative; width:96px; height:96px; margin:0 auto 16px; }
+.profile-avatar { width:96px; height:96px; border-radius:50%; background:linear-gradient(135deg,#ff2d95,#b6178f); color:#fff; font-size:36px; font-weight:700; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.profile-avatar img { width:100%; height:100%; object-fit:cover; }
+.profile-edit-badge { position:absolute; bottom:0; right:0; width:28px; height:28px; border-radius:50%; background:#ff2d95; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; cursor:pointer; border:3px solid var(--card); }
+.profile-name { font-size:21px; font-weight:700; margin-bottom:12px; }
+.profile-edit-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 22px; border:1px solid #ff2d95; color:#ff2d95; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; background:transparent; margin-bottom:14px; }
+.profile-joined { font-size:12.5px; color:var(--text-faint); }
+.profile-edit-form { text-align:left; margin-top:6px; }
+.profile-edit-form input { width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:12px 14px; border-radius:8px; font-size:14px; margin-bottom:10px; outline:none; }
+.profile-edit-form input:focus { border-color:#ff2d95; }
+.profile-static-field { font-size:13px; color:var(--text-faint); background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:11px 14px; margin-bottom:10px; word-break:break-all; }
+.profile-static-field b { color:var(--text-dim); }
+.profile-edit-form .row { display:flex; gap:8px; }
+.profile-edit-actions { display:flex; gap:8px; }
+.profile-save-btn, .profile-cancel-btn { flex:1; border:none; border-radius:8px; padding:12px; font-size:14px; font-weight:700; cursor:pointer; }
+.profile-save-btn { background:#ff2d95; color:#fff; }
+.profile-cancel-btn { background:rgba(128,128,128,.2); color:var(--text); }
+.profile-error { color:#ff5b5b; font-size:12.5px; margin-bottom:10px; min-height:14px; }
+.profile-stats { display:grid; grid-template-columns:1fr 1fr; background:var(--card); border-radius:14px; overflow:hidden; margin-bottom:14px; }
+.profile-stat { text-align:center; padding:18px 8px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); }
+.profile-stat:nth-child(2n) { border-right:none; }
+.profile-stat:nth-child(3), .profile-stat:nth-child(4) { border-bottom:none; }
+.profile-stat-num { font-size:21px; font-weight:700; }
+.profile-stat-label { font-size:12px; color:var(--text-faint); margin-top:3px; }
+.profile-tabs { display:flex; border-bottom:1px solid var(--border); margin-bottom:10px; }
+.profile-tab { flex:1; text-align:center; padding:12px 4px 10px; font-size:12.5px; color:var(--text-faint); cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:5px; border-bottom:2px solid transparent; }
+.profile-tab i { font-size:15px; }
+.profile-tab.active { color:#ff2d95; border-color:#ff2d95; }
+.profile-list-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.settings-item { display:flex; align-items:center; justify-content:space-between; background:var(--card); border-radius:10px; padding:14px 16px; margin-bottom:10px; cursor:pointer; font-size:14px; border:none; width:100%; color:var(--text); text-align:left; }
+.settings-item i.left { color:#ff2d95; margin-right:10px; width:18px; text-align:center; }
+.settings-item i.right { color:var(--text-faint); font-size:12px; }
+.settings-item.danger, .settings-item.danger i.left { color:#ff5b5b; }
+.settings-item.on { outline:2px solid #ff2d95; }
+
+/* ===== FOOTER ===== */
+.footer { background:var(--bg-alt); padding:40px 20px; text-align:center; border-top:1px solid var(--border); margin-top:20px; }
+.footer-logo { font-size:22px; font-weight:700; margin-bottom:15px; }
+.footer-logo span { color:#ff2d95; }
+.footer-text { font-size:14px; color:var(--text-dim); line-height:1.6; max-width:500px; margin:0 auto 25px; }
+.social-icons { display:flex; justify-content:center; gap:15px; }
+.social-icons a { width:40px; height:40px; background:var(--card-2); border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text); font-size:18px; transition:.2s; }
+.social-icons a:hover { background:#ff2d95; color:#fff; transform:translateY(-3px); }
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav { position:fixed; left:0; right:0; bottom:0; z-index:500; display:flex; background:var(--bg-alt); border-top:1px solid var(--border); padding:6px 4px calc(6px + env(safe-area-inset-bottom)); }
+.bottom-nav a { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; padding:6px 2px; color:var(--text-faint); font-size:10.5px; font-weight:600; cursor:pointer; }
+.bottom-nav a i { font-size:19px; }
+.bottom-nav a.active { color:#ff2d95; }
+@media (min-width:700px) { .bottom-nav { display:none; } body { padding-bottom:0; } }
+
+/* ===== SAKURA ===== */
+#sakura-container { position:fixed; inset:0; pointer-events:none; z-index:400; overflow:hidden; }
+.sakura-petal { position:absolute; top:0; background:#ff2d95; border-radius:60% 0 60% 0; opacity:.7; animation:fall linear forwards; }
+@keyframes fall { 0% { transform:translateY(-10vh) rotate(0); opacity:0; } 10% { opacity:.7; } 90% { opacity:.7; } 100% { transform:translateY(110vh) rotate(720deg); opacity:0; } }
+@media (prefers-reduced-motion:reduce) { #sakura-container { display:none; } .player-play-btn { animation:none; } }
+
+/* ===== AUTH MODAL ===== */
+.mml-auth-overlay { position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:5000; display:none; align-items:center; justify-content:center; padding:20px; }
+.mml-auth-overlay.active { display:flex; }
+.mml-auth-card { background:var(--bg-alt); border:1px solid var(--border); border-radius:14px; padding:28px 24px; max-width:380px; width:100%; max-height:88vh; overflow-y:auto; position:relative; }
+.mml-auth-close { position:absolute; top:14px; right:14px; width:32px; height:32px; border-radius:50%; background:rgba(128,128,128,.2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; }
+.mml-auth-title { font-size:20px; font-weight:700; margin-bottom:18px; }
+.mml-auth-input { width:100%; background:var(--bg); border:1px solid var(--border); color:var(--text); padding:13px 14px; border-radius:8px; font-size:14.5px; margin-bottom:12px; outline:none; }
+.mml-auth-input:focus { border-color:#ff2d95; }
+.mml-auth-row { display:flex; gap:10px; }
+.mml-auth-row .mml-auth-input { flex:1; min-width:0; }
+.mml-auth-check { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-dim); margin-bottom:16px; }
+.mml-auth-check input { width:16px; height:16px; accent-color:#ff2d95; }
+.mml-auth-error { color:#ff5b5b; font-size:13px; margin-bottom:10px; min-height:15px; }
+.mml-auth-submit { width:100%; background:#ff2d95; color:#fff; border:none; border-radius:8px; padding:13px; font-size:15px; font-weight:700; cursor:pointer; }
+.mml-auth-submit:disabled { opacity:.5; cursor:not-allowed; }
+.mml-auth-switch { text-align:center; font-size:13px; color:var(--text-faint); margin-top:16px; }
+.mml-auth-switch a, .mml-auth-forgot { color:#ff2d95; font-weight:600; cursor:pointer; }
+.mml-auth-forgot { text-align:center; font-size:12.5px; margin-top:10px; }
+.mml-auth-section { display:none; }
+.mml-auth-section.active { display:block; }
+.mml-auth-menu { position:fixed; z-index:5001; background:var(--bg-alt); border:1px solid var(--border); border-radius:10px; padding:8px; min-width:180px; box-shadow:0 10px 30px rgba(0,0,0,.5); display:none; }
+.mml-auth-menu.active { display:block; }
+.mml-auth-menu-user { padding:10px 12px; font-size:13.5px; font-weight:700; border-bottom:1px solid var(--border); margin-bottom:6px; }
+.mml-auth-menu-item { padding:10px 12px; font-size:14px; color:var(--text-dim); cursor:pointer; border-radius:6px; }
+.mml-auth-menu-item:hover { background:var(--card); color:#ff2d95; }
+</style>
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header id="mainHeader">
+  <div class="header-left">
+    <i class="fa fa-arrow-left back-btn hidden" id="backBtn" role="button" aria-label="Back"></i>
+    <button class="menu-toggle" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    <div class="logo">
+      <a href="#/home" aria-label="Movie Land">
+        <svg viewBox="0 0 246 64" role="img" aria-label="Movie Land">
+          <defs>
+            <linearGradient id="mlTicketGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ff6fb0"/><stop offset="55%" stop-color="#ff2d95"/><stop offset="100%" stop-color="#b6178f"/>
+            </linearGradient>
+            <linearGradient id="mlLandGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ff5fab"/><stop offset="100%" stop-color="#ff2d95"/>
+            </linearGradient>
+            <filter id="mlGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="2.4" result="blur"/>
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <mask id="mlTicketMask">
+              <rect x="-26" y="-18" width="52" height="36" rx="7" fill="#fff"/>
+              <circle cx="-26" cy="0" r="5" fill="#000"/><circle cx="26" cy="0" r="5" fill="#000"/>
+            </mask>
+          </defs>
+          <g transform="translate(34,32) rotate(-8)" filter="url(#mlGlow)">
+            <rect x="-26" y="-18" width="52" height="36" rx="7" fill="url(#mlTicketGrad)" mask="url(#mlTicketMask)"/>
+            <line x1="0" y1="-13" x2="0" y2="13" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-dasharray="0.5 4.5" opacity="0.85"/>
+            <path d="M -19,-7 L -19,7 L -6,0 Z" fill="#fff" opacity="0.95"/>
+            <path d="M20,0 L14.77,1.77 L13,7 L11.23,1.77 L6,0 L11.23,-1.77 L13,-7 L14.77,-1.77 Z" fill="#fff" opacity="0.95"/>
+          </g>
+          <text x="74" y="41" font-family="'Poppins','Segoe UI',Arial,sans-serif" font-weight="800" font-size="27" letter-spacing="0.5" fill="currentColor">MOVIE</text>
+          <text x="160" y="41" font-family="'Poppins','Segoe UI',Arial,sans-serif" font-weight="800" font-size="27" letter-spacing="0.5" fill="url(#mlLandGrad)">LAND</text>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="header-right">
+    <i class="fa fa-search" id="searchBtn" role="button" aria-label="Search"></i>
+    <button class="mml-auth-btn" id="mmlAuthBtn" aria-label="Account"><i class="fa fa-user"></i></button>
+  </div>
+</header>
+
+<div class="search-box" id="searchBox">
+  <input type="text" id="searchInput" placeholder="Search movies, TV shows & anime..." autocomplete="off">
+  <i class="fa fa-times" id="closeSearch" role="button" aria-label="Close search"></i>
+</div>
+<div class="home-search-results" id="searchResults"></div>
+
+<div class="sidebar" id="sidebar">
+  <ul>
+    <li data-route="home"><a href="#/home"><i class="fa fa-home"></i> Home</a></li>
+    <li data-route="movies"><a href="#/movies"><i class="fa fa-film"></i> All Movies</a></li>
+    <li data-route="lkcinema"><a href="#/lkcinema"><i class="fa-solid fa-clapperboard"></i> LK Cinema</a></li>
+    <li data-route="anime"><a href="#/anime"><i class="fa-solid fa-dragon"></i> Anime</a></li>
+    <li data-route="series"><a href="#/series"><i class="fa fa-tv"></i> TV Shows</a></li>
+    <li data-route="request"><a href="#/request"><i class="fa fa-plus-circle"></i> Requests</a></li>
+    <li data-route="chanels"><a href="#/chanels"><i class="fa-solid fa-users"></i> Join Channels</a></li>
+    <li data-route="about"><a href="#/about"><i class="fa fa-info-circle"></i> About</a></li>
+    <li data-route="contact"><a href="#/contact"><i class="fa fa-envelope"></i> Contact Us</a></li>
+    <li data-route="settings"><a href="#/settings"><i class="fa fa-cog"></i> Settings</a></li>
+  </ul>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<!-- ===================== PAGE CONTENT ===================== -->
+<main id="app"></main>
+
+<footer class="footer">
+  <div class="footer-logo">𝗠𝗔𝗚𝗜𝗖𝗔𝗟 <span>𝗠𝗢𝗩𝗜𝗘 𝗟𝗔𝗡𝗗</span></div>
+  <p class="footer-text">
+    The best platform to stream latest Movies and Cartoons with high-quality subtitles.
+    Enjoy your favorite content for free on Magical Movie Land.
+  </p>
+  <div class="social-icons">
+    <a href="https://www.facebook.com/share/1BbGBZ8ddZ/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="https://t.me/YourUsername" target="_blank" rel="noopener" aria-label="Telegram"><i class="fa-brands fa-telegram"></i></a>
+    <a href="https://www.tiktok.com/@vinuxnoo?_r=1&_t=ZS-97SZwiHJ6jU" target="_blank" rel="noopener" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+  </div>
+</footer>
+
+<nav class="bottom-nav">
+  <a href="#/home" data-route="home"><i class="fa fa-home"></i><span>Home</span></a>
+  <a href="#/movies" data-route="movies"><i class="fa fa-film"></i><span>Movies</span></a>
+  <a href="#/anime" data-route="anime"><i class="fa-solid fa-dragon"></i><span>Anime</span></a>
+  <a href="#/series" data-route="series"><i class="fa fa-tv"></i><span>TV Shows</span></a>
+  <a id="bottomMenuBtn" role="button"><i class="fa fa-bars"></i><span>Menu</span></a>
+</nav>
+
+<div id="sakura-container"></div>
+
+<!-- Trailer modal -->
+<div class="trailer-modal" id="trailerModal">
+  <div class="trailer-modal-inner">
+    <span class="trailer-close" id="trailerClose">&times;</span>
+    <div class="player-container" id="trailerPlayerBox"></div>
+  </div>
+</div>
+
+<!-- Auth modal -->
+<div class="mml-auth-overlay" id="mmlAuthOverlay">
+  <div class="mml-auth-card">
+    <div class="mml-auth-close" id="mmlAuthClose"><i class="fa fa-times"></i></div>
+
+    <div class="mml-auth-section active" id="mmlLoginSection">
+      <div class="mml-auth-title">Log in</div>
+      <div class="mml-auth-error" id="mmlLoginError"></div>
+      <input type="text" class="mml-auth-input" id="mmlLoginUsername" placeholder="Username" autocomplete="username">
+      <input type="password" class="mml-auth-input" id="mmlLoginPassword" placeholder="Password" autocomplete="current-password">
+      <label class="mml-auth-check"><input type="checkbox" id="mmlLoginStay" checked> Stay logged in</label>
+      <button class="mml-auth-submit" id="mmlLoginBtn"><i class="fa fa-sign-in-alt"></i> Sign in</button>
+      <div class="mml-auth-switch">Don't have an account yet? <a id="mmlGoSignup">Sign up here</a></div>
+      <div class="mml-auth-forgot" id="mmlForgotBtn">I forgot my password</div>
+    </div>
+
+    <div class="mml-auth-section" id="mmlSignupSection">
+      <div class="mml-auth-title">Sign up, it's free..</div>
+      <div class="mml-auth-error" id="mmlSignupError"></div>
+      <input type="text" class="mml-auth-input" id="mmlSignupUsername" placeholder="Username" autocomplete="username">
+      <input type="email" class="mml-auth-input" id="mmlSignupEmail" placeholder="E-mail address" autocomplete="email">
+      <input type="password" class="mml-auth-input" id="mmlSignupPassword" placeholder="Password" autocomplete="new-password">
+      <div class="mml-auth-row">
+        <input type="text" class="mml-auth-input" id="mmlSignupFirstName" placeholder="Name">
+        <input type="text" class="mml-auth-input" id="mmlSignupLastName" placeholder="Last name">
+      </div>
+      <button class="mml-auth-submit" id="mmlSignupBtn"><i class="fa fa-user-plus"></i> Sign up</button>
+      <div class="mml-auth-switch">Do you already have an account? <a id="mmlGoLogin">Login here</a></div>
+    </div>
+  </div>
+</div>
+<div class="mml-auth-menu" id="mmlAuthMenu">
+  <div class="mml-auth-menu-user" id="mmlMenuUsername"></div>
+  <div class="mml-auth-menu-item" id="mmlProfileBtn"><i class="fa fa-user-circle"></i> Profile</div>
+  <div class="mml-auth-menu-item" id="mmlLogoutBtn"><i class="fa fa-right-from-bracket"></i> Logout</div>
+</div>
+
+<!-- ===================== APP SCRIPT ===================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, doc, getDoc, setDoc, addDoc,
+  serverTimestamp, arrayUnion, arrayRemove
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
+  onAuthStateChanged, setPersistence, browserLocalPersistence, browserSessionPersistence,
+  sendPasswordResetEmail, updateProfile
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+/* =========================================================
+   Firebase — එක පාරක් විතරක් initialize කරනවා
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyCx0TEmgr3GCyvfeok9Y42yR1PTM4_8y9M",
+  authDomain: "magical-movie-land.firebaseapp.com",
+  projectId: "magical-movie-land",
+  storageBucket: "magical-movie-land.firebasestorage.app",
+  messagingSenderId: "27757424288",
+  appId: "1:27757424288:web:d650e2659f09f0b9c823c5"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const auth = getAuth(fbApp);
+
+/* =========================================================
+   Helpers
+   ========================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const app = $('#app');
+
+// HTML escape — Firestore data innerHTML ට දාද්දි XSS වළක්වන්න
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+// http/https URL විතරයි පිළිගන්නේ (javascript: වගේ ඒවා block)
+const safeUrl = u => { u = String(u || '').trim(); return /^https?:\/\//i.test(u) ? u : ''; };
+const cssUrl = u => { u = safeUrl(u); return u ? u.replace(/["'()\\\s]/g, c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')) : ''; };
+const ts = m => Date.parse(m && m.date) || 0;
+
+// via.placeholder.com නැවතිලා — ඒ නිසා inline SVG placeholder එකක්
+const PH = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450"><rect width="100%" height="100%" fill="#222"/><text x="50%" y="50%" fill="#777" font-family="Arial" font-size="22" text-anchor="middle">No Image</text></svg>');
+// image load fail වුනාම placeholder (inline onerror නැතුව)
+document.addEventListener('error', e => {
+  const t = e.target;
+  if (t && t.tagName === 'IMG' && !t.dataset.fb) { t.dataset.fb = '1'; t.src = PH; }
+}, true);
+
+function dedupeByTitle(list) {
+  const seen = new Set(), out = [];
+  (list || []).forEach(m => {
+    const k = (m.title || '').trim().toLowerCase();
+    if (!k || seen.has(k)) return;
+    seen.add(k); out.push(m);
+  });
+  return out;
+}
+const hasSection = (m, k) => Array.isArray(m.sections) && m.sections.includes(k);
+const isSeries = m => hasSection(m, 'series') || m.category === 'series' || m.category === 'tvshows' || m.type === 'series' || m.type === 'tv';
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* =========================================================
+   Theme
+   ========================================================= */
+function applyTheme(t) {
+  t = t === 'light' ? 'light' : 'dark';
+  document.documentElement.className = t;
+  try { localStorage.setItem('theme', t); } catch (e) {}
+}
+
+/* =========================================================
+   Movies data + cache (localStorage)
+   ========================================================= */
+const CACHE_KEY = 'mml_movies_cache_v1';
+const MOVIE_CACHE_PREFIX = 'mml_movie_';
+let allMovies = [];
+let dataState = 'loading'; // loading | ready | failed
+let onDataUpdate = null;   // දැන් පෙන්නන page එකේ re-render callback
+
+function readCache() {
+  try {
+    const arr = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+    return Array.isArray(arr) && arr.length ? arr : null;
+  } catch (e) { return null; }
+}
+function writeCache(items) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(items)); } catch (e) {} }
+
+async function fetchAllMoviesOnce() {
+  const snap = await getDocs(collection(db, 'movies'));
+  const items = [];
+  snap.forEach(d => { const m = d.data(); m.id = d.id; if (m.title) items.push(m); });
+  return items;
+}
+async function fetchFreshSilently() {
+  for (let i = 1; i <= 6; i++) {
+    try {
+      const items = await fetchAllMoviesOnce();
+      if (items.length) return items;
+    } catch (err) { console.error(`Firebase fetch error (attempt ${i}):`, err); }
+    if (i < 6) await sleep(1500);
+  }
+  return null;
+}
+async function loadMovies() {
+  const cached = readCache();
+  if (cached) { allMovies = dedupeByTitle(cached); dataState = 'ready'; onDataUpdate && onDataUpdate(); }
+  const fresh = await fetchFreshSilently();
+  if (fresh) {
+    allMovies = dedupeByTitle(fresh); dataState = 'ready'; writeCache(fresh);
+  } else if (!cached) {
+    dataState = 'failed';
+  }
+  onDataUpdate && onDataUpdate();
+}
+
+/* =========================================================
+   Sidebar / search / header
+   ========================================================= */
+const sidebar = $('#sidebar'), overlay = $('#overlay'), menuBtn = $('#menuBtn');
+function setSidebar(open) {
+  sidebar.classList.toggle('active', open);
+  overlay.classList.toggle('active', open);
+  menuBtn.classList.toggle('active', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+menuBtn.addEventListener('click', () => setSidebar(!sidebar.classList.contains('active')));
+overlay.addEventListener('click', () => setSidebar(false));
+$('#bottomMenuBtn').addEventListener('click', () => setSidebar(!sidebar.classList.contains('active')));
+
+const searchBox = $('#searchBox'), searchInput = $('#searchInput'), searchResults = $('#searchResults');
+function closeSearch() {
+  searchBox.classList.remove('active');
+  searchResults.classList.remove('active');
+  searchInput.value = '';
+}
+$('#searchBtn').addEventListener('click', () => {
+  if (searchBox.classList.contains('active')) { closeSearch(); return; }
+  searchBox.classList.add('active'); searchInput.focus();
+});
+$('#closeSearch').addEventListener('click', closeSearch);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSearch(); setSidebar(false); } });
+
+function runSearch(q) {
+  q = q.trim().toLowerCase();
+  if (!q) { searchResults.classList.remove('active'); return; }
+  searchResults.classList.add('active');
+  const found = allMovies.filter(m => (m.title || '').toLowerCase().includes(q)).slice(0, 20);
+  if (!found.length) {
+    searchResults.innerHTML = `<div class="home-no-result">${dataState === 'loading' ? 'Loading…' : '🔍 Not Found!'}</div>`;
+    return;
+  }
+  searchResults.innerHTML = found.map(m => {
+    const type = isSeries(m) ? 'TV Show' : hasSection(m, 'anime') ? 'Anime' : 'Movie';
+    return `
+      <a class="home-result-item" href="#/watch/${encodeURIComponent(m.id)}">
+        <img class="home-result-poster" src="${esc(safeUrl(m.poster) || PH)}" alt="" loading="lazy">
+        <div class="home-result-info">
+          <div class="home-result-title">${esc(m.title)}</div>
+          <div class="home-result-meta">${esc(m.year || 'N/A')}${m.duration ? ' • ' + esc(m.duration) : ''}</div>
+          <div class="home-result-type">${type}</div>
+        </div>
+      </a>`;
+  }).join('');
+}
+let searchTimer;
+searchInput.addEventListener('input', e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => runSearch(e.target.value), 250); });
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(searchInput.value); });
+
+$('#backBtn').addEventListener('click', () => {
+  if (history.length > 1) history.back(); else location.hash = '#/home';
+});
+
+/* Sakura petals — container එක පැහැදිලිව හදලා, petals ගාන සීමා කරලා */
+(function sakura() {
+  const box = $('#sakura-container');
+  setInterval(() => {
+    if (document.hidden || box.childElementCount > 18) return;
+    const p = document.createElement('div');
+    const size = Math.random() * 8 + 8;
+    const dur = Math.random() * 5 + 6;
+    p.className = 'sakura-petal';
+    p.style.cssText = `left:${Math.random() * 100}vw;width:${size}px;height:${size}px;animation-duration:${dur}s;background:rgba(255,${45 + Math.random() * 20 | 0},${149 + Math.random() * 20 | 0},.7)`;
+    box.appendChild(p);
+    setTimeout(() => p.remove(), dur * 1000 + 200);
+  }, 700);
+})();
+
+/* =========================================================
+   Cards / grids
+   ========================================================= */
+function cardHTML(m, series) {
+  const poster = safeUrl(m.poster) || PH;
+  let rating = m.rating ? String(m.rating).split('/')[0] : '';
+  if (rating && !rating.includes('.')) rating += '.0';
+  const badge = series ? (m.season || '') : String(m.quality || 'HD').toUpperCase();
+  const title = series && m.year ? `${m.title} (${m.year})` : (m.title || 'Untitled');
+  return `
+    <a class="movie-card" href="#/watch/${encodeURIComponent(m.id)}">
+      ${badge ? `<span class="quality-badge">${esc(badge)}</span>` : ''}
+      ${rating ? `<span class="rating-badge">★ ${esc(rating)}</span>` : ''}
+      <img src="${esc(poster)}" alt="${esc(m.title)}" loading="lazy" decoding="async">
+      <div class="movie-title">${esc(title)}</div>
+    </a>`;
+}
+const emptyNote = () => dataState === 'loading' ? 'Loading…' : dataState === 'failed' ? 'Load කරගන්න බැරි උනා. Network එක check කරලා page එක refresh කරන්න.' : 'තාම මෙතන කිසිවක් නැහැ.';
+
+/* Generic list page (All Movies / LK Cinema / Anime / TV Shows) */
+function listPage({ title, filter, series }) {
+  return () => {
+    const PAGE = 60;
+    let limit = PAGE;
+    app.innerHTML = `<h1 class="page-title-center">${title}</h1><div class="movie-grid" id="listGrid"></div><div class="load-more-wrap" id="loadMore"></div>`;
+    const grid = $('#listGrid'), more = $('#loadMore');
+    function fill() {
+      // පරණ -> අලුත් (අලුත්ම එක අන්තිමට) — ඔයා ඉල්ලපු විදිහටම
+      const list = dedupeByTitle(allMovies.filter(filter)).sort((a, b) => ts(a) - ts(b));
+      if (!list.length) { grid.innerHTML = `<div class="empty-note">${emptyNote()}</div>`; more.innerHTML = ''; return; }
+      grid.innerHTML = list.slice(0, limit).map(m => cardHTML(m, series)).join('');
+      more.innerHTML = list.length > limit ? `<button class="btn btn-secondary" id="loadMoreBtn">Load more (${list.length - limit})</button>` : '';
+      $('#loadMoreBtn')?.addEventListener('click', () => { limit += PAGE; fill(); });
+    }
+    fill();
+    onDataUpdate = fill;
+  };
+}
+
+/* =========================================================
+   HOME
+   ========================================================= */
+let heroBanners = null; // null = තාම load කරලා නෑ
+let heroTimer = null;
+
+async function initHero() {
+  const hero = $('#heroSlider'), slidesBox = $('#heroSlides'), dotsBox = $('#heroDots');
+  if (!hero) return;
+  if (heroBanners === null) {
+    heroBanners = [];
+    try {
+      const snap = await getDocs(collection(db, 'heroBanners'));
+      snap.forEach(d => { const x = d.data(); x.id = d.id; if (safeUrl(x.imageUrl)) heroBanners.push(x); });
+      heroBanners.sort((a, b) => ts(a) - ts(b));
+    } catch (err) { console.error('Hero banners load error:', err); }
+  }
+  if (!$('#heroSlider') || !heroBanners.length) return; // page එක මාරු වෙලා නම් නවතින්න
+  hero.classList.add('has-banners');
+  slidesBox.innerHTML = heroBanners.map((b, i) => `<div class="hero-slide ${i ? '' : 'active'}"><img src="${esc(safeUrl(b.imageUrl))}" alt="banner" loading="lazy"></div>`).join('');
+  dotsBox.innerHTML = heroBanners.map((b, i) => `<span class="dot ${i ? '' : 'active'}" data-i="${i}"></span>`).join('');
+  const slides = $$('.hero-slide', slidesBox), dots = $$('.dot', dotsBox);
+  let cur = 0;
+  const go = i => { slides[cur].classList.remove('active'); dots[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active'); dots[cur].classList.add('active'); };
+  const start = () => { clearInterval(heroTimer); if (slides.length > 1) heroTimer = setInterval(() => go((cur + 1) % slides.length), 4500); };
+  dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); start(); }));
+  start();
+}
+
+const HOME_SECTIONS = [
+  { key: 'trending_home', title: 'Daily Trending', link: '#/movies' },
+  { key: 'latest_home', title: 'Latest Uploads', link: '#/movies' },
+  { key: 'tvshows_home', title: 'TV Shows', link: '#/series' }
+];
+function homePage() {
+  app.innerHTML = `
+    <section class="hero" id="heroSlider"><div id="heroSlides"></div><div class="hero-dots" id="heroDots"></div></section>
+    ${HOME_SECTIONS.map(s => `
+      <section class="trending is-empty" id="sec-${s.key}">
+        <div class="section-header"><h2>${s.title}</h2><a class="view-all" href="${s.link}">VIEW ALL</a></div>
+        <div class="movie-grid" id="grid-${s.key}"></div>
+      </section>`).join('')}
+    <div id="homeNote"></div>`;
+  function fill() {
+    let any = false;
+    HOME_SECTIONS.forEach(s => {
+      const items = dedupeByTitle(allMovies.filter(m => hasSection(m, s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, 8);
+      $('#grid-' + s.key).innerHTML = items.map(m => cardHTML(m, s.key === 'tvshows_home')).join('');
+      $('#sec-' + s.key).classList.toggle('is-empty', !items.length);
+      if (items.length) any = true;
+    });
+    $('#homeNote').innerHTML = any ? '' : `<div class="empty-note">${emptyNote()}</div>`;
+  }
+  fill();
+  onDataUpdate = fill;
+  initHero();
+}
+
+/* =========================================================
+   Static pages
+   ========================================================= */
+const aboutPage = () => app.innerHTML = `
+  <div class="box">
+    <h1 class="title-bar">About Us</h1>
+    <div class="about-text">
+      <p>Welcome to <strong>MAGICAL MOVIE LAND</strong>, your number one source for high-quality Sinhala dubbed and subtitled cartoons and movies. We’re dedicated to giving you the very best of animated content, with a focus on quality, speed, and a great user experience.</p>
+      <p>Founded in 2026, MAGICAL MOVIE LAND has come a long way from its beginnings. Our passion for providing localized entertainment for Sri Lankan fans drove us to build this platform so that everyone can enjoy their favorite characters in their own language.</p>
+      <p>We hope you enjoy our platform as much as we enjoy offering it to you. If you have any questions or comments, please don’t hesitate to <a href="#/contact">Contact Us</a>.</p>
+    </div>
+  </div>`;
+
+const channelsPage = () => app.innerHTML = `
+  <section class="join-wrapper">
+    <h1>Telegram &amp; WhatsApp</h1>
+    <p>Latest Movies &amp; Series Updates මෙතනින් ගන්න. Spam නැත, Admin posts විතරයි.</p>
+    <a href="https://t.me/yourlink" target="_blank" rel="noopener" class="channel-btn btn-tg"><i class="fa-brands fa-telegram"></i> Join Telegram</a>
+    <a href="https://chat.whatsapp.com/yourlink" target="_blank" rel="noopener" class="channel-btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Join WhatsApp</a>
+  </section>`;
+
+const contactPage = () => app.innerHTML = `
+  <div class="contact-container">
+    <h1 class="contact-title">Contact Us</h1>
+    <p class="contact-text">If you have any requests, issues, or business inquiries, the best way to reach us is via WhatsApp. Click the button below to message us directly.</p>
+    <a href="https://wa.me/94777865724" target="_blank" rel="noopener" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> Contact via WhatsApp</a>
+    <p class="email-text">Alternatively, you can email us at:</p>
+    <p class="email-address">magicalmovieland@gmail.com</p>
+    <a href="https://magicalmovieland.com" target="_blank" rel="noopener" class="website-btn">magicalmovieland.com</a>
+  </div>`;
+
+function settingsPage() {
+  const cur = document.documentElement.className === 'light' ? 'light' : 'dark';
+  app.innerHTML = `
+    <h1 class="page-h1">Settings</h1>
+    <div style="max-width:480px;margin:0 auto;padding:10px 15px 30px">
+      <div class="sec-title"><span class="cast-bar"></span> Theme</div>
+      <button class="settings-item ${cur === 'dark' ? 'on' : ''}" data-theme="dark"><span><i class="fa fa-moon left"></i> Dark</span></button>
+      <button class="settings-item ${cur === 'light' ? 'on' : ''}" data-theme="light"><span><i class="fa fa-sun left"></i> Light</span></button>
+      <div class="sec-title" style="margin-top:20px"><span class="cast-bar"></span> Data</div>
+      <button class="settings-item" id="clearCacheBtn"><span><i class="fa fa-broom left"></i> Clear cached data</span><i class="fa fa-chevron-right right"></i></button>
+    </div>`;
+  $$('[data-theme]').forEach(b => b.addEventListener('click', () => { applyTheme(b.dataset.theme); settingsPage(); }));
+  $('#clearCacheBtn').addEventListener('click', () => {
+    try { Object.keys(localStorage).filter(k => k === CACHE_KEY || k.startsWith(MOVIE_CACHE_PREFIX)).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    allMovies = []; dataState = 'loading'; loadMovies();
+    alert('Cache එක clear කළා ✅');
+  });
+}
+
+/* =========================================================
+   REQUEST page
+   ========================================================= */
+function requestPage() {
+  app.innerHTML = `
+    <h1 class="page-h1">🎬 Movie/Series Request</h1>
+    <div class="request-box">
+      <div class="alert success" id="reqOk"><i class="fa fa-check-circle"></i> Request submitted! Will add soon 💪</div>
+      <div class="alert error" id="reqErr"><i class="fa fa-exclamation-circle"></i> <span id="reqErrText">Error!</span></div>
+      <form id="requestForm" novalidate>
+        <div class="form-group"><label>Your Name</label><input type="text" id="reqName" placeholder="Ex: John" maxlength="60" required></div>
+        <div class="form-group"><label>Type</label>
+          <select id="reqType" required>
+            <option value="">Select Type</option><option value="movie">Movie</option>
+            <option value="tvshow">TV Series</option><option value="anime">Anime</option>
+          </select></div>
+        <div class="form-group"><label>Movie/Series Name</label><input type="text" id="reqTitle" placeholder="Ex: Widow's Bay S01" maxlength="120" required></div>
+        <div class="form-group"><label>Year</label><input type="number" id="reqYear" placeholder="Ex: 2024" min="1900" max="${new Date().getFullYear() + 2}"></div>
+        <div class="form-group"><label>IMDB / TMDB Link</label><input type="url" id="reqLink" placeholder="https://www.imdb.com/title/tt..." maxlength="300"></div>
+        <div class="form-group"><label>Note</label><textarea id="reqNote" placeholder="Ex: Sinhala subtitles or dubbed, 1080p" maxlength="500"></textarea></div>
+        <input class="hp-field" type="text" id="reqWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn-submit" id="reqBtn"><i class="fa fa-paper-plane"></i> Request Submit</button>
+      </form>
+      <p class="info-text">⚡ The request will go to the admin. Once added, it will be displayed on the site.<br>Spam requests are rejected.</p>
+    </div>`;
+  const form = $('#requestForm'), ok = $('#reqOk'), err = $('#reqErr'), btn = $('#reqBtn');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    ok.style.display = 'none'; err.style.display = 'none';
+    const showErr = t => { $('#reqErrText').textContent = t; err.style.display = 'block'; };
+    if ($('#reqWebsite').value) return; // bot trap
+    const name = $('#reqName').value.trim(), type = $('#reqType').value, title = $('#reqTitle').value.trim();
+    if (!name || !type || !title) return showErr('Name, Type සහ Movie/Series Name අනිවාර්යයි.');
+    const link = $('#reqLink').value.trim();
+    if (link && !safeUrl(link)) return showErr('Link එක http:// හෝ https:// වලින් පටන් ගන්න ඕන.');
+    const last = +(localStorage.getItem('mml_last_request') || 0);
+    if (Date.now() - last < 60000) return showErr('විනාඩියක් ඉන්න, ආයෙ request එකක් යවන්න.');
+
+    btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
+    try {
+      await addDoc(collection(db, 'requests'), {
+        name, type, title,
+        year: $('#reqYear').value || '', link,
+        note: $('#reqNote').value.trim(),
+        status: 'pending', createdAt: serverTimestamp()
+      });
+      try { localStorage.setItem('mml_last_request', String(Date.now())); } catch (e2) {}
+      ok.style.display = 'block'; form.reset(); window.scrollTo(0, 0);
+    } catch (ex) {
+      console.error(ex); showErr(ex.message);
+    } finally {
+      btn.disabled = false; btn.innerHTML = '<i class="fa fa-paper-plane"></i> Request Submit';
+    }
+  });
+}
+
+/* =========================================================
+   WATCH page
+   ========================================================= */
+let watchTimers = [];
+let playerOpen = false;
+
+function ytIdFromUrl(url) {
+  if (!url) return null;
+  if (!/^https?:/i.test(url)) return /^[\w-]{11}$/.test(url) ? url : null;
+  for (const p of [/youtu\.be\/([\w-]+)/, /[?&]v=([\w-]+)/, /embed\/([\w-]+)/]) { const x = url.match(p); if (x) return x[1]; }
+  return null;
+}
+function isDirectFileUrl(url) {
+  if (!url || /youtube\.com|youtu\.be/.test(url)) return false;
+  return /\.(mp4|mkv|webm|mov|m4v)(\?|$)/i.test(url) || url.includes('r2.dev') || url.includes('r2.cloudflarestorage.com');
+}
+function buildPlayerHTML(rawUrl) {
+  const url = safeUrl(rawUrl);
+  if (!url) return '<div class="player-msg">Video link එකක් නෑ</div>';
+  const yt = /youtube\.com|youtu\.be/.test(url) ? ytIdFromUrl(url) : null;
+  if (yt) return `<iframe src="https://www.youtube.com/embed/${esc(yt)}?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+  if (isDirectFileUrl(url)) return `<video src="${esc(url)}" controls playsinline preload="auto"></video>`;
+  return `<iframe src="${esc(url)}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
+}
+function attachVideoFallback(box) {
+  const v = box.querySelector('video');
+  if (!v) return;
+  v.addEventListener('error', () => { box.innerHTML = '<div class="player-msg"><b>Error: Refresh page or check your network.</b></div>'; }, { once: true });
+  v.muted = false;
+  v.play().catch(err => {
+    if (err && err.name === 'NotAllowedError') {
+      v.muted = true; v.play().catch(() => {});
+      v.addEventListener('playing', () => { v.muted = false; }, { once: true });
+    }
+  });
+}
+function buildCastHTML(m) {
+  let members = Array.isArray(m.castMembers) ? m.castMembers.filter(c => c && c.name) : [];
+  if (!members.length && m.cast) members = String(m.cast).split(',').map(s => s.trim()).filter(Boolean).map(name => ({ name }));
+  if (!members.length) return '';
+  return `
+    <div class="cast-wrap">
+      <div class="sec-title"><span class="cast-bar"></span> Cast</div>
+      <div class="cast-scroll">
+        ${members.map(c => {
+          const initial = (c.name || '?').trim().charAt(0).toUpperCase();
+          const fallback = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="100%" height="100%" fill="#222"/><text x="50%" y="58%" fill="#fff" font-family="Arial" font-size="32" text-anchor="middle">${esc(initial)}</text></svg>`);
+          return `<div class="cast-item">
+            <img class="cast-photo" src="${esc(safeUrl(c.photo) || fallback)}" alt="${esc(c.name)}" loading="lazy">
+            <div class="cast-name">${esc(c.name)}</div>
+            ${c.character ? `<div class="cast-role">${esc(c.character)}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+}
+
+/* My List / Seen — users/{uid}.myList / seenList */
+const slim = m => ({ id: m.id, title: m.title || '', poster: safeUrl(m.poster) });
+async function loadUserDoc() {
+  if (!currentUser) return {};
+  try { const s = await getDoc(doc(db, 'users', currentUser.uid)); return s.exists() ? s.data() : {}; }
+  catch (e) { console.error(e); return {}; }
+}
+async function listHas(field, id) {
+  const d = await loadUserDoc();
+  return (Array.isArray(d[field]) ? d[field] : []).some(x => x.id === id);
+}
+async function toggleInList(field, m) {
+  if (!currentUser) { openModal('login'); return null; }
+  const d = await loadUserDoc();
+  const arr = Array.isArray(d[field]) ? d[field] : [];
+  const existing = arr.find(x => x.id === m.id);
+  await setDoc(doc(db, 'users', currentUser.uid), { [field]: existing ? arrayRemove(existing) : arrayUnion(slim(m)) }, { merge: true });
+  return !existing;
+}
+async function markSeen(m) {
+  if (!currentUser) return;
+  try {
+    const d = await loadUserDoc();
+    if ((Array.isArray(d.seenList) ? d.seenList : []).some(x => x.id === m.id)) return;
+    await setDoc(doc(db, 'users', currentUser.uid), { seenList: arrayUnion(slim(m)) }, { merge: true });
+  } catch (e) { console.error(e); }
+}
+
+function renderMovie(m) {
+  document.title = (m.title || 'Watch') + ' - MAGICAL MOVIE LAND';
+  const series = isSeries(m);
+  const backdrop = safeUrl(m.backdrop) || safeUrl(m.poster) || '';
+  const poster = safeUrl(m.poster) || PH;
+  const genreTags = String(m.genre || '').split(',').map(g => g.trim()).filter(Boolean);
+  const episodes = Array.isArray(m.episodes) ? m.episodes : [];
+
+  let meta = `<span>${esc(m.year || 'N/A')}</span>`;
+  if (m.rating) meta += `<span class="rating"><i class="fa fa-star"></i> ${esc(m.rating)}</span>`;
+  if (m.duration && !series) meta += `<span>${esc(m.duration)}</span>`;
+  if (series) meta += `<span>TV Series</span>`;
+  genreTags.forEach(g => meta += `<span>${esc(g)}</span>`);
+
+  let episodesHTML = '';
+  if (series && episodes.length) {
+    const seasons = [...new Set(episodes.map(e => e.season || 1))].sort((a, b) => a - b);
+    episodesHTML = `
+      <section class="episodes-wrap" id="episodesSection" style="display:none">
+        <div class="sec-title"><span class="cast-bar"></span> Select Episode to Watch</div>
+        ${seasons.length > 1 ? `<select class="season-select" id="seasonSelect">${seasons.map(s => `<option value="${s}">Season ${s}</option>`).join('')}</select>` : ''}
+        <div id="episodeList"></div>
+      </section>`;
+  }
+
+  app.innerHTML = `
+    <div class="details-hero" ${backdrop ? `style="background-image:url('${cssUrl(backdrop)}')"` : ''}>
+      <div class="details-hero-inner">
+        <img class="details-poster" src="${esc(poster)}" alt="${esc(m.title)}">
+        <div class="details-title-block">
+          <div class="details-title">${esc(m.title || 'Untitled')}</div>
+          <div class="details-meta">${meta}</div>
+        </div>
+      </div>
+    </div>
+    <div class="details-body">
+      <div class="details-actions">
+        <button class="btn btn-primary" id="watchNowBtn"><i class="fa fa-play"></i> Watch Now</button>
+        ${m.trailer ? `<button class="btn btn-secondary" id="trailerBtn"><i class="fa fa-film"></i> Trailer</button>` : ''}
+        <button class="btn btn-outline" id="myListBtn"><i class="fa fa-plus"></i> My List</button>
+      </div>
+    </div>
+    <div class="player-wrap" id="playerWrap">
+      <div class="player-container" id="playerBox"></div>
+      <div class="now-playing-label" id="nowPlayingLabel"></div>
+    </div>
+    <div class="details-body" style="padding-top:0">
+      <div class="details-desc-label">Overview</div>
+      <p class="details-desc">${esc(m.description || 'Description එකක් නෑ.')}</p>
+    </div>
+    ${episodesHTML}
+    ${buildCastHTML(m)}`;
+
+  const playerWrap = $('#playerWrap'), playerBox = $('#playerBox'), label = $('#nowPlayingLabel');
+  const episodesSection = $('#episodesSection');
+  const watchBtn = $('#watchNowBtn');
+  let episodesVisible = false;
+
+  function updateWatchBtn() {
+    const back = playerOpen || episodesVisible;
+    watchBtn.classList.toggle('btn-back', back);
+    watchBtn.classList.toggle('btn-primary', !back);
+    watchBtn.innerHTML = back ? '<i class="fa fa-arrow-left"></i> Back' : '<i class="fa fa-play"></i> Watch Now';
+  }
+  function playUrl(url, text) {
+    label.textContent = text || '';
+    playerWrap.classList.add('active');
+    const bg = cssUrl(backdrop);
+    playerBox.innerHTML = `<div class="player-poster" ${bg ? `style="background-image:url('${bg}')"` : ''}><div class="player-play-btn"><i class="fa fa-play"></i></div></div>`;
+    $('.player-poster', playerBox).addEventListener('click', () => {
+      playerBox.innerHTML = buildPlayerHTML(url);
+      attachVideoFallback(playerBox);
+      markSeen(m);
+    }, { once: true });
+    playerOpen = true;
+    playerWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function closePlayer() {
+    playerWrap.classList.remove('active'); playerBox.innerHTML = ''; label.textContent = ''; playerOpen = false;
+  }
+
+  watchBtn.addEventListener('click', () => {
+    if (playerOpen || episodesVisible) {
+      closePlayer();
+      if (episodesSection) episodesSection.style.display = 'none';
+      episodesVisible = false; updateWatchBtn(); return;
+    }
+    if (series && episodesSection) {
+      episodesVisible = true; episodesSection.style.display = ''; updateWatchBtn();
+      episodesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      playUrl(m.videoUrl, m.title); updateWatchBtn();
+    }
+  });
+
+  function renderEpisodes(season) {
+    const list = $('#episodeList');
+    if (!list) return;
+    const eps = episodes.filter(e => (e.season || 1) === Number(season)).sort((a, b) => (a.episode || 0) - (b.episode || 0));
+    list.innerHTML = eps.map((e, i) => `
+      <div class="episode-item" data-i="${i}">
+        <div class="episode-num">${String(e.episode || 0).padStart(2, '0')}</div>
+        <div class="episode-info">
+          <div class="episode-title">${esc(e.title || 'Episode ' + String(e.episode || 0).padStart(2, '0'))}</div>
+          <div class="episode-sub">Season ${esc(e.season || 1)}</div>
+        </div>
+        <i class="fa fa-play episode-play-icon"></i>
+      </div>`).join('');
+    $$('.episode-item', list).forEach(item => item.addEventListener('click', () => {
+      const e = eps[+item.dataset.i];
+      $$('.episode-item', list).forEach(x => x.classList.remove('playing'));
+      item.classList.add('playing');
+      playUrl(e.videoUrl, `S${e.season || 1} · E${e.episode || 1}${e.title ? ' — ' + e.title : ''}`);
+      updateWatchBtn();
+    }));
+  }
+  if (series && episodes.length) {
+    renderEpisodes(episodes[0].season || 1);
+    $('#seasonSelect')?.addEventListener('change', e => renderEpisodes(e.target.value));
+  }
+
+  if (m.trailer) {
+    const modal = $('#trailerModal'), box = $('#trailerPlayerBox');
+    const close = () => { modal.classList.remove('active'); box.innerHTML = ''; };
+    $('#trailerBtn').addEventListener('click', () => {
+      const id = ytIdFromUrl(m.trailer);
+      box.innerHTML = id ? `<iframe src="https://www.youtube.com/embed/${esc(id)}?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>` : buildPlayerHTML(m.trailer);
+      attachVideoFallback(box);
+      modal.classList.add('active');
+    });
+    $('#trailerClose').onclick = close;
+    modal.onclick = e => { if (e.target === modal) close(); };
+    watchTimers.push(close); // route මාරු වුනාම trailer එක නවත්තන්න
+  }
+
+  // My List button
+  const listBtn = $('#myListBtn');
+  const paint = inList => {
+    listBtn.innerHTML = inList ? '<i class="fa fa-check"></i> In My List' : '<i class="fa fa-plus"></i> My List';
+    listBtn.classList.toggle('btn-primary', inList); listBtn.classList.toggle('btn-outline', !inList);
+  };
+  if (currentUser) listHas('myList', m.id).then(paint);
+  listBtn.addEventListener('click', async () => {
+    listBtn.disabled = true;
+    try { const r = await toggleInList('myList', m); if (r !== null) paint(r); }
+    catch (e) { console.error(e); alert('Error: ' + e.message); }
+    finally { listBtn.disabled = false; }
+  });
+}
+
+async function watchPage(id, token) {
+  playerOpen = false;
+  if (!id) return renderNotFound();
+  let shown = null;
+  const readCached = () => { try { return JSON.parse(localStorage.getItem(MOVIE_CACHE_PREFIX + id) || 'null'); } catch (e) { return null; } };
+  const cached = readCached() || allMovies.find(m => m.id === id) || null;
+  if (cached) { renderMovie(cached); shown = JSON.stringify(cached); }
+  else app.innerHTML = '<div class="empty-note">Loading…</div>';
+
+  let result = null;
+  for (let i = 1; i <= 6; i++) {
+    if (token !== routeToken) return;
+    try {
+      const snap = await getDoc(doc(db, 'movies', id));
+      result = snap.exists() ? { exists: true, data: { ...snap.data(), id: snap.id } } : { exists: false };
+      break;
+    } catch (err) {
+      console.error(`Firebase fetch error (attempt ${i}):`, err);
+      if (i < 6) await sleep(1500);
+    }
+  }
+  if (token !== routeToken) return;
+  if (result && !result.exists) { try { localStorage.removeItem(MOVIE_CACHE_PREFIX + id); } catch (e) {} return renderNotFound(); }
+  if (result && result.exists) {
+    try { localStorage.setItem(MOVIE_CACHE_PREFIX + id, JSON.stringify(result.data)); } catch (e) {}
+    // Player එක open නම් / data වෙනස් නැත්නම් re-render කරන්නේ නෑ (video එක නවතින එක වළක්වන්න)
+    if (!playerOpen && JSON.stringify(result.data) !== shown) renderMovie(result.data);
+    return;
+  }
+  if (!cached) app.innerHTML = '<div class="empty-note">Load කරගන්න බැරි උනා. Network එක check කරලා page එක refresh කරන්න.</div>';
+}
+function renderNotFound() {
+  app.innerHTML = `<div class="empty-note"><i class="fa fa-ghost" style="font-size:34px;display:block;margin-bottom:10px"></i>Movie / TV Show එක හමු නොවීය.<br><a class="link-pink" href="#/home" style="font-weight:600">← Back to Home</a></div>`;
+}
+
+/* =========================================================
+   AUTH (login / signup / logout / menu)
+   ========================================================= */
+let currentUser = null, authReady = false, userDoc = null;
+let routeAuthCb = null;
+
+const normUsername = u => (u || '').trim().toLowerCase();
+async function usernameTaken(u) { return (await getDoc(doc(db, 'usernames', normUsername(u)))).exists(); }
+async function emailForUsername(u) {
+  const s = await getDoc(doc(db, 'usernames', normUsername(u)));
+  return s.exists() ? (s.data().email || null) : null;
+}
+
+const authOverlay = $('#mmlAuthOverlay'), authMenu = $('#mmlAuthMenu'), authBtn = $('#mmlAuthBtn');
+const loginSection = $('#mmlLoginSection'), signupSection = $('#mmlSignupSection');
+const loginError = $('#mmlLoginError'), signupError = $('#mmlSignupError');
+
+function openModal(section) {
+  loginError.textContent = ''; signupError.textContent = '';
+  loginSection.classList.toggle('active', section === 'login');
+  signupSection.classList.toggle('active', section === 'signup');
+  authOverlay.classList.add('active');
+}
+const closeModal = () => authOverlay.classList.remove('active');
+$('#mmlAuthClose').addEventListener('click', closeModal);
+authOverlay.addEventListener('click', e => { if (e.target === authOverlay) closeModal(); });
+$('#mmlGoSignup').addEventListener('click', () => openModal('signup'));
+$('#mmlGoLogin').addEventListener('click', () => openModal('login'));
+
+function renderAuthBtnAvatar(label, photoURL) {
+  const u = safeUrl(photoURL) || (/^data:image\//.test(photoURL || '') ? photoURL : '');
+  if (u) authBtn.innerHTML = `<img src="${esc(u)}" alt="">`;
+  else authBtn.textContent = (label || '?').trim().charAt(0).toUpperCase() || '?';
+}
+authBtn.addEventListener('click', () => {
+  if (!currentUser) { openModal('login'); return; }
+  const r = authBtn.getBoundingClientRect();
+  authMenu.style.top = (r.bottom + 8) + 'px';
+  authMenu.style.right = (window.innerWidth - r.right) + 'px';
+  authMenu.classList.toggle('active');
+});
+document.addEventListener('click', e => {
+  if (!authMenu.contains(e.target) && !authBtn.contains(e.target)) authMenu.classList.remove('active');
+});
+$('#mmlLogoutBtn').addEventListener('click', async () => { await signOut(auth); authMenu.classList.remove('active'); });
+$('#mmlProfileBtn').addEventListener('click', () => { authMenu.classList.remove('active'); if (currentUser) location.hash = '#/profile'; });
+
+$('#mmlSignupBtn').addEventListener('click', async () => {
+  const username = $('#mmlSignupUsername').value.trim();
+  const email = $('#mmlSignupEmail').value.trim();
+  const password = $('#mmlSignupPassword').value;
+  const firstName = $('#mmlSignupFirstName').value.trim();
+  const lastName = $('#mmlSignupLastName').value.trim();
+  const btn = $('#mmlSignupBtn');
+  signupError.textContent = '';
+  if (!username || !email || !password) { signupError.textContent = 'Username, Email, Password අනිවාර්යයි'; return; }
+  if (password.length < 6) { signupError.textContent = 'Password එකේ අඩුම වශයෙන් අකුරු 6ක් ඕන'; return; }
+  if (!/^[a-zA-Z0-9_.]{3,20}$/.test(username)) { signupError.textContent = 'Username එකේ letters/numbers/underscore/dot විතරයි (අකුරු 3-20)'; return; }
+  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+  try {
+    if (await usernameTaken(username)) { signupError.textContent = 'මේ Username එක දැනටමත් පාවිච්චි කරලා. වෙන එකක් try කරන්න.'; return; }
+    const cred = await createUserWithEmailAndPassword(auth, email, password);
+    const uid = cred.user.uid;
+    await updateProfile(cred.user, { displayName: username }).catch(() => {});
+    await setDoc(doc(db, 'usernames', normUsername(username)), { email, uid });
+    await setDoc(doc(db, 'users', uid), { username, email, firstName, lastName, createdAt: new Date().toISOString() });
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    signupError.textContent =
+      err.code === 'auth/email-already-in-use' ? 'මේ Email එක දැනටමත් register වෙලා තියෙනවා.' :
+      err.code === 'auth/invalid-email' ? 'Email address එක වැරදියි.' :
+      err.code === 'auth/weak-password' ? 'Password එක දුර්වලයි.' : 'Error: ' + err.message;
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fa fa-user-plus"></i> Sign up';
+  }
+});
+
+$('#mmlLoginBtn').addEventListener('click', async () => {
+  const username = $('#mmlLoginUsername').value.trim();
+  const password = $('#mmlLoginPassword').value;
+  const stay = $('#mmlLoginStay').checked;
+  const btn = $('#mmlLoginBtn');
+  loginError.textContent = '';
+  if (!username || !password) { loginError.textContent = 'Username සහ Password දෙකම දාන්න'; return; }
+  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+  try {
+    const email = await emailForUsername(username);
+    if (!email) { loginError.textContent = 'Username හෝ Password වැරදියි.'; return; }
+    await setPersistence(auth, stay ? browserLocalPersistence : browserSessionPersistence);
+    await signInWithEmailAndPassword(auth, email, password);
+    closeModal();
+  } catch (err) {
+    console.error(err);
+    loginError.textContent = ['auth/wrong-password', 'auth/invalid-credential', 'auth/user-not-found'].includes(err.code)
+      ? 'Username හෝ Password වැරදියි.' : err.code === 'auth/too-many-requests' ? 'ඉතා වැඩි උත්සාහයන්. ටිකක් ඉඳලා try කරන්න.' : 'Error: ' + err.message;
+  } finally {
+    btn.disabled = false; btn.innerHTML = '<i class="fa fa-sign-in-alt"></i> Sign in';
+  }
+});
+['mmlLoginUsername', 'mmlLoginPassword'].forEach(id => $('#' + id).addEventListener('keydown', e => { if (e.key === 'Enter') $('#mmlLoginBtn').click(); }));
+
+$('#mmlForgotBtn').addEventListener('click', async () => {
+  const raw = (prompt('Password reset කරන්න ඔයාගේ Username එක හෝ Email එක දාන්න:') || '').trim();
+  if (!raw) return;
+  try {
+    const email = raw.includes('@') ? raw : await emailForUsername(raw);
+    if (!email) { alert('මේ Username/Email එකට account එකක් හම්බුනේ නෑ.'); return; }
+    await sendPasswordResetEmail(auth, email);
+    alert('Password reset link එකක් ' + email + ' වලට යවලා තියෙනවා.');
+  } catch (err) { alert('Error: ' + err.message); }
+});
+
+onAuthStateChanged(auth, async user => {
+  currentUser = user;
+  userDoc = null;
+  if (user) {
+    const label = user.displayName || (user.email || '').split('@')[0];
+    $('#mmlMenuUsername').textContent = label;
+    userDoc = await loadUserDoc();
+    renderAuthBtnAvatar(label, userDoc.photoURL);
+  } else {
+    authBtn.innerHTML = '<i class="fa fa-user"></i>';
+    authMenu.classList.remove('active');
+  }
+  authReady = true;
+  routeAuthCb && routeAuthCb();
+});
+
+/* =========================================================
+   PROFILE page
+   ========================================================= */
+function resizeImageToDataURL(file, size = 240, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Image එක read කරගන්න බැරි උනා'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Image file එක invalid'));
+      img.onload = () => {
+        const c = document.createElement('canvas'); c.width = c.height = size;
+        const scale = Math.max(size / img.width, size / img.height);
+        const w = img.width * scale, h = img.height * scale;
+        c.getContext('2d').drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
+        resolve(c.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function profilePage() {
+  let editing = false, tab = 'list';
+  const gridHTML = (items, emptyText) => items.length
+    ? `<div class="profile-list-grid">${items.map(it => `
+        <a class="movie-card" href="#/watch/${encodeURIComponent(it.id || '')}"><img src="${esc(safeUrl(it.poster) || PH)}" alt="${esc(it.title || '')}" loading="lazy"></a>`).join('')}</div>`
+    : `<div class="empty-note">${emptyText}</div>`;
+
+  function draw() {
+    if (!authReady) { app.innerHTML = '<div class="empty-note">Loading…</div>'; return; }
+    if (!currentUser) {
+      app.innerHTML = `
+        <div class="profile-wrap"><div class="profile-loggedout">
+          <i class="fa fa-user-circle"></i>
+          <h2>Log in to view your Profile</h2>
+          <p>Account එකකට log in වුනොත් My List, Seen List සහ Profile settings බලාගන්න පුළුවන්.</p>
+          <button class="btn btn-primary" id="goLoginBtn"><i class="fa fa-sign-in-alt"></i> Log in</button>
+        </div></div>`;
+      $('#goLoginBtn').addEventListener('click', () => openModal('login'));
+      return;
+    }
+    const d = userDoc || {};
+    const label = d.username || currentUser.displayName || (currentUser.email || '').split('@')[0] || '?';
+    const fullName = [d.firstName, d.lastName].filter(Boolean).join(' ');
+    const myList = Array.isArray(d.myList) ? d.myList : [];
+    const seenList = Array.isArray(d.seenList) ? d.seenList : [];
+    const photo = safeUrl(d.photoURL) || (/^data:image\//.test(d.photoURL || '') ? d.photoURL : '');
+    let joined = '';
+    if (d.createdAt) { const dt = new Date(d.createdAt); if (!isNaN(dt)) joined = 'Joined Date: ' + dt.toISOString().slice(0, 10); }
+
+    app.innerHTML = `
+      <div class="profile-wrap">
+        <div class="profile-card">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="pfAvatar">${photo ? `<img src="${esc(photo)}" alt="">` : esc(label.charAt(0).toUpperCase())}</div>
+            <div class="profile-edit-badge" id="pfBadge" title="Change profile photo"><i class="fa fa-pen"></i></div>
+          </div>
+          <input type="file" id="pfFile" accept="image/*" style="display:none">
+          ${editing ? `
+            <div class="profile-edit-form">
+              <div class="profile-error" id="pfError"></div>
+              <div class="profile-static-field"><b>Username:</b> ${esc(label)}</div>
+              <div class="profile-static-field"><b>Email:</b> ${esc(d.email || currentUser.email || '—')}</div>
+              <div class="row">
+                <input type="text" id="pfFirst" placeholder="Name" value="${esc(d.firstName || '')}">
+                <input type="text" id="pfLast" placeholder="Last name" value="${esc(d.lastName || '')}">
+              </div>
+              <div class="profile-edit-actions">
+                <button class="profile-cancel-btn" id="pfCancel">Cancel</button>
+                <button class="profile-save-btn" id="pfSave"><i class="fa fa-save"></i> Save</button>
+              </div>
+            </div>` : `
+            <div class="profile-name">${esc(fullName || label)}</div>
+            <button class="profile-edit-btn" id="pfEdit"><i class="fa fa-pen"></i> Edit Profile</button>
+            <div class="profile-joined">${esc(joined)}</div>`}
+        </div>
+
+        <div class="profile-stats">
+          <div class="profile-stat"><div class="profile-stat-num">${myList.length}</div><div class="profile-stat-label">My List</div></div>
+          <div class="profile-stat"><div class="profile-stat-num">${seenList.length}</div><div class="profile-stat-label">Seen List</div></div>
+          <div class="profile-stat"><div class="profile-stat-num">${Array.isArray(d.sharedLinks) ? d.sharedLinks.length : 0}</div><div class="profile-stat-label">Shared Links</div></div>
+          <div class="profile-stat"><div class="profile-stat-num">${Number(d.commentsCount) || 0}</div><div class="profile-stat-label">Comments</div></div>
+        </div>
+
+        <div class="profile-tabs">
+          ${[['list', 'fa-solid fa-table-cells-large', 'List'], ['seen', 'fa fa-eye', 'Seen'], ['links', 'fa fa-link', 'Links'], ['settings', 'fa fa-cog', 'Settings']]
+            .map(([k, ic, t]) => `<div class="profile-tab ${tab === k ? 'active' : ''}" data-tab="${k}"><i class="${ic}"></i> ${t}</div>`).join('')}
+        </div>
+        <div>
+          ${tab === 'list' ? gridHTML(myList, 'No content available on your list.') : ''}
+          ${tab === 'seen' ? gridHTML(seenList, 'No content available on your seen list.') : ''}
+          ${tab === 'links' ? '<div class="empty-note">No shared links yet.</div>' : ''}
+          ${tab === 'settings' ? `
+            <button class="settings-item" id="pfChangePw"><span><i class="fa fa-key left"></i> Change Password</span><i class="fa fa-chevron-right right"></i></button>
+            <button class="settings-item danger" id="pfLogout"><span><i class="fa fa-right-from-bracket left"></i> Logout</span><i class="fa fa-chevron-right right"></i></button>` : ''}
+        </div>
+      </div>`;
+
+    $$('.profile-tab').forEach(t => t.addEventListener('click', () => { tab = t.dataset.tab; draw(); }));
+    $('#pfEdit')?.addEventListener('click', () => { editing = true; draw(); });
+    $('#pfCancel')?.addEventListener('click', () => { editing = false; draw(); });
+    $('#pfSave')?.addEventListener('click', async () => {
+      const btn = $('#pfSave');
+      const firstName = $('#pfFirst').value.trim(), lastName = $('#pfLast').value.trim();
+      btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
+      try {
+        await setDoc(doc(db, 'users', currentUser.uid), { firstName, lastName }, { merge: true });
+        userDoc = { ...userDoc, firstName, lastName }; editing = false; draw();
+      } catch (err) {
+        console.error(err); $('#pfError').textContent = 'Error: ' + err.message;
+        btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save';
+      }
+    });
+    $('#pfBadge').addEventListener('click', () => $('#pfFile').click());
+    $('#pfFile').addEventListener('change', async e => {
+      const file = e.target.files[0]; e.target.value = '';
+      if (!file) return;
+      if (!file.type.startsWith('image/')) { alert('කරුණාකර Image file එකක් තෝරන්න'); return; }
+      $('#pfAvatar').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
+      try {
+        const dataUrl = await resizeImageToDataURL(file);
+        await setDoc(doc(db, 'users', currentUser.uid), { photoURL: dataUrl }, { merge: true });
+        userDoc = { ...userDoc, photoURL: dataUrl };
+        renderAuthBtnAvatar(label, dataUrl); draw();
+      } catch (err) { console.error(err); alert('Error: ' + err.message); draw(); }
+    });
+    $('#pfChangePw')?.addEventListener('click', async () => {
+      if (!currentUser.email) return;
+      try { await sendPasswordResetEmail(auth, currentUser.email); alert('Password reset link එකක් ' + currentUser.email + ' වලට යවලා තියෙනවා.'); }
+      catch (err) { alert('Error: ' + err.message); }
+    });
+    $('#pfLogout')?.addEventListener('click', async () => {
+      if (!confirm('Logout කරන්න ස්ථිර ද?')) return;
+      await signOut(auth); location.hash = '#/home';
+    });
+  }
+  routeAuthCb = draw;
+  draw();
+}
+
+/* =========================================================
+   ROUTER  (#/home, #/movies, #/watch/ID ...)
+   ========================================================= */
+const routes = {
+  home:     { nav: 'home',     render: homePage },
+  movies:   { nav: 'movies',   render: listPage({ title: '🎬 All Movies', filter: m => hasSection(m, 'allmovies') }) },
+  lkcinema: { nav: 'lkcinema', render: listPage({ title: '🎬 LK Cinema', filter: m => hasSection(m, 'cinema') }) },
+  anime:    { nav: 'anime',    render: listPage({ title: '🎌 Anime', filter: m => hasSection(m, 'anime') }) },
+  series:   { nav: 'series',   render: listPage({ title: 'TV Shows', series: true, filter: m => hasSection(m, 'series') || m.type === 'series' }) },
+  request:  { nav: 'request',  render: requestPage },
+  chanels:  { nav: 'chanels',  render: channelsPage },
+  about:    { nav: 'about',    render: aboutPage },
+  contact:  { nav: 'contact',  render: contactPage },
+  settings: { nav: 'settings', render: settingsPage },
+  profile:  { nav: 'profile',  render: profilePage },
+  watch:    { nav: '',         render: null }
+};
+let routeToken = 0;
+
+function cleanupRoute() {
+  onDataUpdate = null; routeAuthCb = null;
+  clearInterval(heroTimer);
+  watchTimers.forEach(fn => { try { fn(); } catch (e) {} });
+  watchTimers = []; playerOpen = false;
+  $('#trailerModal').classList.remove('active'); $('#trailerPlayerBox').innerHTML = '';
+  document.title = 'MAGICAL MOVIE LAND';
+  setSidebar(false); closeSearch();
+}
+
+function router() {
+  const token = ++routeToken;
+  cleanupRoute();
+  const parts = location.hash.replace(/^#\/?/, '').split('/');
+  const name = parts[0] || 'home';
+  const route = routes[name] || routes.home;
+  $('#backBtn').classList.toggle('hidden', name !== 'watch');
+  $$('[data-route]').forEach(el => el.classList.toggle('active', el.dataset.route === route.nav));
+  window.scrollTo(0, 0);
+  if (name === 'watch') watchPage(decodeURIComponent(parts.slice(1).join('/')), token);
+  else route.render();
+}
+window.addEventListener('hashchange', router);
+
+// පරණ watch.html?id=XXX links වලට support
+(function legacy() {
+  const id = new URLSearchParams(location.search).get('id');
+  if (id && !location.hash) { history.replaceState(null, '', location.pathname); location.hash = '#/watch/' + encodeURIComponent(id); }
+})();
+
+loadMovies();
+router();
+</script>
+</body>
+</html>
