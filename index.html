@@ -73,7 +73,7 @@ header#mainHeader {
 .header-left, .header-right { display:flex; align-items:center; }
 .header-right i { font-size:20px; margin-left:20px; cursor:pointer; color:var(--text); }
 .logo a { display:flex; align-items:center; }
-.logo svg { height:46px; width:auto; display:block; }
+.logo svg { height:28px; width:auto; display:block; }
 .back-btn { font-size:20px; cursor:pointer; margin-right:14px; color:var(--text); }
 
 .mml-auth-btn {
@@ -446,6 +446,8 @@ a.settings-item { text-decoration:none; }
   .top-nav a:hover { color:var(--text); background:rgba(128,128,128,.16); }
   .top-nav a.active { color:#fff; background:var(--accent); }
 
+  .logo svg { height:36px; }
+
   /* Page container */
   #app { max-width:1500px; margin:0 auto; }
 
@@ -512,10 +514,11 @@ a.settings-item { text-decoration:none; }
     <i class="fa fa-arrow-left back-btn hidden" id="backBtn" role="button" aria-label="Back"></i>
     <button class="menu-toggle" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="logo">
-      <a href="#/home" aria-label="MovieZ">
-        <svg viewBox="0 0 160 64" role="img" aria-label="MovieZ">
-          <text x="2" y="44" font-family="'Poppins','Segoe UI','DejaVu Sans',Arial,sans-serif" font-weight="800" font-size="34" letter-spacing="0.5" fill="#038ede">MOVIE</text>
-          <text x="128" y="47" font-family="'Poppins','Segoe UI','DejaVu Sans',Arial,sans-serif" font-weight="800" font-size="43" fill="#ec131e">Z</text>
+      <a href="#/home" aria-label="CineMovieZ">
+        <svg viewBox="40 70 2185 300" role="img" aria-label="CineMovieZ">
+          <path fill="var(--text)" d="M240.3 315.8Q224.8 323.8 208 327.9Q191.3 332 173 332Q118.6 332 86.8 301.6Q55 271.2 55 219.1Q55 166.8 86.8 136.4Q118.6 106 173 106Q191.3 106 208 110.1Q224.8 114.2 240.3 122.2V167.3Q224.7 156.6 209.5 151.7Q194.3 146.7 177.6 146.7Q147.5 146.7 130.3 166Q113.1 185.2 113.1 219.1Q113.1 252.8 130.3 272Q147.5 291.3 177.6 291.3Q194.3 291.3 209.5 286.3Q224.7 281.4 240.3 270.7Z M289.5 109.9H345.7V327.8H289.5Z M403.4 109.9H466.2L545.4 259.3V109.9H598.6V327.8H535.9L456.7 178.4V327.8H403.4Z M656.2 109.9H807.8V152.4H712.4V193H802.1V235.4H712.4V285.3H811V327.8H656.2Z"/>
+          <path fill="#038ede" d="M864 109.9H935.5L985.1 226.5L1035 109.9H1106.3V327.8H1053.2V168.4L1003 285.9H967.4L917.3 168.4V327.8H864Z M1263.7 146.7Q1238 146.7 1223.9 165.7Q1209.7 184.6 1209.7 219.1Q1209.7 253.4 1223.9 272.3Q1238 291.3 1263.7 291.3Q1289.5 291.3 1303.7 272.3Q1317.8 253.4 1317.8 219.1Q1317.8 184.6 1303.7 165.7Q1289.5 146.7 1263.7 146.7ZM1263.7 106Q1316.2 106 1346 136.1Q1375.8 166.1 1375.8 219.1Q1375.8 271.9 1346 301.9Q1316.2 332 1263.7 332Q1211.3 332 1181.5 301.9Q1151.7 271.9 1151.7 219.1Q1151.7 166.1 1181.5 136.1Q1211.3 106 1263.7 106Z M1395.1 109.9H1451.6L1509.3 270.7L1567 109.9H1623.4L1542.7 327.8H1475.8Z M1655.2 109.9H1711.3V327.8H1655.2Z M1769.2 109.9H1920.8V152.4H1825.4V193H1915.1V235.4H1825.4V285.3H1924V327.8H1769.2Z"/>
+          <path fill="#ec131e" d="M1975.3 81H2207.3V124.1L2059.2 303.2H2211.5V357H1971V313.9L2119.1 134.8H1975.3Z"/>
         </svg>
       </a>
     </div>
