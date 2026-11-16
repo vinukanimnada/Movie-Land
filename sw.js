@@ -1,5 +1,5 @@
 /* MAGICAL MOVIE LAND — service worker */
-const VERSION = 'mml-v2';
+const VERSION = 'mml-v4';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 const CACHEABLE_HOSTS = ['cdnjs.cloudflare.com', 'www.gstatic.com'];
 
