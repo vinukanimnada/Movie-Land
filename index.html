@@ -770,6 +770,9 @@ document.addEventListener('error', e => {
   if (t && t.tagName === 'IMG' && !t.dataset.fb) { t.dataset.fb = '1'; t.src = PH; }
 }, true);
 
+// HTML වෙනස් වුනොත් විතරයි ආයෙ render කරන්නේ (නැත්නම් posters ආයෙ load වෙනවා)
+const setHTML = (el, html) => { if (!el) return false; if (el._html === html) return false; el.innerHTML = html; el._html = html; return true; };
+
 function dedupeByTitle(list) {
   const seen = new Set(), out = [];
   (list || []).forEach(m => {
@@ -985,10 +988,11 @@ function listPage({ title, filter, series }) {
         : sort === 'top' ? list.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0))
         : sort === 'az' ? list.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
         : list.sort((a, b) => ts(a) - ts(b));
-      if (!list.length) { grid.innerHTML = dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`; more.innerHTML = ''; return; }
-      grid.innerHTML = list.slice(0, limit).map(m => cardHTML(m, series)).join('');
-      more.innerHTML = list.length > limit ? `<button class="btn btn-secondary" id="loadMoreBtn">Load more (${list.length - limit})</button>` : '';
-      $('#loadMoreBtn', root)?.addEventListener('click', () => { limit += PAGE; fill(); });
+      if (!list.length) { setHTML(grid, dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`); setHTML(more, ''); return; }
+      setHTML(grid, list.slice(0, limit).map(m => cardHTML(m, series)).join(''));
+      if (setHTML(more, list.length > limit ? `<button class="btn btn-secondary" id="loadMoreBtn">Load more (${list.length - limit})</button>` : '')) {
+        $('#loadMoreBtn', root)?.addEventListener('click', () => { limit += PAGE; fill(); });
+      }
     }
     fill();
     onDataUpdate = fill;
@@ -1096,15 +1100,15 @@ function homePage() {
     HOME_SECTIONS.forEach(s => {
       let items = dedupeByTitle(allMovies.filter(m => hasSection(m, s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, 8);
       if (lsGet('mml_sec_' + s.key, 'on') === 'off') items = [];
-      $('#grid-' + s.key).innerHTML = items.map(m => cardHTML(m, s.key === 'tvshows_home')).join('');
+      setHTML($('#grid-' + s.key), items.map(m => cardHTML(m, s.key === 'tvshows_home')).join(''));
       $('#sec-' + s.key).classList.toggle('is-empty', !items.length);
       if (items.length) any = true;
     });
     const ml = currentUser && userDoc && Array.isArray(userDoc.myList) ? userDoc.myList.slice().reverse().slice(0, 8) : [];
-    $('#grid-mylist').innerHTML = ml.map(m => cardHTML(m, false)).join('');
+    setHTML($('#grid-mylist'), ml.map(m => cardHTML(m, false)).join(''));
     $('#sec-mylist').classList.toggle('is-empty', !ml.length);
     if (ml.length) any = true;
-    $('#homeNote').innerHTML = any ? '' : dataState === 'loading' ? `<div class="movie-grid">${skeleton(6)}</div>` : `<div class="empty-note">${emptyNote()}</div>`;
+    setHTML($('#homeNote'), any ? '' : dataState === 'loading' ? `<div class="movie-grid">${skeleton(6)}</div>` : `<div class="empty-note">${emptyNote()}</div>`);
     renderHero();
   }
   heroSig = '';
@@ -1160,7 +1164,7 @@ const contactPage = () => app.innerHTML = `
 
 let deferredInstall = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; });
-const APP_VERSION = '1.2';
+const APP_VERSION = '1.3';
 
 function settingsPage() {
   const getLS = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
