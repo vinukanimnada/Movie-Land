@@ -207,6 +207,8 @@ html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
 .btn-back { background:rgba(128,128,128,.15); border:1px solid #4dc3ff; }
 .btn-back i { color:#4dc3ff; }
 .btn:disabled { opacity:.5; cursor:not-allowed; }
+#myListBtn .fa-solid.fa-bookmark { animation:bmPop .3s cubic-bezier(.2,.9,.3,1.4); }
+@keyframes bmPop { 0% { transform:scale(.6); } 60% { transform:scale(1.25); } 100% { transform:scale(1); } }
 
 /* ===== STATIC PAGES ===== */
 .box { background:var(--card); margin:15px; padding:15px; border-radius:6px; }
@@ -1361,7 +1363,7 @@ function renderMovie(m) {
       <div class="details-actions">
         <button class="btn btn-primary" id="watchNowBtn"><i class="fa fa-play"></i> Watch Now</button>
         ${m.trailer ? `<button class="btn btn-secondary" id="trailerBtn"><i class="fa fa-film"></i> Trailer</button>` : ''}
-        <button class="btn btn-outline" id="myListBtn"><i class="fa fa-plus"></i> My List</button>
+        <button class="btn btn-outline" id="myListBtn"><i class="fa-regular fa-bookmark"></i> My List</button>
       </div>
     </div>
     <div class="player-wrap" id="playerWrap">
@@ -1460,7 +1462,7 @@ function renderMovie(m) {
   // My List button
   const listBtn = $('#myListBtn');
   const paint = inList => {
-    listBtn.innerHTML = inList ? '<i class="fa fa-check"></i> In My List' : '<i class="fa fa-plus"></i> My List';
+    listBtn.innerHTML = inList ? '<i class="fa-solid fa-bookmark"></i> Saved' : '<i class="fa-regular fa-bookmark"></i> My List';
     listBtn.classList.toggle('btn-primary', inList); listBtn.classList.toggle('btn-outline', !inList);
   };
   if (currentUser) listHas('myList', m.id).then(paint);
