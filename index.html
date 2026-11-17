@@ -23,6 +23,12 @@
   var t = 'dark';
   try { t = localStorage.getItem('theme') === 'light' ? 'light' : 'dark'; } catch (e) {}
   document.documentElement.className = t;
+  try {
+    var h = document.documentElement.classList, c = localStorage.getItem('mml_cols');
+    if (c === '2' || c === '4') h.add('cols-' + c);
+    if (localStorage.getItem('mml_badges') === 'off') h.add('no-badges');
+    if (localStorage.getItem('mml_motion') === 'off') h.add('no-motion');
+  } catch (e) {}
   window.MML_ACCENTS = {
     blue:   { name:'Blue',   rgb:'45,123,255',  a:'#2d7bff', a2:'#6b9dff', dark:'#1749b6', soft:'#5f9fff' },
     pink:   { name:'Pink',   rgb:'255,45,149',  a:'#ff2d95', a2:'#ff6b9d', dark:'#b6178f', soft:'#ff5fab' },
@@ -336,6 +342,16 @@ html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
 .settings-item i.right { color:var(--text-faint); font-size:12px; }
 .settings-item.danger, .settings-item.danger i.left { color:#ff5b5b; }
 .settings-item.on { outline:2px solid var(--accent); }
+.settings-label { font-size:13px; color:var(--text-dim); font-weight:600; margin:4px 2px 8px; }
+.seg { display:flex; gap:8px; margin-bottom:12px; }
+.seg-btn { flex:1; background:var(--card); color:var(--text); border:none; border-radius:10px; padding:12px 0; font-size:15px; font-weight:700; cursor:pointer; }
+.seg-btn.on { outline:2px solid var(--accent); color:var(--accent); }
+html.no-badges .quality-badge, html.no-badges .rating-badge { display:none; }
+html.no-motion *, html.no-motion *::before, html.no-motion *::after { animation:none !important; transition:none !important; }
+@media (max-width:767px) {
+  html.cols-2 .movie-grid { grid-template-columns:repeat(2,1fr); }
+  html.cols-4 .movie-grid { grid-template-columns:repeat(4,1fr); gap:6px; }
+}
 
 /* ===== FOOTER ===== */
 .footer { background:var(--bg-alt); padding:40px 20px; text-align:center; border-top:1px solid var(--border); margin-top:20px; }
@@ -718,8 +734,19 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
    ========================================================= */
 function applyTheme(t) {
   t = t === 'light' ? 'light' : 'dark';
-  document.documentElement.className = t;
+  const h = document.documentElement.classList;
+  h.remove('dark', 'light'); h.add(t);
   try { localStorage.setItem('theme', t); } catch (e) {}
+}
+const lsGet = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+function applyPrefs() {
+  const h = document.documentElement.classList;
+  h.remove('cols-2', 'cols-4', 'no-badges', 'no-motion');
+  const c = lsGet('mml_cols', '3');
+  if (c === '2' || c === '4') h.add('cols-' + c);
+  if (lsGet('mml_badges', 'on') === 'off') h.add('no-badges');
+  if (lsGet('mml_motion', 'on') === 'off') h.add('no-motion');
 }
 
 /* =========================================================
@@ -824,7 +851,7 @@ searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(
 (function sakura() {
   const box = $('#sakura-container');
   setInterval(() => {
-    if (!sakuraOn || document.hidden || box.childElementCount > 18) return;
+    if (!sakuraOn || document.hidden || document.documentElement.classList.contains('no-motion') || box.childElementCount > 18) return;
     const p = document.createElement('div');
     const size = Math.random() * 8 + 8;
     const dur = Math.random() * 5 + 6;
@@ -898,7 +925,7 @@ async function initHero() {
   const slides = $$('.hero-slide', slidesBox), dots = $$('.dot', dotsBox);
   let cur = 0;
   const go = i => { slides[cur].classList.remove('active'); dots[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active'); dots[cur].classList.add('active'); };
-  const start = () => { clearInterval(heroTimer); if (slides.length > 1) heroTimer = setInterval(() => go((cur + 1) % slides.length), 4500); };
+  const start = () => { clearInterval(heroTimer); if (slides.length > 1 && lsGet('mml_hero_auto', 'on') !== 'off') heroTimer = setInterval(() => go((cur + 1) % slides.length), 4500); };
   dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); start(); }));
   start();
 }
@@ -986,7 +1013,8 @@ function settingsPage() {
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
   function draw() {
-    const theme = document.documentElement.className === 'light' ? 'light' : 'dark';
+    const theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
+    const cols = lsGet('mml_cols', '3'), badgesOn = lsGet('mml_badges', 'on') !== 'off', motionOn = lsGet('mml_motion', 'on') !== 'off', heroAuto = lsGet('mml_hero_auto', 'on') !== 'off';
     const accent = getLS('mml_accent', 'blue');
     const label = currentUser ? ((userDoc && userDoc.username) || currentUser.displayName || (currentUser.email || '').split('@')[0]) : '';
 
@@ -1011,14 +1039,33 @@ function settingsPage() {
         <div class="sec-title"><span class="cast-bar"></span> Effects</div>
         <button class="settings-item" id="stSakura"><span><i class="fa fa-spa left"></i> Falling petals</span><span class="switch ${sakuraOn ? 'on' : ''}"></span></button>
 
+        <div class="sec-title"><span class="cast-bar"></span> Display</div>
+        <div class="settings-label">Phone grid columns</div>
+        <div class="seg">${['2', '3', '4'].map(n => `<button class="seg-btn ${cols === n ? 'on' : ''}" data-cols="${n}">${n}</button>`).join('')}</div>
+        <button class="settings-item" id="stBadges"><span><i class="fa fa-tag left"></i> Quality &amp; rating badges</span><span class="switch ${badgesOn ? 'on' : ''}"></span></button>
+        <button class="settings-item" id="stMotion"><span><i class="fa fa-wand-magic-sparkles left"></i> Animations</span><span class="switch ${motionOn ? 'on' : ''}"></span></button>
+        <button class="settings-item" id="stHero"><span><i class="fa fa-images left"></i> Banner auto-slide</span><span class="switch ${heroAuto ? 'on' : ''}"></span></button>
+
+        ${currentUser ? `
+        <div class="sec-title"><span class="cast-bar"></span> My Library</div>
+        <button class="settings-item danger" id="stClearList"><span><i class="fa fa-list-check left"></i> Clear My List</span><i class="fa fa-chevron-right right"></i></button>
+        <button class="settings-item danger" id="stClearSeen"><span><i class="fa fa-eye-slash left"></i> Clear Seen List</span><i class="fa fa-chevron-right right"></i></button>` : ''}
+
+        <div class="sec-title"><span class="cast-bar"></span> Share &amp; Support</div>
+        <button class="settings-item" id="stShare"><span><i class="fa fa-share-nodes left"></i> Share this app</span><i class="fa fa-chevron-right right"></i></button>
+        <a class="settings-item" href="#/chanels"><span><i class="fa fa-users left"></i> Join Channels</span><i class="fa fa-chevron-right right"></i></a>
+        <a class="settings-item" href="https://wa.me/94777865724?text=${encodeURIComponent('Hi, I want to report a problem on CineMovieZ: ')}" target="_blank" rel="noopener"><span><i class="fa fa-bug left"></i> Report a problem</span><i class="fa fa-chevron-right right"></i></a>
+
         <div class="sec-title"><span class="cast-bar"></span> App</div>
         <button class="settings-item" id="stInstall"><span><i class="fa fa-download left"></i> ${isStandalone() ? 'App installed ✓' : 'Install App'}</span><i class="fa fa-chevron-right right"></i></button>
         <button class="settings-item" id="stClear"><span><i class="fa fa-broom left"></i> Clear cached data</span><i class="fa fa-chevron-right right"></i></button>
 
         <div class="sec-title"><span class="cast-bar"></span> About</div>
+        <a class="settings-item" href="#/about"><span><i class="fa fa-info-circle left"></i> About Us</span><i class="fa fa-chevron-right right"></i></a>
         <a class="settings-item" href="#/privacy"><span><i class="fa fa-shield-halved left"></i> Privacy Policy</span><i class="fa fa-chevron-right right"></i></a>
         <a class="settings-item" href="#/contact"><span><i class="fa fa-envelope left"></i> Contact Us</span><i class="fa fa-chevron-right right"></i></a>
         <a class="settings-item" href="#/request"><span><i class="fa fa-plus-circle left"></i> Request a Movie</span><i class="fa fa-chevron-right right"></i></a>
+        <button class="settings-item danger" id="stReset"><span><i class="fa fa-rotate-left left"></i> Reset all settings</span><i class="fa fa-chevron-right right"></i></button>
         <div class="app-version">MAGICAL MOVIE LAND · v${APP_VERSION}</div>
       </div>`;
 
@@ -1041,6 +1088,33 @@ function settingsPage() {
       try { Object.keys(localStorage).filter(k => k === CACHE_KEY || k.startsWith(MOVIE_CACHE_PREFIX)).forEach(k => localStorage.removeItem(k)); } catch (e) {}
       allMovies = []; dataState = 'loading'; loadMovies();
       alert('Cache එක clear කළා ✅');
+    });
+    $$('[data-cols]').forEach(b => b.addEventListener('click', () => { lsSet('mml_cols', b.dataset.cols); applyPrefs(); draw(); }));
+    const flip = (id, key, after) => $(id).addEventListener('click', () => { lsSet(key, lsGet(key, 'on') === 'off' ? 'on' : 'off'); applyPrefs(); after && after(); draw(); });
+    flip('#stBadges', 'mml_badges');
+    flip('#stMotion', 'mml_motion', () => { if (lsGet('mml_motion', 'on') === 'off') $('#sakura-container').innerHTML = ''; });
+    flip('#stHero', 'mml_hero_auto');
+    const clearList = (field, name) => async () => {
+      if (!confirm(name + ' සම්පූර්ණයෙන්ම මකන්න ස්ථිර ද?')) return;
+      try {
+        await setDoc(doc(db, 'users', currentUser.uid), { [field]: [] }, { merge: true });
+        userDoc = { ...(userDoc || {}), [field]: [] };
+        alert(name + ' clear කළා ✅');
+      } catch (err) { console.error(err); alert('Error: ' + err.message); }
+    };
+    $('#stClearList')?.addEventListener('click', clearList('myList', 'My List'));
+    $('#stClearSeen')?.addEventListener('click', clearList('seenList', 'Seen List'));
+    $('#stShare').addEventListener('click', async () => {
+      const url = location.origin + location.pathname;
+      try {
+        if (navigator.share) { await navigator.share({ title: 'CineMovieZ', text: 'Watch movies & TV shows on CineMovieZ', url }); return; }
+        await navigator.clipboard.writeText(url); alert('Link එක copy කළා ✅');
+      } catch (e) { if (e && e.name !== 'AbortError') prompt('මේ link එක copy කරන්න:', url); }
+    });
+    $('#stReset').addEventListener('click', () => {
+      if (!confirm('සියලුම settings මුල් තත්ත්වයට ගේන්න ස්ථිර ද?')) return;
+      ['theme', 'mml_accent', 'mml_sakura', 'mml_cols', 'mml_badges', 'mml_motion', 'mml_hero_auto'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+      applyTheme('dark'); window.mmlApplyAccent('blue'); sakuraOn = true; applyPrefs(); draw();
     });
     $('#stLogin')?.addEventListener('click', () => openModal('login'));
     $('#stLogout')?.addEventListener('click', async () => { if (confirm('Logout කරන්න ස්ථිර ද?')) await signOut(auth); });
