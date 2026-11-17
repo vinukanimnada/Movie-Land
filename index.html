@@ -183,6 +183,9 @@ html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
 .hero-slide { position:absolute; inset:0; opacity:0; transition:opacity .6s ease; background:#111; }
 .hero-slide.active { opacity:1; }
 .hero-slide img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+.hero-slide { pointer-events:none; display:block; }
+.hero-slide.active { pointer-events:auto; }
+.hero-cap { position:absolute; left:0; right:0; bottom:0; padding:34px 14px 24px; font-size:16px; font-weight:700; color:#fff; background:linear-gradient(to top,rgba(0,0,0,.75),transparent); text-shadow:0 2px 6px rgba(0,0,0,.6); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .hero-dots { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); display:flex; gap:6px; z-index:2; }
 .hero-dots .dot { width:8px; height:8px; background:rgba(255,255,255,.5); border-radius:50%; cursor:pointer; transition:.3s; box-shadow:0 0 3px rgba(0,0,0,.6); }
 .hero-dots .dot.active { background:var(--accent); width:20px; border-radius:10px; }
@@ -907,9 +910,40 @@ function listPage({ title, filter, series }) {
 let heroBanners = null; // null = තාම load කරලා නෑ
 let heroTimer = null;
 
-async function initHero() {
+let heroSig = '';
+function heroItems() {
+  const items = (heroBanners || []).map(b => ({ img: safeUrl(b.imageUrl), href: '', title: '' }));
+  dedupeByTitle(allMovies.filter(m => m.showInHero === true && safeUrl(m.backdrop)))
+    .sort((a, b) => ts(b) - ts(a))
+    .forEach(m => items.push({ img: safeUrl(m.backdrop), href: '#/watch/' + encodeURIComponent(m.id), title: m.title || '' }));
+  return items.filter(i => i.img);
+}
+function renderHero() {
   const hero = $('#heroSlider'), slidesBox = $('#heroSlides'), dotsBox = $('#heroDots');
   if (!hero) return;
+  const items = heroItems();
+  const sig = JSON.stringify(items.map(i => i.img + '|' + i.href));
+  if (sig === heroSig) return;          // වෙනසක් නැත්නම් slider එක reset කරන්නේ නෑ
+  heroSig = sig;
+  clearInterval(heroTimer);
+  if (!items.length) { hero.classList.remove('has-banners'); slidesBox.innerHTML = ''; dotsBox.innerHTML = ''; return; }
+  hero.classList.add('has-banners');
+  slidesBox.innerHTML = items.map((b, i) => {
+    const inner = `<img src="${esc(b.img)}" alt="${esc(b.title || 'banner')}" loading="${i ? 'lazy' : 'eager'}">${b.title ? `<div class="hero-cap">${esc(b.title)}</div>` : ''}`;
+    return b.href
+      ? `<a class="hero-slide ${i ? '' : 'active'}" href="${esc(b.href)}">${inner}</a>`
+      : `<div class="hero-slide ${i ? '' : 'active'}">${inner}</div>`;
+  }).join('');
+  dotsBox.innerHTML = items.map((b, i) => `<span class="dot ${i ? '' : 'active'}" data-i="${i}"></span>`).join('');
+  const slides = $$('.hero-slide', slidesBox), dots = $$('.dot', dotsBox);
+  let cur = 0;
+  const go = i => { slides[cur].classList.remove('active'); dots[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active'); dots[cur].classList.add('active'); };
+  const start = () => { clearInterval(heroTimer); if (slides.length > 1 && lsGet('mml_hero_auto', 'on') !== 'off') heroTimer = setInterval(() => go((cur + 1) % slides.length), 4500); };
+  dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); start(); }));
+  start();
+}
+async function initHero() {
+  if (!$('#heroSlider')) return;
   if (heroBanners === null) {
     heroBanners = [];
     try {
@@ -918,16 +952,7 @@ async function initHero() {
       heroBanners.sort((a, b) => ts(a) - ts(b));
     } catch (err) { console.error('Hero banners load error:', err); }
   }
-  if (!$('#heroSlider') || !heroBanners.length) return; // page එක මාරු වෙලා නම් නවතින්න
-  hero.classList.add('has-banners');
-  slidesBox.innerHTML = heroBanners.map((b, i) => `<div class="hero-slide ${i ? '' : 'active'}"><img src="${esc(safeUrl(b.imageUrl))}" alt="banner" loading="lazy"></div>`).join('');
-  dotsBox.innerHTML = heroBanners.map((b, i) => `<span class="dot ${i ? '' : 'active'}" data-i="${i}"></span>`).join('');
-  const slides = $$('.hero-slide', slidesBox), dots = $$('.dot', dotsBox);
-  let cur = 0;
-  const go = i => { slides[cur].classList.remove('active'); dots[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active'); dots[cur].classList.add('active'); };
-  const start = () => { clearInterval(heroTimer); if (slides.length > 1 && lsGet('mml_hero_auto', 'on') !== 'off') heroTimer = setInterval(() => go((cur + 1) % slides.length), 4500); };
-  dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); start(); }));
-  start();
+  renderHero(); // page එක මාරු වෙලා නම් #heroSlider නැති නිසා නවතිනවා
 }
 
 const HOME_SECTIONS = [
@@ -953,7 +978,9 @@ function homePage() {
       if (items.length) any = true;
     });
     $('#homeNote').innerHTML = any ? '' : `<div class="empty-note">${emptyNote()}</div>`;
+    renderHero();
   }
+  heroSig = '';
   fill();
   onDataUpdate = fill;
   initHero();
