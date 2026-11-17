@@ -74,7 +74,6 @@ header#mainHeader {
 .header-right i { font-size:20px; margin-left:20px; cursor:pointer; color:var(--text); }
 .logo a { display:flex; align-items:center; }
 .logo svg { height:40px; width:auto; display:block; }
-.back-btn { font-size:20px; cursor:pointer; margin-right:14px; color:var(--text); }
 
 .mml-auth-btn {
   width:38px; height:38px; min-width:38px; border-radius:50%;
@@ -511,7 +510,6 @@ a.settings-item { text-decoration:none; }
 <!-- ===================== HEADER ===================== -->
 <header id="mainHeader">
   <div class="header-left">
-    <i class="fa fa-arrow-left back-btn hidden" id="backBtn" role="button" aria-label="Back"></i>
     <button class="menu-toggle" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
     <div class="logo">
       <a href="#/home" aria-label="CineMovieZ">
@@ -821,10 +819,6 @@ function runSearch(q) {
 let searchTimer;
 searchInput.addEventListener('input', e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => runSearch(e.target.value), 250); });
 searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(searchInput.value); });
-
-$('#backBtn').addEventListener('click', () => {
-  if (history.length > 1) history.back(); else location.hash = '#/home';
-});
 
 /* Sakura petals — container එක පැහැදිලිව හදලා, petals ගාන සීමා කරලා */
 (function sakura() {
@@ -1707,7 +1701,6 @@ function router() {
   const parts = location.hash.replace(/^#\/?/, '').split('/');
   const name = parts[0] || 'home';
   const route = routes[name] || routes.home;
-  $('#backBtn').classList.toggle('hidden', name !== 'watch');
   $$('[data-route]').forEach(el => el.classList.toggle('active', el.dataset.route === route.nav));
   window.scrollTo(0, 0);
   if (name === 'watch') watchPage(decodeURIComponent(parts.slice(1).join('/')), token);
