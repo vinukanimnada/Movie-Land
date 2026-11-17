@@ -28,6 +28,7 @@
     if (c === '2' || c === '4') h.add('cols-' + c);
     if (localStorage.getItem('mml_badges') === 'off') h.add('no-badges');
     if (localStorage.getItem('mml_motion') === 'off') h.add('no-motion');
+    if (localStorage.getItem('mml_titles') === 'off') h.add('no-titles');
   } catch (e) {}
   window.MML_ACCENTS = {
     blue:   { name:'Blue',   rgb:'45,123,255',  a:'#2d7bff', a2:'#6b9dff', dark:'#1749b6', soft:'#5f9fff' },
@@ -360,6 +361,30 @@ html.no-motion *, html.no-motion *::before, html.no-motion *::after { animation:
   html.cols-4 .movie-grid { grid-template-columns:repeat(4,1fr); gap:6px; }
 }
 
+/* ===== POLISH ===== */
+header#mainHeader { background:var(--bg-alt); background:color-mix(in srgb, var(--bg-alt) 80%, transparent); -webkit-backdrop-filter:blur(16px) saturate(170%); backdrop-filter:blur(16px) saturate(170%); }
+.bottom-nav { background:var(--bg-alt); background:color-mix(in srgb, var(--bg-alt) 82%, transparent); -webkit-backdrop-filter:blur(16px) saturate(170%); backdrop-filter:blur(16px) saturate(170%); }
+#app > * { animation:pageIn .35s ease both; }
+@keyframes pageIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.movie-card { border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.35); transition:transform .2s, box-shadow .2s; }
+.movie-card:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 12px 28px rgba(var(--accent-rgb),.3); }
+.movie-card:active { transform:scale(.97); }
+.skel { display:block; aspect-ratio:2/3; border-radius:10px; background:linear-gradient(90deg,var(--card),var(--card-2),var(--card)); background-size:200% 100%; animation:heroShimmer 1.3s linear infinite; }
+.btn-primary { background:linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow:0 6px 18px rgba(var(--accent-rgb),.35); }
+.section-header h2::before { background:linear-gradient(var(--accent-2),var(--accent-dark)); }
+.view-all { box-shadow:0 4px 12px rgba(var(--accent-rgb),.3); }
+.sort-chips { display:flex; gap:8px; overflow-x:auto; padding:0 15px 6px; scrollbar-width:none; justify-content:flex-start; }
+.sort-chips::-webkit-scrollbar { display:none; }
+@media (min-width:1024px) { .sort-chips { justify-content:center; } }
+.chip { flex:0 0 auto; border:1px solid var(--border); background:var(--card); color:var(--text-dim); padding:7px 15px; border-radius:20px; font-size:13px; font-weight:600; cursor:pointer; transition:.2s; }
+.chip.on { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 4px 12px rgba(var(--accent-rgb),.35); }
+.to-top { position:fixed; right:14px; bottom:80px; width:44px; height:44px; border-radius:50%; border:none; background:var(--accent); color:#fff; font-size:16px; cursor:pointer; z-index:450; box-shadow:0 6px 18px rgba(var(--accent-rgb),.45); opacity:0; pointer-events:none; transform:translateY(10px); transition:.25s; }
+.to-top.show { opacity:1; pointer-events:auto; transform:none; }
+@media (min-width:1024px) { .to-top { bottom:24px; right:24px; } }
+html.no-titles .movie-title { display:none; }
+.related-wrap { max-width:1200px; margin:0 auto; padding:6px 0 10px; }
+.related-wrap .sec-title { padding:0 15px; }
+
 /* ===== FOOTER ===== */
 .footer { background:var(--bg-alt); padding:40px 20px; text-align:center; border-top:1px solid var(--border); margin-top:20px; }
 .footer-logo { font-size:22px; font-weight:700; margin-bottom:15px; }
@@ -594,6 +619,7 @@ a.settings-item { text-decoration:none; }
     <li data-route="chanels"><a href="#/chanels"><i class="fa-solid fa-users"></i> Join Channels</a></li>
     <li data-route="about"><a href="#/about"><i class="fa fa-info-circle"></i> About</a></li>
     <li data-route="contact"><a href="#/contact"><i class="fa fa-envelope"></i> Contact Us</a></li>
+    <li><a href="#" id="surpriseBtn"><i class="fa fa-dice"></i> Surprise Me</a></li>
     <li data-route="settings"><a href="#/settings"><i class="fa fa-cog"></i> Settings</a></li>
   </ul>
 </div>
@@ -624,6 +650,7 @@ a.settings-item { text-decoration:none; }
   <a href="#/settings" data-route="settings"><i class="fa fa-cog"></i><span>Settings</span></a>
 </nav>
 
+<button class="to-top" id="toTop" aria-label="Back to top"><i class="fa fa-chevron-up"></i></button>
 <div id="sakura-container"></div>
 
 <!-- Trailer modal -->
@@ -749,11 +776,12 @@ const lsGet = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e)
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 function applyPrefs() {
   const h = document.documentElement.classList;
-  h.remove('cols-2', 'cols-4', 'no-badges', 'no-motion');
+  h.remove('cols-2', 'cols-4', 'no-badges', 'no-motion', 'no-titles');
   const c = lsGet('mml_cols', '3');
   if (c === '2' || c === '4') h.add('cols-' + c);
   if (lsGet('mml_badges', 'on') === 'off') h.add('no-badges');
   if (lsGet('mml_motion', 'on') === 'off') h.add('no-motion');
+  if (lsGet('mml_titles', 'on') === 'off') h.add('no-titles');
 }
 
 /* =========================================================
@@ -826,6 +854,17 @@ $('#searchBtn').addEventListener('click', () => {
   searchBox.classList.add('active'); searchInput.focus();
 });
 $('#closeSearch').addEventListener('click', closeSearch);
+
+const toTop = $('#toTop');
+window.addEventListener('scroll', () => toTop.classList.toggle('show', window.scrollY > 600), { passive: true });
+toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+$('#surpriseBtn').addEventListener('click', e => {
+  e.preventDefault();
+  if (!allMovies.length) { alert('තාම load වෙනවා, ටිකක් ඉඳලා try කරන්න 🎲'); return; }
+  const m = allMovies[Math.floor(Math.random() * allMovies.length)];
+  setSidebar(false);
+  location.hash = '#/watch/' + encodeURIComponent(m.id);
+});
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeSearch(); setSidebar(false); } });
 
 function runSearch(q) {
@@ -886,6 +925,8 @@ function cardHTML(m, series) {
       <div class="movie-title">${esc(title)}</div>
     </a>`;
 }
+const skeleton = n => Array.from({ length: n }, () => '<div class="skel"></div>').join('');
+const SORTS = [['default', 'Default'], ['new', 'Newest'], ['top', 'Top rated'], ['az', 'A–Z']];
 const emptyNote = () => dataState === 'loading' ? 'Loading…' : dataState === 'failed' ? 'Load කරගන්න බැරි උනා. Network එක check කරලා page එක refresh කරන්න.' : 'තාම මෙතන කිසිවක් නැහැ.';
 
 /* Generic list page (All Movies / LK Cinema / Anime / TV Shows) */
@@ -893,12 +934,22 @@ function listPage({ title, filter, series }) {
   return () => {
     const PAGE = 60;
     let limit = PAGE;
-    app.innerHTML = `<h1 class="page-title-center">${title}</h1><div class="movie-grid" id="listGrid"></div><div class="load-more-wrap" id="loadMore"></div>`;
+    let sort = 'default';
+    app.innerHTML = `<h1 class="page-title-center">${title}</h1><div class="sort-chips" id="sortChips">${SORTS.map(([k, t]) => `<button class="chip ${k === sort ? 'on' : ''}" data-sort="${k}">${t}</button>`).join('')}</div><div class="movie-grid" id="listGrid"></div><div class="load-more-wrap" id="loadMore"></div>`;
     const grid = $('#listGrid'), more = $('#loadMore');
+    $$('#sortChips .chip').forEach(c => c.addEventListener('click', () => {
+      sort = c.dataset.sort; limit = PAGE;
+      $$('#sortChips .chip').forEach(x => x.classList.toggle('on', x === c));
+      fill();
+    }));
     function fill() {
       // පරණ -> අලුත් (අලුත්ම එක අන්තිමට) — ඔයා ඉල්ලපු විදිහටම
-      const list = dedupeByTitle(allMovies.filter(filter)).sort((a, b) => ts(a) - ts(b));
-      if (!list.length) { grid.innerHTML = `<div class="empty-note">${emptyNote()}</div>`; more.innerHTML = ''; return; }
+      let list = dedupeByTitle(allMovies.filter(filter));
+      list = sort === 'new' ? list.sort((a, b) => ts(b) - ts(a))
+        : sort === 'top' ? list.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0))
+        : sort === 'az' ? list.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
+        : list.sort((a, b) => ts(a) - ts(b));
+      if (!list.length) { grid.innerHTML = dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`; more.innerHTML = ''; return; }
       grid.innerHTML = list.slice(0, limit).map(m => cardHTML(m, series)).join('');
       more.innerHTML = list.length > limit ? `<button class="btn btn-secondary" id="loadMoreBtn">Load more (${list.length - limit})</button>` : '';
       $('#loadMoreBtn')?.addEventListener('click', () => { limit += PAGE; fill(); });
@@ -996,6 +1047,7 @@ const HOME_SECTIONS = [
 function homePage() {
   app.innerHTML = `
     <section class="hero" id="heroSlider"><div id="heroSlides"></div><div class="hero-dots" id="heroDots"></div></section>
+    <section class="trending is-empty" id="sec-mylist"><div class="section-header"><h2>My List</h2><a class="view-all" href="#/profile">VIEW ALL</a></div><div class="movie-grid" id="grid-mylist"></div></section>
     ${HOME_SECTIONS.map(s => `
       <section class="trending is-empty" id="sec-${s.key}">
         <div class="section-header"><h2>${s.title}</h2><a class="view-all" href="${s.link}">VIEW ALL</a></div>
@@ -1005,17 +1057,23 @@ function homePage() {
   function fill() {
     let any = false;
     HOME_SECTIONS.forEach(s => {
-      const items = dedupeByTitle(allMovies.filter(m => hasSection(m, s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, 8);
+      let items = dedupeByTitle(allMovies.filter(m => hasSection(m, s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, 8);
+      if (lsGet('mml_sec_' + s.key, 'on') === 'off') items = [];
       $('#grid-' + s.key).innerHTML = items.map(m => cardHTML(m, s.key === 'tvshows_home')).join('');
       $('#sec-' + s.key).classList.toggle('is-empty', !items.length);
       if (items.length) any = true;
     });
-    $('#homeNote').innerHTML = any ? '' : `<div class="empty-note">${emptyNote()}</div>`;
+    const ml = currentUser && userDoc && Array.isArray(userDoc.myList) ? userDoc.myList.slice().reverse().slice(0, 8) : [];
+    $('#grid-mylist').innerHTML = ml.map(m => cardHTML(m, false)).join('');
+    $('#sec-mylist').classList.toggle('is-empty', !ml.length);
+    if (ml.length) any = true;
+    $('#homeNote').innerHTML = any ? '' : dataState === 'loading' ? `<div class="movie-grid">${skeleton(6)}</div>` : `<div class="empty-note">${emptyNote()}</div>`;
     renderHero();
   }
   heroSig = '';
   fill();
   onDataUpdate = fill;
+  routeAuthCb = fill;
   initHero();
 }
 
@@ -1074,7 +1132,7 @@ function settingsPage() {
 
   function draw() {
     const theme = document.documentElement.classList.contains('light') ? 'light' : 'dark';
-    const cols = lsGet('mml_cols', '3'), badgesOn = lsGet('mml_badges', 'on') !== 'off', motionOn = lsGet('mml_motion', 'on') !== 'off', heroAuto = lsGet('mml_hero_auto', 'on') !== 'off';
+    const cols = lsGet('mml_cols', '3'), badgesOn = lsGet('mml_badges', 'on') !== 'off', motionOn = lsGet('mml_motion', 'on') !== 'off', heroAuto = lsGet('mml_hero_auto', 'on') !== 'off', startPg = lsGet('mml_start', 'home'), titlesOn = lsGet('mml_titles', 'on') !== 'off', autoOn = lsGet('mml_autonext', 'on') !== 'off';
     const accent = getLS('mml_accent', 'blue');
     const label = currentUser ? ((userDoc && userDoc.username) || currentUser.displayName || (currentUser.email || '').split('@')[0]) : '';
 
@@ -1110,6 +1168,14 @@ function settingsPage() {
         <div class="sec-title"><span class="cast-bar"></span> My Library</div>
         <button class="settings-item danger" id="stClearList"><span><i class="fa fa-list-check left"></i> Clear My List</span><i class="fa fa-chevron-right right"></i></button>
         <button class="settings-item danger" id="stClearSeen"><span><i class="fa fa-eye-slash left"></i> Clear Seen List</span><i class="fa fa-chevron-right right"></i></button>` : ''}
+
+        <div class="sec-title"><span class="cast-bar"></span> Home &amp; Playback</div>
+        <div class="settings-label">Start page</div>
+        <div class="seg">${[['home', 'Home'], ['movies', 'Movies'], ['anime', 'Anime'], ['series', 'TV']].map(([k, t]) => `<button class="seg-btn ${startPg === k ? 'on' : ''}" data-start="${k}">${t}</button>`).join('')}</div>
+        <div class="settings-label">Home sections</div>
+        ${HOME_SECTIONS.map(x => `<button class="settings-item" data-sec="${x.key}"><span><i class="fa fa-table-cells-large left"></i> ${x.title}</span><span class="switch ${lsGet('mml_sec_' + x.key, 'on') !== 'off' ? 'on' : ''}"></span></button>`).join('')}
+        <button class="settings-item" id="stTitles"><span><i class="fa fa-font left"></i> Titles on posters</span><span class="switch ${titlesOn ? 'on' : ''}"></span></button>
+        <button class="settings-item" id="stAuto"><span><i class="fa fa-forward-step left"></i> Auto-play next episode</span><span class="switch ${autoOn ? 'on' : ''}"></span></button>
 
         <div class="sec-title"><span class="cast-bar"></span> Share &amp; Support</div>
         <button class="settings-item" id="stShare"><span><i class="fa fa-share-nodes left"></i> Share this app</span><i class="fa fa-chevron-right right"></i></button>
@@ -1149,6 +1215,10 @@ function settingsPage() {
       allMovies = []; dataState = 'loading'; loadMovies();
       alert('Cache එක clear කළා ✅');
     });
+    $$('[data-start]').forEach(b => b.addEventListener('click', () => { lsSet('mml_start', b.dataset.start); draw(); }));
+    $$('[data-sec]').forEach(b => b.addEventListener('click', () => { const k = 'mml_sec_' + b.dataset.sec; lsSet(k, lsGet(k, 'on') === 'off' ? 'on' : 'off'); draw(); }));
+    $('#stAuto').addEventListener('click', () => { lsSet('mml_autonext', lsGet('mml_autonext', 'on') === 'off' ? 'on' : 'off'); draw(); });
+    $('#stTitles').addEventListener('click', () => { lsSet('mml_titles', lsGet('mml_titles', 'on') === 'off' ? 'on' : 'off'); applyPrefs(); draw(); });
     $$('[data-cols]').forEach(b => b.addEventListener('click', () => { lsSet('mml_cols', b.dataset.cols); applyPrefs(); draw(); }));
     const flip = (id, key, after) => $(id).addEventListener('click', () => { lsSet(key, lsGet(key, 'on') === 'off' ? 'on' : 'off'); applyPrefs(); after && after(); draw(); });
     flip('#stBadges', 'mml_badges');
@@ -1173,7 +1243,7 @@ function settingsPage() {
     });
     $('#stReset').addEventListener('click', () => {
       if (!confirm('සියලුම settings මුල් තත්ත්වයට ගේන්න ස්ථිර ද?')) return;
-      ['theme', 'mml_accent', 'mml_sakura', 'mml_cols', 'mml_badges', 'mml_motion', 'mml_hero_auto'].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+      ['theme', 'mml_accent', 'mml_sakura', 'mml_cols', 'mml_badges', 'mml_motion', 'mml_hero_auto', 'mml_start', 'mml_titles', 'mml_autonext', ...HOME_SECTIONS.map(x => 'mml_sec_' + x.key)].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
       applyTheme('dark'); window.mmlApplyAccent('blue'); sakuraOn = true; applyPrefs(); draw();
     });
     $('#stLogin')?.addEventListener('click', () => openModal('login'));
@@ -1263,9 +1333,10 @@ function buildPlayerHTML(rawUrl) {
   if (isDirectFileUrl(url)) return `<video src="${esc(url)}" controls playsinline preload="auto"></video>`;
   return `<iframe src="${esc(url)}" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>`;
 }
-function attachVideoFallback(box) {
+function attachVideoFallback(box, onEnded) {
   const v = box.querySelector('video');
   if (!v) return;
+  if (onEnded) v.addEventListener('ended', onEnded, { once: true });
   v.addEventListener('error', () => { box.innerHTML = '<div class="player-msg"><b>Error: Refresh page or check your network.</b></div>'; }, { once: true });
   v.muted = false;
   v.play().catch(err => {
@@ -1363,6 +1434,7 @@ function renderMovie(m) {
       <div class="details-actions">
         <button class="btn btn-primary" id="watchNowBtn"><i class="fa fa-play"></i> Watch Now</button>
         ${m.trailer ? `<button class="btn btn-secondary" id="trailerBtn"><i class="fa fa-film"></i> Trailer</button>` : ''}
+        <button class="btn btn-secondary" id="shareBtn" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
         <button class="btn btn-outline" id="myListBtn"><i class="fa-regular fa-bookmark"></i> My List</button>
       </div>
     </div>
@@ -1375,7 +1447,8 @@ function renderMovie(m) {
       <p class="details-desc">${esc(m.description || 'Description එකක් නෑ.')}</p>
     </div>
     ${episodesHTML}
-    ${buildCastHTML(m)}`;
+    ${buildCastHTML(m)}
+    <div id="relatedWrap"></div>`;
 
   const playerWrap = $('#playerWrap'), playerBox = $('#playerBox'), label = $('#nowPlayingLabel');
   const episodesSection = $('#episodesSection');
@@ -1388,16 +1461,13 @@ function renderMovie(m) {
     watchBtn.classList.toggle('btn-primary', !back);
     watchBtn.innerHTML = back ? '<i class="fa fa-arrow-left"></i> Back' : '<i class="fa fa-play"></i> Watch Now';
   }
-  function playUrl(url, text) {
+  function playUrl(url, text, onEnd, auto) {
     label.textContent = text || '';
     playerWrap.classList.add('active');
     const bg = cssUrl(backdrop);
     playerBox.innerHTML = `<div class="player-poster" ${bg ? `style="background-image:url('${bg}')"` : ''}><div class="player-play-btn"><i class="fa fa-play"></i></div></div>`;
-    $('.player-poster', playerBox).addEventListener('click', () => {
-      playerBox.innerHTML = buildPlayerHTML(url);
-      attachVideoFallback(playerBox);
-      markSeen(m);
-    }, { once: true });
+    const begin = () => { playerBox.innerHTML = buildPlayerHTML(url); attachVideoFallback(playerBox, onEnd); markSeen(m); };
+    if (auto) begin(); else $('.player-poster', playerBox).addEventListener('click', begin, { once: true });
     playerOpen = true;
     playerWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -1432,13 +1502,19 @@ function renderMovie(m) {
         </div>
         <i class="fa fa-play episode-play-icon"></i>
       </div>`).join('');
-    $$('.episode-item', list).forEach(item => item.addEventListener('click', () => {
-      const e = eps[+item.dataset.i];
-      $$('.episode-item', list).forEach(x => x.classList.remove('playing'));
-      item.classList.add('playing');
-      playUrl(e.videoUrl, `S${e.season || 1} · E${e.episode || 1}${e.title ? ' — ' + e.title : ''}`);
-      updateWatchBtn();
-    }));
+    const items = $$('.episode-item', list);
+    items.forEach((item, idx) => {
+      const play = auto => {
+        const e = eps[+item.dataset.i];
+        items.forEach(x => x.classList.remove('playing'));
+        item.classList.add('playing');
+        const onEnd = lsGet('mml_autonext', 'on') !== 'off' && items[idx + 1] ? () => items[idx + 1].dispatchEvent(new CustomEvent('autoplay')) : null;
+        playUrl(e.videoUrl, `S${e.season || 1} · E${e.episode || 1}${e.title ? ' — ' + e.title : ''}`, onEnd, auto === true);
+        updateWatchBtn();
+      };
+      item.addEventListener('click', () => play(false));
+      item.addEventListener('autoplay', () => play(true));
+    });
   }
   if (series && episodes.length) {
     renderEpisodes(episodes[0].season || 1);
@@ -1472,6 +1548,29 @@ function renderMovie(m) {
     catch (e) { console.error(e); alert('Error: ' + e.message); }
     finally { listBtn.disabled = false; }
   });
+
+  // Share
+  $('#shareBtn').addEventListener('click', async () => {
+    const url = location.href;
+    try {
+      if (navigator.share) { await navigator.share({ title: m.title || 'CineMovieZ', text: (m.title || '') + ' — CineMovieZ', url }); return; }
+      await navigator.clipboard.writeText(url); alert('Link එක copy කළා ✅');
+    } catch (e) { if (e && e.name !== 'AbortError') prompt('මේ link එක copy කරන්න:', url); }
+  });
+
+  // More Like This
+  const tagsOf = x => String(x.genre || '').split(',').map(g => g.trim().toLowerCase()).filter(Boolean);
+  const myTags = tagsOf(m);
+  function fillRelated() {
+    const box = $('#relatedWrap');
+    if (!box) return;
+    const rel = dedupeByTitle(allMovies.filter(x => x.id !== m.id && isSeries(x) === series))
+      .map(x => ({ x, n: tagsOf(x).filter(t => myTags.includes(t)).length }))
+      .filter(o => o.n > 0).sort((a, b) => b.n - a.n || ts(b.x) - ts(a.x)).slice(0, 9).map(o => o.x);
+    box.innerHTML = rel.length ? `<div class="related-wrap"><div class="sec-title"><span class="cast-bar"></span> More Like This</div><div class="movie-grid">${rel.map(x => cardHTML(x, series)).join('')}</div></div>` : '';
+  }
+  fillRelated();
+  onDataUpdate = fillRelated;
 }
 
 async function watchPage(id, token) {
@@ -1848,6 +1947,10 @@ window.addEventListener('hashchange', router);
   if (id && !location.hash) { history.replaceState(null, '', location.pathname); location.hash = '#/watch/' + encodeURIComponent(id); }
 })();
 
+{
+  const sp = lsGet('mml_start', 'home');
+  if (!location.hash && sp !== 'home' && routes[sp]) history.replaceState(null, '', '#/' + sp);
+}
 loadMovies();
 router();
 
