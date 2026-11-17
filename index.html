@@ -180,6 +180,8 @@ html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
 /* ===== HOME ===== */
 .hero { position:relative; height:180px; overflow:hidden; background:var(--card); margin:12px 15px; border-radius:16px; display:none; }
 .hero.has-banners { display:block; }
+.hero.is-loading { display:block; background:linear-gradient(90deg,var(--card),var(--card-2),var(--card)); background-size:200% 100%; animation:heroShimmer 1.3s linear infinite; }
+@keyframes heroShimmer { to { background-position:-200% 0; } }
 .hero-slide { position:absolute; inset:0; opacity:0; transition:opacity .6s ease; background:#111; }
 .hero-slide.active { opacity:1; }
 .hero-slide img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
@@ -907,7 +909,9 @@ function listPage({ title, filter, series }) {
 /* =========================================================
    HOME
    ========================================================= */
-let heroBanners = null; // null = තාම load කරලා නෑ
+const HERO_CACHE = 'mml_hero_cache_v1';
+let heroBanners = (function () { try { const a = JSON.parse(localStorage.getItem(HERO_CACHE) || 'null'); return Array.isArray(a) ? a : null; } catch (e) { return null; } })(); // null = තාම කිසිම data එකක් නෑ
+let heroFetched = false, heroPromise = null;
 let heroTimer = null;
 
 let heroSig = '';
@@ -923,10 +927,16 @@ function renderHero() {
   if (!hero) return;
   const items = heroItems();
   const sig = JSON.stringify(items.map(i => i.img + '|' + i.href));
+  if (!items.length) {
+    if (hero.classList.contains('is-loading')) return;   // data එනකම් skeleton එක තියන්න
+    heroSig = sig; clearInterval(heroTimer);
+    hero.classList.remove('has-banners'); slidesBox.innerHTML = ''; dotsBox.innerHTML = '';
+    return;
+  }
+  hero.classList.remove('is-loading');
   if (sig === heroSig) return;          // වෙනසක් නැත්නම් slider එක reset කරන්නේ නෑ
   heroSig = sig;
   clearInterval(heroTimer);
-  if (!items.length) { hero.classList.remove('has-banners'); slidesBox.innerHTML = ''; dotsBox.innerHTML = ''; return; }
   hero.classList.add('has-banners');
   slidesBox.innerHTML = items.map((b, i) => {
     const inner = `<img src="${esc(b.img)}" alt="${esc(b.title || 'banner')}" loading="${i ? 'lazy' : 'eager'}">${b.title ? `<div class="hero-cap">${esc(b.title)}</div>` : ''}`;
@@ -942,17 +952,38 @@ function renderHero() {
   dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); start(); }));
   start();
 }
+function fetchHeroBanners() {
+  if (heroFetched) return Promise.resolve();
+  if (heroPromise) return heroPromise;
+  heroPromise = (async () => {
+    for (let i = 1; i <= 5; i++) {
+      try {
+        const snap = await getDocs(collection(db, 'heroBanners'));
+        const list = [];
+        snap.forEach(d => { const x = d.data(); x.id = d.id; if (safeUrl(x.imageUrl)) list.push(x); });
+        list.sort((a, b) => ts(a) - ts(b));
+        heroBanners = list; heroFetched = true;
+        try { localStorage.setItem(HERO_CACHE, JSON.stringify(list)); } catch (e) {}
+        return;
+      } catch (err) {
+        console.error(`Hero banners load error (attempt ${i}):`, err);
+        if (i < 5) await sleep(1200);
+      }
+    }
+  })().finally(() => { heroPromise = null; });
+  return heroPromise;
+}
 async function initHero() {
-  if (!$('#heroSlider')) return;
-  if (heroBanners === null) {
-    heroBanners = [];
-    try {
-      const snap = await getDocs(collection(db, 'heroBanners'));
-      snap.forEach(d => { const x = d.data(); x.id = d.id; if (safeUrl(x.imageUrl)) heroBanners.push(x); });
-      heroBanners.sort((a, b) => ts(a) - ts(b));
-    } catch (err) { console.error('Hero banners load error:', err); }
-  }
-  renderHero(); // page එක මාරු වෙලා නම් #heroSlider නැති නිසා නවතිනවා
+  const hero = $('#heroSlider');
+  if (!hero) return;
+  if (heroBanners === null && !heroItems().length) hero.classList.add('is-loading'); // cache නැති පළමු වතාව: skeleton
+  renderHero();                       // cache + movies වලින් ඉක්මනින්ම පෙන්නනවා
+  await fetchHeroBanners();           // ඊට පස්සේ අලුත්ම data එක ගන්නවා (fail වුනොත් auto retry)
+  if (heroBanners === null) heroBanners = [];
+  const h = $('#heroSlider');
+  if (!h) return;                     // page එක මාරු වෙලා නම් නවතින්න
+  h.classList.remove('is-loading');
+  renderHero();
 }
 
 const HOME_SECTIONS = [
