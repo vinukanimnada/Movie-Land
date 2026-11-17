@@ -382,6 +382,7 @@ html.no-motion *, html.no-motion *::before, html.no-motion *::after { animation:
 /* ===== POLISH ===== */
 .bottom-nav { background:var(--bg-alt); background:color-mix(in srgb, var(--bg-alt) 82%, transparent); -webkit-backdrop-filter:blur(16px) saturate(170%); backdrop-filter:blur(16px) saturate(170%); }
 #app > * { animation:pageIn .35s ease both; }
+#app > .route-cached { animation:none; }
 @keyframes pageIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
 .movie-card { border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,.35); transition:transform .2s, box-shadow .2s; }
 .movie-card:hover { transform:translateY(-4px) scale(1.03); box-shadow:0 12px 28px rgba(var(--accent-rgb),.3); }
@@ -750,7 +751,8 @@ const auth = getAuth(fbApp);
    ========================================================= */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
-const app = $('#app');
+const appRoot = $('#app');
+let app = appRoot;   // දැනට පෙන්නන page එකේ container එක (router එක මාරු කරනවා)
 
 // HTML escape — Firestore data innerHTML ට දාද්දි XSS වළක්වන්න
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
@@ -812,6 +814,16 @@ let allMovies = [];
 let dataState = 'loading'; // loading | ready | failed
 let onDataUpdate = null;   // දැන් පෙන්නන page එකේ re-render callback
 
+/* Page cache: Home / Movies / LK Cinema / Anime / TV Shows pages DOM එකේම තියාගන්නවා (ආයෙ load කරන්නේ නෑ) */
+let stateVer = 0, curName = null;
+const pageCache = {};
+function bumpData() {
+  stateVer++;
+  onDataUpdate && onDataUpdate();
+  const pg = pageCache[curName];
+  if (pg) pg.ver = stateVer;
+}
+
 function readCache() {
   try {
     const arr = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
@@ -838,14 +850,14 @@ async function fetchFreshSilently() {
 }
 async function loadMovies() {
   const cached = readCache();
-  if (cached) { allMovies = dedupeByTitle(cached); dataState = 'ready'; onDataUpdate && onDataUpdate(); }
+  if (cached) { allMovies = dedupeByTitle(cached); dataState = 'ready'; bumpData(); }
   const fresh = await fetchFreshSilently();
   if (fresh) {
     allMovies = dedupeByTitle(fresh); dataState = 'ready'; writeCache(fresh);
   } else if (!cached) {
     dataState = 'failed';
   }
-  onDataUpdate && onDataUpdate();
+  bumpData();
 }
 
 /* =========================================================
@@ -958,11 +970,12 @@ function listPage({ title, filter, series }) {
     const PAGE = 60;
     let limit = PAGE;
     let sort = 'default';
+    const root = app;
     app.innerHTML = `<h1 class="page-title-center">${title}</h1><div class="sort-chips" id="sortChips">${SORTS.map(([k, t]) => `<button class="chip ${k === sort ? 'on' : ''}" data-sort="${k}">${t}</button>`).join('')}</div><div class="movie-grid" id="listGrid"></div><div class="load-more-wrap" id="loadMore"></div>`;
-    const grid = $('#listGrid'), more = $('#loadMore');
-    $$('#sortChips .chip').forEach(c => c.addEventListener('click', () => {
+    const grid = $('#listGrid', root), more = $('#loadMore', root);
+    $$('#sortChips .chip', root).forEach(c => c.addEventListener('click', () => {
       sort = c.dataset.sort; limit = PAGE;
-      $$('#sortChips .chip').forEach(x => x.classList.toggle('on', x === c));
+      $$('#sortChips .chip', root).forEach(x => x.classList.toggle('on', x === c));
       fill();
     }));
     function fill() {
@@ -975,7 +988,7 @@ function listPage({ title, filter, series }) {
       if (!list.length) { grid.innerHTML = dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`; more.innerHTML = ''; return; }
       grid.innerHTML = list.slice(0, limit).map(m => cardHTML(m, series)).join('');
       more.innerHTML = list.length > limit ? `<button class="btn btn-secondary" id="loadMoreBtn">Load more (${list.length - limit})</button>` : '';
-      $('#loadMoreBtn')?.addEventListener('click', () => { limit += PAGE; fill(); });
+      $('#loadMoreBtn', root)?.addEventListener('click', () => { limit += PAGE; fill(); });
     }
     fill();
     onDataUpdate = fill;
@@ -988,7 +1001,7 @@ function listPage({ title, filter, series }) {
 const HERO_CACHE = 'mml_hero_cache_v1';
 let heroBanners = (function () { try { const a = JSON.parse(localStorage.getItem(HERO_CACHE) || 'null'); return Array.isArray(a) ? a : null; } catch (e) { return null; } })(); // null = තාම කිසිම data එකක් නෑ
 let heroFetched = false, heroPromise = null;
-let heroTimer = null;
+let heroTimer = null, heroRestart = null;
 
 let heroSig = '';
 function heroItems() {
@@ -1005,7 +1018,7 @@ function renderHero() {
   const sig = JSON.stringify(items.map(i => i.img + '|' + i.href));
   if (!items.length) {
     if (hero.classList.contains('is-loading')) return;   // data එනකම් skeleton එක තියන්න
-    heroSig = sig; clearInterval(heroTimer);
+    heroSig = sig; clearInterval(heroTimer); heroRestart = null;
     hero.classList.remove('has-banners'); slidesBox.innerHTML = ''; dotsBox.innerHTML = '';
     return;
   }
@@ -1026,6 +1039,7 @@ function renderHero() {
   const go = i => { slides[cur].classList.remove('active'); dots[cur].classList.remove('active'); cur = i; slides[cur].classList.add('active'); dots[cur].classList.add('active'); };
   const start = () => { clearInterval(heroTimer); if (slides.length > 1 && lsGet('mml_hero_auto', 'on') !== 'off') heroTimer = setInterval(() => go((cur + 1) % slides.length), 4500); };
   dots.forEach(d => d.addEventListener('click', () => { go(+d.dataset.i); start(); }));
+  heroRestart = start;
   start();
 }
 function fetchHeroBanners() {
@@ -1421,6 +1435,8 @@ async function toggleInList(field, m) {
   const arr = Array.isArray(d[field]) ? d[field] : [];
   const existing = arr.find(x => x.id === m.id);
   await setDoc(doc(db, 'users', currentUser.uid), { [field]: existing ? arrayRemove(existing) : arrayUnion(slim(m)) }, { merge: true });
+  userDoc = { ...(userDoc || {}), [field]: existing ? arr.filter(x => x.id !== m.id) : [...arr, slim(m)] };
+  stateVer++;   // Home එකේ My List refresh වෙන්න
   return !existing;
 }
 async function markSeen(m) {
@@ -1429,6 +1445,7 @@ async function markSeen(m) {
     const d = await loadUserDoc();
     if ((Array.isArray(d.seenList) ? d.seenList : []).some(x => x.id === m.id)) return;
     await setDoc(doc(db, 'users', currentUser.uid), { seenList: arrayUnion(slim(m)) }, { merge: true });
+    userDoc = { ...(userDoc || {}), seenList: [...(Array.isArray(d.seenList) ? d.seenList : []), slim(m)] };
   } catch (e) { console.error(e); }
 }
 
@@ -1773,7 +1790,9 @@ onAuthStateChanged(auth, async user => {
     authMenu.classList.remove('active');
   }
   authReady = true;
+  stateVer++;
   routeAuthCb && routeAuthCb();
+  const pgA = pageCache[curName]; if (pgA) pgA.ver = stateVer;
 });
 
 /* =========================================================
@@ -1967,20 +1986,61 @@ function cleanupRoute() {
   setSidebar(false); closeSearch();
 }
 
+const CACHED_ROUTES = new Set(['home', 'movies', 'lkcinema', 'anime', 'series']);
+let tmpEl = null;
+
 function router() {
   const token = ++routeToken;
+  // පිටවෙන page එකේ scroll position එක save කරගන්නවා
+  const prev = pageCache[curName];
+  if (prev) prev.scrollY = window.scrollY;
+  if (curName === 'settings' || curName === 'profile') stateVer++;   // settings / lists වෙනස් වෙලා ඇති
   cleanupRoute();
   routeCount++;
   const parts = location.hash.replace(/^#\/?/, '').split('/');
   const name = parts[0] || 'home';
-  const route = routes[name] || routes.home;
+  const key = routes[name] ? name : 'home';
+  const route = routes[key];
+  curName = key;
   document.body.classList.toggle('on-watch', name === 'watch');
   menuBtn.setAttribute('aria-label', name === 'watch' ? 'Back' : 'Menu');
   $$('[data-route]').forEach(el => el.classList.toggle('active', el.dataset.route === route.nav));
+
+  // සියලුම page hide කරනවා, තාවකාලික page එක අයින් කරනවා
+  [...appRoot.children].forEach(el => { el.style.display = 'none'; });
+  if (tmpEl) { tmpEl.remove(); tmpEl = null; }
+
+  if (CACHED_ROUTES.has(key)) {
+    let pg = pageCache[key];
+    if (!pg) {
+      const el = document.createElement('div');
+      el.className = 'route-page route-cached';
+      appRoot.appendChild(el);
+      app = el;
+      window.scrollTo(0, 0);
+      route.render();
+      pageCache[key] = { el, onData: onDataUpdate, auth: routeAuthCb, ver: stateVer, scrollY: 0 };
+    } else {
+      // කලින් හදපු page එකම ආයෙත් පෙන්නනවා — poster / hero ආයෙ load වෙන්නේ නෑ
+      pg.el.style.display = '';
+      app = pg.el;
+      onDataUpdate = pg.onData; routeAuthCb = pg.auth;
+      if (pg.ver !== stateVer) { pg.onData && pg.onData(); pg.ver = stateVer; }   // data වෙනස් වෙලා නම් විතරයි refresh
+      if (key === 'home' && heroRestart) heroRestart();
+      window.scrollTo(0, pg.scrollY || 0);
+    }
+    return;
+  }
+
+  tmpEl = document.createElement('div');
+  tmpEl.className = 'route-page';
+  appRoot.appendChild(tmpEl);
+  app = tmpEl;
   window.scrollTo(0, 0);
   if (name === 'watch') watchPage(decodeURIComponent(parts.slice(1).join('/')), token);
   else route.render();
 }
+try { history.scrollRestoration = 'manual'; } catch (e) {}
 window.addEventListener('hashchange', router);
 
 // පරණ watch.html?id=XXX links වලට support
