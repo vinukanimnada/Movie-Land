@@ -181,7 +181,8 @@ html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
 .home-no-result { text-align:center; color:var(--text-faint); padding:30px 20px; font-size:14px; }
 
 /* ===== PAGE BASICS ===== */
-.page-title-center { text-align:center; color:var(--accent); margin:20px 0 20px; font-size:24px; }
+.page-title-center { position:relative; text-align:left; color:var(--accent); margin:20px 15px 16px; padding-left:12px; font-size:24px; line-height:1.2; }
+.page-title-center::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%); width:4px; height:26px; background:linear-gradient(var(--accent-2),var(--accent-dark)); border-radius:2px; }
 .page-h1 { font-size:20px; margin:20px 15px 10px; padding-left:12px; border-left:4px solid var(--accent); }
 .empty-note { text-align:center; color:var(--text-faint); padding:50px 20px; font-size:14px; grid-column:1/-1; }
 .load-more-wrap { text-align:center; padding:6px 0 20px; }
@@ -525,7 +526,8 @@ a.settings-item { text-decoration:none; }
   .movie-grid { grid-template-columns:repeat(auto-fill, minmax(170px, 1fr)); gap:18px; padding:20px 28px; }
   .movie-title { font-size:13px; padding:26px 8px 8px; }
   .quality-badge, .rating-badge { font-size:11px; padding:3px 6px; }
-  .page-title-center { font-size:30px; margin:34px 0 10px; }
+  .page-title-center { font-size:30px; margin:34px 28px 16px; padding-left:14px; }
+  .page-title-center::before { height:32px; }
   .page-h1 { font-size:24px; margin:34px 28px 12px; }
   .empty-note { font-size:15px; }
 
@@ -1965,9 +1967,9 @@ function profilePage() {
    ========================================================= */
 const routes = {
   home:     { nav: 'home',     render: homePage },
-  movies:   { nav: 'movies',   render: listPage({ title: '🎬 All Movies', filter: m => hasSection(m, 'allmovies') }) },
-  lkcinema: { nav: 'lkcinema', render: listPage({ title: '🎬 LK Cinema', filter: m => hasSection(m, 'cinema') }) },
-  anime:    { nav: 'anime',    render: listPage({ title: '🎌 Anime', filter: m => hasSection(m, 'anime') }) },
+  movies:   { nav: 'movies',   render: listPage({ title: 'All Movies', filter: m => hasSection(m, 'allmovies') }) },
+  lkcinema: { nav: 'lkcinema', render: listPage({ title: 'LK Cinema', filter: m => hasSection(m, 'cinema') }) },
+  anime:    { nav: 'anime',    render: listPage({ title: 'Anime', filter: m => hasSection(m, 'anime') }) },
   series:   { nav: 'series',   render: listPage({ title: 'TV Shows', series: true, filter: m => hasSection(m, 'series') || m.type === 'series' }) },
   request:  { nav: 'request',  render: requestPage },
   chanels:  { nav: 'chanels',  render: channelsPage },
