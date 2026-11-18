@@ -739,7 +739,7 @@ a.settings-item { text-decoration:none; }
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getFirestore, collection, getDocs, doc, getDoc, setDoc, addDoc,
-  serverTimestamp, arrayUnion, arrayRemove, deleteDoc
+  serverTimestamp, arrayUnion, arrayRemove, deleteDoc, increment
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import {
   getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
@@ -802,6 +802,59 @@ function dedupeByTitle(list) {
 const hasSection = (m, k) => Array.isArray(m.sections) && m.sections.includes(k);
 const isSeries = m => hasSection(m, 'series') || m.category === 'series' || m.category === 'tvshows' || m.type === 'series' || m.type === 'tv';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* =========================================================
+   Analytics — Admin panel එකේ Analytics tab එකට data (Firestore counters)
+   ========================================================= */
+const slDay = () => new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);          // ශ්‍රී ලංකා වේලාවෙන් දවස
+const slHour = () => String(new Date(Date.now() + 5.5 * 3600e3).getUTCHours());
+const sessGet = k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } };
+const sessSet = k => { try { sessionStorage.setItem(k, '1'); } catch (e) {} };
+
+// kind: views | plays | trailers | saves | shares
+function track(kind, m) {
+  try {
+    const d = slDay();
+    if (m && m.id) {
+      setDoc(doc(db, 'analytics', m.id), {
+        title: m.title || '', poster: safeUrl(m.poster), category: isSeries(m) ? 'series' : 'movie',
+        [kind]: increment(1), lastAt: new Date().toISOString(),
+        days: { [d]: { [kind]: increment(1) } }
+      }, { merge: true }).catch(() => {});
+    }
+    setDoc(doc(db, 'analytics_daily', d), { [kind]: increment(1) }, { merge: true }).catch(() => {});
+  } catch (e) {}
+}
+// එකම session එකේ එකම movie එක දෙපාරක් නොගණන්න
+function trackOnce(kind, m) {
+  if (!m || !m.id) return;
+  const k = 'mml_t_' + kind + '_' + m.id;
+  if (sessGet(k)) return;
+  sessSet(k); track(kind, m);
+}
+function trackVisit() {
+  try {
+    if (sessGet('mml_visit')) return;
+    sessSet('mml_visit');
+    const d = slDay();
+    const mobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const data = { visits: increment(1), [mobile ? 'mobile' : 'desktop']: increment(1), hours: { [slHour()]: increment(1) } };
+    let firstToday = true;
+    try { firstToday = localStorage.getItem('mml_last_day') !== d; localStorage.setItem('mml_last_day', d); } catch (e) {}
+    if (firstToday) data.visitors = increment(1);   // දවසට එක device එකකට එක පාරයි
+    setDoc(doc(db, 'analytics_daily', d), data, { merge: true }).catch(() => {});
+  } catch (e) {}
+}
+// හොයලා හම්බුනේ නැති නම් (request කරන්න ඕන ඒවා දැනගන්න)
+const missedSearches = new Set();
+function trackMiss(q) {
+  try {
+    const id = q.toLowerCase().replace(/[^a-z0-9\u0D80-\u0DFF ]/g, '').trim().replace(/\s+/g, '_').slice(0, 60);
+    if (id.length < 3 || missedSearches.has(id)) return;
+    missedSearches.add(id);
+    setDoc(doc(db, 'analytics_searches', id), { q: q.trim().slice(0, 80), count: increment(1), lastAt: new Date().toISOString() }, { merge: true }).catch(() => {});
+  } catch (e) {}
+}
 
 /* =========================================================
    Theme
@@ -928,6 +981,7 @@ function runSearch(q) {
   searchResults.classList.add('active');
   const found = allMovies.filter(m => (m.title || '').toLowerCase().includes(q)).slice(0, 20);
   if (!found.length) {
+    if (dataState === 'ready') trackMiss(q);
     searchResults.innerHTML = `<div class="home-no-result">${dataState === 'loading' ? 'Loading…' : '🔍 Not Found!'}</div>`;
     return;
   }
@@ -1460,6 +1514,7 @@ async function toggleInList(field, m) {
   await setDoc(doc(db, 'users', currentUser.uid), { [field]: existing ? arrayRemove(existing) : arrayUnion(slim(m)) }, { merge: true });
   userDoc = { ...(userDoc || {}), [field]: existing ? arr.filter(x => x.id !== m.id) : [...arr, slim(m)] };
   stateVer++;   // Home එකේ My List refresh වෙන්න
+  if (field === 'myList' && !existing) track('saves', m);
   return !existing;
 }
 async function markSeen(m) {
@@ -1543,7 +1598,7 @@ function renderMovie(m) {
     playerWrap.classList.add('active');
     const bg = cssUrl(backdrop);
     playerBox.innerHTML = `<div class="player-poster" ${bg ? `style="background-image:url('${bg}')"` : ''}><div class="player-play-btn"><i class="fa fa-play"></i></div></div>`;
-    const startMain = () => { playerBox.innerHTML = buildPlayerHTML(url); attachVideoFallback(playerBox, onEnd); markSeen(m); };
+    const startMain = () => { playerBox.innerHTML = buildPlayerHTML(url); attachVideoFallback(playerBox, onEnd); markSeen(m); track('plays', m); };
     const begin = () => playIntroThen(playerBox, startMain);
     if (auto) startMain();            // auto-next episode එකට intro නෑ (ඕන නම් මේක begin() කරන්න)
     else $('.player-poster', playerBox).addEventListener('click', begin, { once: true });
@@ -1604,6 +1659,7 @@ function renderMovie(m) {
     const modal = $('#trailerModal'), box = $('#trailerPlayerBox');
     const close = () => { modal.classList.remove('active'); box.innerHTML = ''; };
     $('#trailerBtn').addEventListener('click', () => {
+      track('trailers', m);
       const id = ytIdFromUrl(m.trailer);
       box.innerHTML = id ? `<iframe src="https://www.youtube.com/embed/${esc(id)}?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>` : buildPlayerHTML(m.trailer);
       attachVideoFallback(box);
@@ -1630,6 +1686,7 @@ function renderMovie(m) {
 
   // Share
   $('#shareBtn').addEventListener('click', async () => {
+    track('shares', m);
     const url = location.href;
     try {
       if (navigator.share) { await navigator.share({ title: m.title || 'CineMovieZ', text: (m.title || '') + ' — CineMovieZ', url }); return; }
@@ -1658,7 +1715,7 @@ async function watchPage(id, token) {
   let shown = null;
   const readCached = () => { try { return JSON.parse(localStorage.getItem(MOVIE_CACHE_PREFIX + id) || 'null'); } catch (e) { return null; } };
   const cached = readCached() || allMovies.find(m => m.id === id) || null;
-  if (cached) { renderMovie(cached); shown = JSON.stringify(cached); }
+  if (cached) { renderMovie(cached); shown = JSON.stringify(cached); trackOnce('views', cached); }
   else app.innerHTML = '<div class="empty-note">Loading…</div>';
 
   let result = null;
@@ -1678,6 +1735,7 @@ async function watchPage(id, token) {
   if (result && result.exists) {
     try { localStorage.setItem(MOVIE_CACHE_PREFIX + id, JSON.stringify(result.data)); } catch (e) {}
     // Player එක open නම් / data වෙනස් නැත්නම් re-render කරන්නේ නෑ (video එක නවතින එක වළක්වන්න)
+    trackOnce('views', result.data);
     if (!playerOpen && JSON.stringify(result.data) !== shown) renderMovie(result.data);
     return;
   }
@@ -2078,6 +2136,7 @@ window.addEventListener('hashchange', router);
 }
 loadMovies();
 router();
+trackVisit();
 
 /* PWA — service worker */
 if ('serviceWorker' in navigator) {
