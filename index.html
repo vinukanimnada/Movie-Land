@@ -1115,7 +1115,9 @@ function homePage() {
   function fill() {
     let any = false;
     HOME_SECTIONS.forEach(s => {
-      let items = dedupeByTitle(allMovies.filter(m => hasSection(m, s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, 8);
+      // Latest Uploads: All Movies එකට අන්තිමට save කරපු movies 6 auto පෙන්නනවා
+      const auto = s.key === 'latest_home';
+      let items = dedupeByTitle(allMovies.filter(m => hasSection(m, auto ? 'allmovies' : s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, auto ? 6 : 8);
       if (lsGet('mml_sec_' + s.key, 'on') === 'off') items = [];
       setHTML($('#grid-' + s.key), items.map(m => cardHTML(m, s.key === 'tvshows_home')).join(''));
       $('#sec-' + s.key).classList.toggle('is-empty', !items.length);
