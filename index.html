@@ -64,7 +64,7 @@ html.light {
 body {
   background:var(--bg); color:var(--text);
   font-family:'Segoe UI', Tahoma, sans-serif;
-  padding-top:60px; padding-bottom:66px; overflow-x:hidden;
+  padding-top:60px; padding-bottom:66px; overflow-x:hidden; overflow-x:clip;   /* clip: iOS වල fixed bar එක scroll එක්ක ඇදෙන එක වළක්වනවා */
 }
 a { text-decoration:none; color:inherit; }
 img { display:block; }
@@ -434,6 +434,21 @@ html.light .bottom-nav a.active::before { background:linear-gradient(135deg,rgba
 .bottom-nav a i { font-size:19px; }
 .bottom-nav a.active { color:var(--accent); }
 @media (min-width:1024px) { .bottom-nav { display:none; } body { padding-bottom:0; } }
+
+/* ===== BOTTOM NAV — floating liquid glass + iOS scroll fix ===== */
+.bottom-nav {
+  left:10px; right:10px; bottom:calc(8px + env(safe-area-inset-bottom)); padding:6px;
+  border:1px solid rgba(255,255,255,.18); border-radius:30px;
+  background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,.04)), rgba(22,22,26,.55);
+  -webkit-backdrop-filter:blur(24px) saturate(190%); backdrop-filter:blur(24px) saturate(190%);
+  box-shadow:0 12px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -1px 0 rgba(255,255,255,.05);
+  /* own compositing layer: scroll කරද්දී bar එක මැදට ඇදෙන bug එක නවත්තනවා */
+  -webkit-transform:translate3d(0,0,0); transform:translate3d(0,0,0); will-change:transform; -webkit-backface-visibility:hidden; backface-visibility:hidden;
+}
+html.light .bottom-nav { background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(255,255,255,.55)); border-color:rgba(255,255,255,.95); box-shadow:0 12px 30px rgba(0,0,0,.16), inset 0 1px 0 #fff; }
+body { padding-bottom:88px; }
+.to-top { bottom:98px; }
+@media (min-width:1024px) { body { padding-bottom:0; } .to-top { bottom:24px; } }
 
 /* ===== SAKURA ===== */
 #sakura-container { position:fixed; inset:0; pointer-events:none; z-index:400; overflow:hidden; }
