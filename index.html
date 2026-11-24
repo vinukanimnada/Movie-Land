@@ -201,6 +201,11 @@ html.light .search-box input::placeholder { color:rgba(0,0,0,.45); }
 .page-h1 { font-size:20px; margin:20px 15px 10px; padding-left:12px; border-left:4px solid var(--accent); }
 .empty-note { text-align:center; color:var(--text-faint); padding:50px 20px; font-size:14px; grid-column:1/-1; }
 .load-more-wrap { text-align:center; padding:6px 0 20px; }
+.pager { display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap; padding:14px 15px 26px; }
+.pg { min-width:42px; height:42px; padding:0 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); color:var(--text); font-size:15px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:background .15s, transform .15s; }
+.pg:active { transform:scale(.94); }
+.pg.on { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 4px 14px rgba(var(--accent-rgb),.4); }
+.pg.dots { background:transparent; border-color:transparent; color:var(--text-faint); cursor:default; min-width:26px; padding:0 2px; }
 
 /* ===== GRID / CARDS ===== */
 .movie-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:10px; }
@@ -1077,32 +1082,57 @@ const skeleton = n => Array.from({ length: n }, () => '<div class="skel"></div>'
 const SORTS = [['default', 'Default'], ['new', 'Newest'], ['top', 'Top rated'], ['az', 'A–Z']];
 const emptyNote = () => dataState === 'loading' ? 'Loading…' : dataState === 'failed' ? 'Load කරගන්න බැරි උනා. Network එක check කරලා page එක refresh කරන්න.' : 'තාම මෙතන කිසිවක් නැහැ.';
 
+/* Pagination: පිටුවකට movies 27 — 28 වෙනි එක page 2 එකට යනවා */
+const PAGE_SIZE = 27;
+function pagerHTML(cur, total) {
+  const set = new Set([1, 2, total, cur - 1, cur, cur + 1]);
+  const nums = [...set].filter(n => n >= 1 && n <= total).sort((x, y) => x - y);
+  const out = [];
+  nums.forEach((n, i) => {
+    const prev = nums[i - 1];
+    if (prev !== undefined) {
+      if (n - prev === 2) out.push(prev + 1);        // හිස් වෙන්නේ එක page එකක් නම් ඒක පෙන්නනවා
+      else if (n - prev > 2) out.push('…');
+    }
+    out.push(n);
+  });
+  return out.map(n => n === '…'
+    ? '<span class="pg dots">…</span>'
+    : `<button class="pg ${n === cur ? 'on' : ''}" data-page="${n}" aria-label="Page ${n}"${n === cur ? ' aria-current="page"' : ''}>${n}</button>`).join('');
+}
+
 /* Generic list page (All Movies / LK Cinema / Anime / TV Shows) */
 function listPage({ title, filter, series }) {
   return () => {
-    const PAGE = 60;
-    let limit = PAGE;
+    let page = 1;
     let sort = 'default';
     const root = app;
-    app.innerHTML = `<h1 class="page-title-center">${title}</h1><div class="sort-chips" id="sortChips">${SORTS.map(([k, t]) => `<button class="chip ${k === sort ? 'on' : ''}" data-sort="${k}">${t}</button>`).join('')}</div><div class="movie-grid" id="listGrid"></div><div class="load-more-wrap" id="loadMore"></div>`;
-    const grid = $('#listGrid', root), more = $('#loadMore', root);
+    app.innerHTML = `<h1 class="page-title-center">${title}</h1><div class="sort-chips" id="sortChips">${SORTS.map(([k, t]) => `<button class="chip ${k === sort ? 'on' : ''}" data-sort="${k}">${t}</button>`).join('')}</div><div class="movie-grid" id="listGrid"></div><nav class="pager" id="pager" aria-label="Pages"></nav>`;
+    const grid = $('#listGrid', root), pager = $('#pager', root);
     $$('#sortChips .chip', root).forEach(c => c.addEventListener('click', () => {
-      sort = c.dataset.sort; limit = PAGE;
+      sort = c.dataset.sort; page = 1;
       $$('#sortChips .chip', root).forEach(x => x.classList.toggle('on', x === c));
       fill();
     }));
+    pager.addEventListener('click', e => {
+      const btn = e.target.closest('[data-page]');
+      if (!btn) return;
+      page = +btn.dataset.page;
+      fill();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
     function fill() {
-      // පරණ -> අලුත් (අලුත්ම එක අන්තිමට) — ඔයා ඉල්ලපු විදිහටම
+      // Default: පරණ -> අලුත් (අලුත්ම එක අන්තිමට)
       let list = dedupeByTitle(allMovies.filter(filter));
       list = sort === 'new' ? list.sort((a, b) => ts(b) - ts(a))
         : sort === 'top' ? list.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0))
         : sort === 'az' ? list.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
         : list.sort((a, b) => ts(a) - ts(b));
-      if (!list.length) { setHTML(grid, dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`); setHTML(more, ''); return; }
-      setHTML(grid, list.slice(0, limit).map(m => cardHTML(m, series)).join(''));
-      if (setHTML(more, list.length > limit ? `<button class="btn btn-secondary" id="loadMoreBtn">Load more (${list.length - limit})</button>` : '')) {
-        $('#loadMoreBtn', root)?.addEventListener('click', () => { limit += PAGE; fill(); });
-      }
+      if (!list.length) { setHTML(grid, dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`); setHTML(pager, ''); return; }
+      const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+      if (page > pages) page = pages;
+      setHTML(grid, list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(m => cardHTML(m, series)).join(''));
+      setHTML(pager, pages > 1 ? pagerHTML(page, pages) : '');
     }
     fill();
     onDataUpdate = fill;
