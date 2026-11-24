@@ -1504,10 +1504,25 @@ function requestPage() {
 let watchTimers = [];
 let playerOpen = false;
 
+
+
 // Movie එකට කලින් play වෙන intro video එක (index.html තියෙන folder එකේම)
-const INTRO_URL = 'https://pub-08576c48d56a414dabb33e79de2c0a73.r2.dev/Vinuka/intro.MP4'; 
-// Cine Inrto.  https://pub-08576c48d56a414dabb33e79de2c0a73.r2.dev/Vinuka/intro.MP4
-// Block Blaster.  
+const DEFAULT_INTRO = 'https://pub-08576c48d56a414dabb33e79de2c0a73.r2.dev/Vinuka/intro-defult.MP4';
+let INTRO_URL = lsGet('mml_intro', DEFAULT_INTRO);
+(async () => {
+  try {
+    const s = await getDoc(doc(db, 'settings', 'intro'));
+    if (s.exists()) {
+      const d = s.data();
+      INTRO_URL = d.enabled === false ? 'off' : (safeUrl(d.url) || DEFAULT_INTRO);
+      lsSet('mml_intro', INTRO_URL);
+    }
+  } catch (e) {}
+})();
+
+
+
+      
 function ytIdFromUrl(url) {
   if (!url) return null;
   if (!/^https?:/i.test(url)) return /^[\w-]{11}$/.test(url) ? url : null;
@@ -1541,6 +1556,8 @@ function attachVideoFallback(box, onEnded) {
 }
 // Intro එක එකම player එකේ play කරලා, ඉවර වුනාම (හෝ Skip) movie එක පටන් ගන්නවා
 function playIntroThen(box, startMain) {
+    if (!safeUrl(INTRO_URL)) { startMain(); return; }
+
   box.innerHTML = `<video src="${INTRO_URL}" playsinline autoplay preload="auto"></video><button class="skip-intro">Skip ›</button>`;
   const v = box.querySelector('video');
   let done = false;
