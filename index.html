@@ -2282,7 +2282,32 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', loadAds);
 </script>
 <!-- ===== ADS SYSTEM - END ===== -->
-</body>
-</html>
+
+
+
+
+
+
+
+
+
+
+
+<!-- ===== LOOK SYSTEM - START ===== -->
+<div id="look-container"></div>
+<script>
+  // look.html එක Load කරනවා - Christmas / Depavali වගේ Look වෙනස් කරන්න
+  fetch('look.html')
+    .then(function(res){ return res.text(); })
+    .then(function(html){
+      document.getElementById('look-container').innerHTML = html;
+    })
+    .catch(function(){});
+</script>
+<!-- ===== LOOK SYSTEM - END ===== -->
+
+
+
+
 </body>
 </html>
