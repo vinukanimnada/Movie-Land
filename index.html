@@ -79,7 +79,7 @@ html.light {
 body {
   background:var(--bg); color:var(--text);
   font-family:'Segoe UI', Tahoma, sans-serif;
-  padding-top:60px; padding-bottom:66px; overflow-x:hidden; overflow-x:clip;   /* clip: iOS වල fixed bar එක scroll එක්ක ඇදෙන එක වළක්වනවා */
+  padding-top:60px; padding-bottom:66px; overflow-x:hidden; overflow-x:clip;
 }
 a { text-decoration:none; color:inherit; }
 img { display:block; }
@@ -116,7 +116,6 @@ header#mainHeader {
 }
 .menu-toggle:active { transform:scale(.92); }
 html.light .menu-toggle { background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,255,255,.55)); border-color:rgba(0,0,0,.1); box-shadow:0 6px 16px rgba(0,0,0,.12), inset 0 1px 0 #fff; }
-/* ☰ lines: සියල්ල button එකේ මැදට (absolute) දාලා transform වලින් විතරයි වෙනස් කරන්නේ */
 .menu-toggle span {
   position:absolute; left:50%; top:50%; display:block; width:20px; height:2px; margin:-1px 0 0 -10px;
   background:currentColor; border-radius:2px; transform-origin:center;
@@ -127,7 +126,6 @@ html.light .menu-toggle { background:linear-gradient(135deg,rgba(255,255,255,.9)
 .menu-toggle.active span:nth-child(1) { transform:rotate(45deg); }
 .menu-toggle.active span:nth-child(2) { opacity:0; }
 .menu-toggle.active span:nth-child(3) { transform:rotate(-45deg); }
-/* Watch page: උඩ + යට ඉරි දෙක වමට එකතු වෙලා ← arrow එකක් බවට හැරෙනවා */
 body.on-watch .menu-toggle span:nth-child(1),
 body.on-watch .menu-toggle span:nth-child(3) { width:11px; margin-left:-9px; transform-origin:left center; }
 body.on-watch .menu-toggle span:nth-child(1) { transform:rotate(-42deg); }
@@ -157,7 +155,7 @@ body.on-watch .menu-toggle span:nth-child(2) { width:18px; margin-left:-9px; opa
 /* ===== SEARCH ===== */
 .search-box {
   position:fixed; top:60px; left:0; width:100%; padding:12px 15px; display:none; z-index:999;
-  background:transparent; border:none; pointer-events:none; /* bar එක පිටිපස්සේ background නෑ */
+  background:transparent; border:none; pointer-events:none;
 }
 .search-box.active { display:flex; align-items:center; gap:10px; }
 .search-box > * { pointer-events:auto; }
@@ -468,7 +466,6 @@ html.light .bottom-nav a.active::before { background:linear-gradient(135deg,rgba
   background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02)), rgba(14,14,16,.62);
   -webkit-backdrop-filter:blur(18px) saturate(160%); backdrop-filter:blur(18px) saturate(160%);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.1);
-  /* own compositing layer: scroll කරද්දී bar එක මැදට ඇදෙන bug එක නවත්තනවා */
   -webkit-transform:translate3d(0,0,0); transform:translate3d(0,0,0); will-change:transform; -webkit-backface-visibility:hidden; backface-visibility:hidden;
 }
 html.light .bottom-nav { background:linear-gradient(180deg,rgba(255,255,255,.8),rgba(255,255,255,.55)); border-top-color:rgba(0,0,0,.08); box-shadow:inset 0 1px 0 #fff; }
@@ -512,7 +509,7 @@ body { padding-bottom:66px; }
   box-shadow:0 18px 40px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -1px 0 rgba(255,255,255,.06);
   transform-origin:top right;
 }
-.mml-auth-menu::before { /* specular highlight */
+.mml-auth-menu::before {
   content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
   background:radial-gradient(120% 80% at 0% 0%,rgba(255,255,255,.28),transparent 55%);
 }
@@ -529,7 +526,7 @@ html.light .mml-auth-menu-item:hover { background:rgba(0,0,0,.07); }
 @media (prefers-reduced-motion:reduce) { .mml-auth-menu.active { animation:none; } }
 
 /* =========================================================
-   DESKTOP / LARGE SCREEN LAYOUT  (phone වලට බලපාන්නේ නෑ)
+   DESKTOP / LARGE SCREEN LAYOUT
    ========================================================= */
 .settings-wrap { max-width:560px; margin:0 auto; padding:6px 15px 40px; }
 .settings-wrap .sec-title { margin-top:18px; }
@@ -545,7 +542,6 @@ a.settings-item { text-decoration:none; }
 .top-nav { display:none; }
 
 @media (min-width:1024px) {
-  /* Header */
   header#mainHeader { padding:0 28px; }
   .header-left { min-width:230px; }
   .header-right { min-width:230px; justify-content:flex-end; }
@@ -553,17 +549,10 @@ a.settings-item { text-decoration:none; }
   .top-nav a { padding:9px 16px; border-radius:22px; font-size:14.5px; font-weight:600; color:var(--text-dim); white-space:nowrap; transition:background .2s, color .2s; }
   .top-nav a:hover { color:var(--text); background:rgba(128,128,128,.16); }
   .top-nav a.active { color:#fff; background:var(--accent); }
-
   .logo svg { height:46px; }
-
-  /* Page container */
   #app { max-width:1500px; margin:0 auto; }
-
-  /* Search: මැද තියෙන ලොකු bar එකක් + dropdown card එකක් */
   .search-box { left:50%; width:min(720px, calc(100% - 40px)); transform:translateX(-50%); padding:12px 0; }
   .home-search-results { left:50%; width:min(720px, calc(100% - 40px)); transform:translateX(-50%); top:128px; max-height:70vh; border-radius:18px; border:1px solid var(--border); box-shadow:0 24px 60px rgba(0,0,0,.55); }
-
-  /* Grids */
   .movie-grid { grid-template-columns:repeat(auto-fill, minmax(170px, 1fr)); gap:18px; padding:20px 28px; }
   .movie-title { font-size:13px; padding:26px 8px 8px; }
   .quality-badge, .rating-badge { font-size:11px; padding:3px 6px; }
@@ -571,23 +560,17 @@ a.settings-item { text-decoration:none; }
   .page-title-center::before { height:32px; }
   .page-h1 { font-size:24px; margin:34px 28px 12px; }
   .empty-note { font-size:15px; }
-
-  /* Home */
   .hero { height:clamp(320px, 33vw, 480px); margin:22px 28px 10px; border-radius:22px; }
   .hero-dots .dot { width:10px; height:10px; } .hero-dots .dot.active { width:26px; }
   .trending { padding:20px 0 8px; }
   .section-header { padding:0 28px; margin-bottom:6px; }
   .section-header h2 { font-size:23px; }
   .view-all { font-size:12px; padding:6px 14px; }
-
-  /* Static / form pages */
   .box { max-width:920px; margin:30px auto; padding:30px 34px; border-radius:14px; }
   .about-text { font-size:16px; }
   .request-box { max-width:640px; margin:34px auto; padding:34px; }
   .contact-container { margin:60px auto; }
   .profile-wrap { max-width:680px; padding-top:34px; }
-
-  /* Watch page */
   .details-hero { min-height:440px; padding:44px 0; }
   .details-hero-inner { max-width:1200px; margin:0 auto; padding:0 28px; gap:34px; }
   .details-poster { width:240px; height:355px; border-radius:12px; }
@@ -603,8 +586,6 @@ a.settings-item { text-decoration:none; }
   #episodeList .episode-item { margin-bottom:0; }
   .cast-item { width:104px; } .cast-photo { width:94px; height:94px; }
   .trailer-modal-inner { max-width:1000px; }
-
-  /* Footer */
   .footer { padding:50px 28px; }
   .footer-text { max-width:640px; }
 }
@@ -617,7 +598,6 @@ a.settings-item { text-decoration:none; }
 </head>
 <body>
 
-<!-- ===================== HEADER ===================== -->
 <header id="mainHeader">
   <div class="header-left">
     <button class="menu-toggle" id="menuBtn" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -641,10 +621,8 @@ a.settings-item { text-decoration:none; }
           <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
           </defs>
-          <!-- wordmark -->
           <path fill="url(#gT)" d="M377.8 196.2Q369.8 199.1 362.4 200.5Q355 202 348.4 202Q330.9 202 320.5 192.4Q310 182.8 310 167Q310 156.6 313.3 147.4Q316.6 138.2 323.1 130.6Q330.7 121.6 341.4 116.8Q352.1 112 364.5 112Q371.2 112 378 113.6Q384.8 115.2 391.9 118.4L388.3 136.4Q382.7 132.2 377 130.2Q371.4 128.2 365 128.2Q351.5 128.2 342.5 138.6Q333.4 148.9 333.4 164.4Q333.4 174.4 339 180.1Q344.6 185.8 354.4 185.8Q360.3 185.8 366.9 183.7Q373.4 181.5 381.6 177Z M398.2 113.6H420.6L403.7 200.3H381.3Z M428.3 113.6H453.2L473.1 173.6L484.8 113.6H505.9L489 200.3H464L444.2 140.2L432.6 200.3H411.3Z M513.6 113.6H573.9L570.6 130.5H532.7L529.5 146.6H565.3L561.9 163.5H526.2L522.4 183.4H561.5L558.3 200.3H496.7Z M580.7 113.6H608.2L619.3 159.6L648.6 113.6H677.2L660.3 200.3H639.1L651.4 136.3L621.3 183.6H609.3L597.3 136.3L585 200.3H563.8Z M738.7 149.1Q738.7 138.9 734 133.6Q729.4 128.2 720.6 128.2Q709 128.2 701.1 138.6Q693.3 149.1 693.3 164.8Q693.3 174.8 697.9 180.3Q702.5 185.8 710.6 185.8Q717.3 185.8 722.5 183Q727.7 180.2 731.4 174.6Q734.9 169.3 736.8 162.7Q738.7 156.1 738.7 149.1ZM723.9 112Q741.2 112 751.8 121.6Q762.3 131.2 762.3 146.7Q762.3 157.3 759.1 166.7Q755.9 176.1 749.7 183.6Q742.1 192.9 731.8 197.4Q721.5 202 708 202Q690.8 202 680.3 192.4Q669.7 182.8 669.7 167.3Q669.7 156.6 672.9 147.2Q676.1 137.8 682.4 130.2Q689.8 121.1 700.1 116.5Q710.4 112 723.9 112Z M761.4 113.6H782.7L793.3 178.4L829.2 113.6H852.3L803.3 200.3H776.7Z M849.6 113.6H872L855.1 200.3H832.7Z M879.7 113.6H940L936.7 130.5H898.7L895.6 146.6H931.3L928 163.5H892.3L888.5 183.4H927.6L924.4 200.3H862.8Z"/>
           <path fill="url(#gZ)" d="M988 95H1092.3L1088.3 114.8L1007.9 194.8H1074.8L1070 219H962L965.7 199.2L1046.4 119.2H983.3Z"/>
-          <!-- swoosh -->
           <path d="M310 238 Q680 216 1050 204 Q700 250 310 246 Z" fill="url(#gS)"/>
         </svg>
       </a>
@@ -689,7 +667,6 @@ a.settings-item { text-decoration:none; }
 </div>
 <div class="overlay" id="overlay"></div>
 
-<!-- ===================== PAGE CONTENT ===================== -->
 <main id="app"></main>
 <noscript>CineMovieZ - Watch movies, TV shows, anime and cartoons with Sinhala subtitles. Free in HD.</noscript>
 
@@ -708,10 +685,8 @@ a.settings-item { text-decoration:none; }
       <stop offset="0" stop-color="#ff5a6e"/><stop offset="1" stop-color="#e0112b"/>
       </linearGradient>
       </defs>
-      <!-- wordmark -->
       <path fill="url(#fgT)" d="M377.8 196.2Q369.8 199.1 362.4 200.5Q355 202 348.4 202Q330.9 202 320.5 192.4Q310 182.8 310 167Q310 156.6 313.3 147.4Q316.6 138.2 323.1 130.6Q330.7 121.6 341.4 116.8Q352.1 112 364.5 112Q371.2 112 378 113.6Q384.8 115.2 391.9 118.4L388.3 136.4Q382.7 132.2 377 130.2Q371.4 128.2 365 128.2Q351.5 128.2 342.5 138.6Q333.4 148.9 333.4 164.4Q333.4 174.4 339 180.1Q344.6 185.8 354.4 185.8Q360.3 185.8 366.9 183.7Q373.4 181.5 381.6 177Z M398.2 113.6H420.6L403.7 200.3H381.3Z M428.3 113.6H453.2L473.1 173.6L484.8 113.6H505.9L489 200.3H464L444.2 140.2L432.6 200.3H411.3Z M513.6 113.6H573.9L570.6 130.5H532.7L529.5 146.6H565.3L561.9 163.5H526.2L522.4 183.4H561.5L558.3 200.3H496.7Z M580.7 113.6H608.2L619.3 159.6L648.6 113.6H677.2L660.3 200.3H639.1L651.4 136.3L621.3 183.6H609.3L597.3 136.3L585 200.3H563.8Z M738.7 149.1Q738.7 138.9 734 133.6Q729.4 128.2 720.6 128.2Q709 128.2 701.1 138.6Q693.3 149.1 693.3 164.8Q693.3 174.8 697.9 180.3Q702.5 185.8 710.6 185.8Q717.3 185.8 722.5 183Q727.7 180.2 731.4 174.6Q734.9 169.3 736.8 162.7Q738.7 156.1 738.7 149.1ZM723.9 112Q741.2 112 751.8 121.6Q762.3 131.2 762.3 146.7Q762.3 157.3 759.1 166.7Q755.9 176.1 749.7 183.6Q742.1 192.9 731.8 197.4Q721.5 202 708 202Q690.8 202 680.3 192.4Q669.7 182.8 669.7 167.3Q669.7 156.6 672.9 147.2Q676.1 137.8 682.4 130.2Q689.8 121.1 700.1 116.5Q710.4 112 723.9 112Z M761.4 113.6H782.7L793.3 178.4L829.2 113.6H852.3L803.3 200.3H776.7Z M849.6 113.6H872L855.1 200.3H832.7Z M879.7 113.6H940L936.7 130.5H898.7L895.6 146.6H931.3L928 163.5H892.3L888.5 183.4H927.6L924.4 200.3H862.8Z"/>
       <path fill="url(#fgZ)" d="M988 95H1092.3L1088.3 114.8L1007.9 194.8H1074.8L1070 219H962L965.7 199.2L1046.4 119.2H983.3Z"/>
-      <!-- swoosh -->
       <path d="M310 238 Q680 216 1050 204 Q700 250 310 246 Z" fill="url(#fgS)"/>
     </svg>
   </a>
@@ -739,7 +714,6 @@ a.settings-item { text-decoration:none; }
 <button class="to-top" id="toTop" aria-label="Back to top"><i class="fa fa-chevron-up"></i></button>
 <div id="sakura-container"></div>
 
-<!-- Trailer modal -->
 <div class="trailer-modal" id="trailerModal">
   <div class="trailer-modal-inner">
     <span class="trailer-close" id="trailerClose">&times;</span>
@@ -747,7 +721,6 @@ a.settings-item { text-decoration:none; }
   </div>
 </div>
 
-<!-- Auth modal -->
 <div class="mml-auth-overlay" id="mmlAuthOverlay">
   <div class="mml-auth-card">
     <div class="mml-auth-close" id="mmlAuthClose"><i class="fa fa-times"></i></div>
@@ -784,7 +757,6 @@ a.settings-item { text-decoration:none; }
   <div class="mml-auth-menu-item" id="mmlLogoutBtn"><i class="fa fa-right-from-bracket"></i> Logout</div>
 </div>
 
-<!-- ===================== APP SCRIPT ===================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
@@ -798,9 +770,6 @@ import {
   deleteUser, reauthenticateWithCredential, EmailAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-/* =========================================================
-   Firebase — එක පාරක් විතරක් initialize කරනවා
-   ========================================================= */
 const firebaseConfig = {
   apiKey: "AIzaSyCx0TEmgr3GCyvfeok9Y42yR1PTM4_8y9M",
   authDomain: "magical-movie-land.firebaseapp.com",
@@ -813,31 +782,23 @@ const fbApp = initializeApp(firebaseConfig);
 const db = getFirestore(fbApp);
 const auth = getAuth(fbApp);
 
-/* =========================================================
-   Helpers
-   ========================================================= */
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const appRoot = $('#app');
-let app = appRoot;   // දැනට පෙන්නන page එකේ container එක (router එක මාරු කරනවා)
+let app = appRoot;
 
-// HTML escape — Firestore data innerHTML ට දාද්දි XSS වළක්වන්න
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-// http/https URL විතරයි පිළිගන්නේ (javascript: වගේ ඒවා block)
 const safeUrl = u => { u = String(u || '').trim(); return /^https?:\/\//i.test(u) ? u : ''; };
 const cssUrl = u => { u = safeUrl(u); return u ? u.replace(/["'()\\\s]/g, c => '%' + c.charCodeAt(0).toString(16).padStart(2, '0')) : ''; };
 const ts = m => Date.parse(m && m.date) || 0;
 
-// via.placeholder.com නැවතිලා — ඒ නිසා inline SVG placeholder එකක්
 const PH = 'data:image/svg+xml;utf8,' + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450"><rect width="100%" height="100%" fill="#222"/><text x="50%" y="50%" fill="#777" font-family="Arial" font-size="22" text-anchor="middle">No Image</text></svg>');
-// image load fail වුනාම placeholder (inline onerror නැතුව)
 document.addEventListener('error', e => {
   const t = e.target;
   if (t && t.tagName === 'IMG' && !t.dataset.fb) { t.dataset.fb = '1'; t.src = PH; }
 }, true);
 
-// HTML වෙනස් වුනොත් විතරයි ආයෙ render කරන්නේ (නැත්නම් posters ආයෙ load වෙනවා)
 const setHTML = (el, html) => { if (!el) return false; if (el._html === html) return false; el.innerHTML = html; el._html = html; return true; };
 
 function dedupeByTitle(list) {
@@ -853,15 +814,11 @@ const hasSection = (m, k) => Array.isArray(m.sections) && m.sections.includes(k)
 const isSeries = m => hasSection(m, 'series') || m.category === 'series' || m.category === 'tvshows' || m.type === 'series' || m.type === 'tv';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-/* =========================================================
-   Analytics — Admin panel එකේ Analytics tab එකට data (Firestore counters)
-   ========================================================= */
-const slDay = () => new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);          // ශ්‍රී ලංකා වේලාවෙන් දවස
+const slDay = () => new Date(Date.now() + 5.5 * 3600e3).toISOString().slice(0, 10);
 const slHour = () => String(new Date(Date.now() + 5.5 * 3600e3).getUTCHours());
 const sessGet = k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } };
 const sessSet = k => { try { sessionStorage.setItem(k, '1'); } catch (e) {} };
 
-// kind: views | plays | trailers | saves | shares
 function track(kind, m) {
   try {
     const d = slDay();
@@ -875,7 +832,6 @@ function track(kind, m) {
     setDoc(doc(db, 'analytics_daily', d), { [kind]: increment(1) }, { merge: true }).catch(() => {});
   } catch (e) {}
 }
-// එකම session එකේ එකම movie එක දෙපාරක් නොගණන්න
 function trackOnce(kind, m) {
   if (!m || !m.id) return;
   const k = 'mml_t_' + kind + '_' + m.id;
@@ -891,11 +847,10 @@ function trackVisit() {
     const data = { visits: increment(1), [mobile ? 'mobile' : 'desktop']: increment(1), hours: { [slHour()]: increment(1) } };
     let firstToday = true;
     try { firstToday = localStorage.getItem('mml_last_day') !== d; localStorage.setItem('mml_last_day', d); } catch (e) {}
-    if (firstToday) data.visitors = increment(1);   // දවසට එක device එකකට එක පාරයි
+    if (firstToday) data.visitors = increment(1);
     setDoc(doc(db, 'analytics_daily', d), data, { merge: true }).catch(() => {});
   } catch (e) {}
 }
-// හොයලා හම්බුනේ නැති නම් (request කරන්න ඕන ඒවා දැනගන්න)
 const missedSearches = new Set();
 function trackMiss(q) {
   try {
@@ -906,9 +861,6 @@ function trackMiss(q) {
   } catch (e) {}
 }
 
-/* =========================================================
-   Theme
-   ========================================================= */
 function applyTheme(t) {
   t = t === 'light' ? 'light' : 'dark';
   const h = document.documentElement.classList;
@@ -927,17 +879,12 @@ function applyPrefs() {
   if (lsGet('mml_titles', 'on') === 'off') h.add('no-titles');
 }
 
-/* =========================================================
-   Movies data + cache (localStorage)
-   ========================================================= */
-let sakuraOn = (function () { try { return localStorage.getItem('mml_sakura') !== 'off'; } catch (e) { return true; } })();
 const CACHE_KEY = 'mml_movies_cache_v1';
 const MOVIE_CACHE_PREFIX = 'mml_movie_';
 let allMovies = [];
-let dataState = 'loading'; // loading | ready | failed
-let onDataUpdate = null;   // දැන් පෙන්නන page එකේ re-render callback
+let dataState = 'loading';
+let onDataUpdate = null;
 
-/* Page cache: Home / Movies / LK Cinema / Anime / TV Shows pages DOM එකේම තියාගන්නවා (ආයෙ load කරන්නේ නෑ) */
 let stateVer = 0, curName = null;
 const pageCache = {};
 function bumpData() {
@@ -983,9 +930,6 @@ async function loadMovies() {
   bumpData();
 }
 
-/* =========================================================
-   Sidebar / search / header
-   ========================================================= */
 const sidebar = $('#sidebar'), overlay = $('#overlay'), menuBtn = $('#menuBtn');
 function setSidebar(open) {
   sidebar.classList.toggle('active', open);
@@ -996,7 +940,7 @@ function setSidebar(open) {
 let routeCount = 0;
 function goBack() { if (routeCount > 1) history.back(); else location.hash = '#/home'; }
 menuBtn.addEventListener('click', () => {
-  if (document.body.classList.contains('on-watch')) { goBack(); return; }   // watch page එකේදී ← back
+  if (document.body.classList.contains('on-watch')) { goBack(); return; }
   setSidebar(!sidebar.classList.contains('active'));
 });
 overlay.addEventListener('click', () => setSidebar(false));
@@ -1052,7 +996,6 @@ let searchTimer;
 searchInput.addEventListener('input', e => { clearTimeout(searchTimer); searchTimer = setTimeout(() => runSearch(e.target.value), 250); });
 searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(searchInput.value); });
 
-/* Sakura petals — container එක පැහැදිලිව හදලා, petals ගාන සීමා කරලා */
 (function sakura() {
   const box = $('#sakura-container');
   setInterval(() => {
@@ -1067,9 +1010,6 @@ searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') runSearch(
   }, 700);
 })();
 
-/* =========================================================
-   Cards / grids
-   ========================================================= */
 function cardHTML(m, series) {
   const poster = safeUrl(m.poster) || PH;
   let rating = m.rating ? String(m.rating).split('/')[0] : '';
@@ -1088,7 +1028,6 @@ const skeleton = n => Array.from({ length: n }, () => '<div class="skel"></div>'
 const SORTS = [['default', 'Default'], ['new', 'Newest'], ['top', 'Top rated'], ['az', 'A–Z']];
 const emptyNote = () => dataState === 'loading' ? 'Loading…' : dataState === 'failed' ? 'Load කරගන්න බැරි උනා. Network එක check කරලා page එක refresh කරන්න.' : 'තාම මෙතන කිසිවක් නැහැ.';
 
-/* Pagination: පිටුවකට movies 27 — 28 වෙනි එක page 2 එකට යනවා */
 const PAGE_SIZE = 27;
 function pagerHTML(cur, total) {
   const set = new Set([1, 2, total, cur - 1, cur, cur + 1]);
@@ -1097,7 +1036,7 @@ function pagerHTML(cur, total) {
   nums.forEach((n, i) => {
     const prev = nums[i - 1];
     if (prev !== undefined) {
-      if (n - prev === 2) out.push(prev + 1);        // හිස් වෙන්නේ එක page එකක් නම් ඒක පෙන්නනවා
+      if (n - prev === 2) out.push(prev + 1);
       else if (n - prev > 2) out.push('…');
     }
     out.push(n);
@@ -1107,7 +1046,6 @@ function pagerHTML(cur, total) {
     : `<button class="pg ${n === cur ? 'on' : ''}" data-page="${n}" aria-label="Page ${n}"${n === cur ? ' aria-current="page"' : ''}>${n}</button>`).join('');
 }
 
-/* Generic list page (All Movies / LK Cinema / Anime / TV Shows) */
 function listPage({ title, filter, series }) {
   return () => {
     let page = 1;
@@ -1128,7 +1066,6 @@ function listPage({ title, filter, series }) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     function fill() {
-      // Default: පරණ -> අලුත් (අලුත්ම එක අන්තිමට)
       let list = dedupeByTitle(allMovies.filter(filter));
       list = sort === 'new' ? list.sort((a, b) => ts(b) - ts(a))
         : sort === 'top' ? list.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0))
@@ -1146,10 +1083,88 @@ function listPage({ title, filter, series }) {
 }
 
 /* =========================================================
+   TV SHOWS PAGE WITH FILTERS (All, Anime, Cartoon, Live-Action)
+   ========================================================= */
+function seriesPage() {
+  return () => {
+    let page = 1;
+    let sort = 'default';
+    let subFilter = 'all'; // default: All Series
+    const root = app;
+    
+    app.innerHTML = `
+      <h1 class="page-title-center">TV Shows</h1>
+      <div class="sort-chips" id="seriesFilters" style="margin-bottom:8px;">
+        <button class="chip on" data-sub="all">All Series</button>
+        <button class="chip" data-sub="anime">Anime Series</button>
+        <button class="chip" data-sub="cartoon">Cartoon Series</button>
+        <button class="chip" data-sub="liveaction">Live-Action Series</button>
+      </div>
+      <div class="sort-chips" id="sortChips">${SORTS.map(([k, t]) => `<button class="chip ${k === sort ? 'on' : ''}" data-sort="${k}">${t}</button>`).join('')}</div>
+      <div class="movie-grid" id="listGrid"></div>
+      <nav class="pager" id="pager" aria-label="Pages"></nav>
+    `;
+
+    const grid = $('#listGrid', root), pager = $('#pager', root);
+
+    // Sub-filters (All, Anime, Cartoon, Live-Action)
+    $$('#seriesFilters .chip', root).forEach(c => c.addEventListener('click', () => {
+      subFilter = c.dataset.sub; page = 1;
+      $$('#seriesFilters .chip', root).forEach(x => x.classList.toggle('on', x === c));
+      fill();
+    }));
+
+    $$('#sortChips .chip', root).forEach(c => c.addEventListener('click', () => {
+      sort = c.dataset.sort; page = 1;
+      $$('#sortChips .chip', root).forEach(x => x.classList.toggle('on', x === c));
+      fill();
+    }));
+
+    pager.addEventListener('click', e => {
+      const btn = e.target.closest('[data-page]');
+      if (!btn) return;
+      page = +btn.dataset.page;
+      fill();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    function fill() {
+      let list = dedupeByTitle(allMovies.filter(m => hasSection(m, 'series') || m.type === 'series'));
+      
+      // Filter by Sub-category
+      if (subFilter === 'anime') {
+        list = list.filter(m => m.seriesType === 'anime');
+      } else if (subFilter === 'cartoon') {
+        list = list.filter(m => m.seriesType === 'cartoon');
+      } else if (subFilter === 'liveaction') {
+        list = list.filter(m => m.seriesType === 'liveaction');
+      }
+
+      list = sort === 'new' ? list.sort((a, b) => ts(b) - ts(a))
+        : sort === 'top' ? list.sort((a, b) => (parseFloat(b.rating) || 0) - (parseFloat(a.rating) || 0))
+        : sort === 'az' ? list.sort((a, b) => (a.title || '').localeCompare(b.title || ''))
+        : list.sort((a, b) => ts(a) - ts(b));
+
+      if (!list.length) { 
+        setHTML(grid, dataState === 'loading' ? skeleton(9) : `<div class="empty-note">${emptyNote()}</div>`); 
+        setHTML(pager, ''); 
+        return; 
+      }
+      const pages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+      if (page > pages) page = pages;
+      setHTML(grid, list.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE).map(m => cardHTML(m, true)).join(''));
+      setHTML(pager, pages > 1 ? pagerHTML(page, pages) : '');
+    }
+    fill();
+    onDataUpdate = fill;
+  };
+}
+
+/* =========================================================
    HOME
    ========================================================= */
 const HERO_CACHE = 'mml_hero_cache_v1';
-let heroBanners = (function () { try { const a = JSON.parse(localStorage.getItem(HERO_CACHE) || 'null'); return Array.isArray(a) ? a : null; } catch (e) { return null; } })(); // null = තාම කිසිම data එකක් නෑ
+let heroBanners = (function () { try { const a = JSON.parse(localStorage.getItem(HERO_CACHE) || 'null'); return Array.isArray(a) ? a : null; } catch (e) { return null; } })();
 let heroFetched = false, heroPromise = null;
 let heroTimer = null, heroRestart = null;
 
@@ -1167,13 +1182,13 @@ function renderHero() {
   const items = heroItems();
   const sig = JSON.stringify(items.map(i => i.img + '|' + i.href));
   if (!items.length) {
-    if (hero.classList.contains('is-loading')) return;   // data එනකම් skeleton එක තියන්න
+    if (hero.classList.contains('is-loading')) return;
     heroSig = sig; clearInterval(heroTimer); heroRestart = null;
     hero.classList.remove('has-banners'); slidesBox.innerHTML = ''; dotsBox.innerHTML = '';
     return;
   }
   hero.classList.remove('is-loading');
-  if (sig === heroSig) return;          // වෙනසක් නැත්නම් slider එක reset කරන්නේ නෑ
+  if (sig === heroSig) return;
   heroSig = sig;
   clearInterval(heroTimer);
   hero.classList.add('has-banners');
@@ -1216,12 +1231,12 @@ function fetchHeroBanners() {
 async function initHero() {
   const hero = $('#heroSlider');
   if (!hero) return;
-  if (heroBanners === null && !heroItems().length) hero.classList.add('is-loading'); // cache නැති පළමු වතාව: skeleton
-  renderHero();                       // cache + movies වලින් ඉක්මනින්ම පෙන්නනවා
-  await fetchHeroBanners();           // ඊට පස්සේ අලුත්ම data එක ගන්නවා (fail වුනොත් auto retry)
+  if (heroBanners === null && !heroItems().length) hero.classList.add('is-loading');
+  renderHero();
+  await fetchHeroBanners();
   if (heroBanners === null) heroBanners = [];
   const h = $('#heroSlider');
-  if (!h) return;                     // page එක මාරු වෙලා නම් නවතින්න
+  if (!h) return;
   h.classList.remove('is-loading');
   renderHero();
 }
@@ -1244,7 +1259,6 @@ function homePage() {
   function fill() {
     let any = false;
     HOME_SECTIONS.forEach(s => {
-      // Latest Uploads: All Movies එකට අන්තිමට save කරපු movies 6 auto පෙන්නනවා
       const auto = s.key === 'latest_home';
       let items = dedupeByTitle(allMovies.filter(m => hasSection(m, auto ? 'allmovies' : s.key))).sort((a, b) => ts(b) - ts(a)).slice(0, auto ? 6 : 8);
       if (lsGet('mml_sec_' + s.key, 'on') === 'off') items = [];
@@ -1266,16 +1280,11 @@ function homePage() {
   initHero();
 }
 
-/* =========================================================
-   Static pages
-   ========================================================= */
 const aboutPage = () => app.innerHTML = `
   <div class="box">
     <h1 class="title-bar">About Us</h1>
     <div class="about-text">
       <p>Welcome to <strong>MAGICAL MOVIE LAND</strong>, your number one source for high-quality Sinhala dubbed and subtitled cartoons and movies. We’re dedicated to giving you the very best of animated content, with a focus on quality, speed, and a great user experience.</p>
-      <p>Founded in 2026, MAGICAL MOVIE LAND has come a long way from its beginnings. Our passion for providing localized entertainment for Sri Lankan fans drove us to build this platform so that everyone can enjoy their favorite characters in their own language.</p>
-      <p>We hope you enjoy our platform as much as we enjoy offering it to you. If you have any questions or comments, please don’t hesitate to <a href="#/contact">Contact Us</a>.</p>
     </div>
   </div>`;
 
@@ -1283,19 +1292,14 @@ const privacyPage = () => app.innerHTML = `
   <div class="box">
     <h1 class="title-bar">Privacy Policy</h1>
     <div class="about-text">
-      <p><strong>MAGICAL MOVIE LAND</strong> ඔබේ පෞද්ගලිකත්වයට ගරු කරයි. මෙම policy එකෙන් අපි එකතු කරන දත්ත සහ ඒවා භාවිතා කරන ආකාරය විස්තර කරයි.</p>
-      <p><strong>අපි එකතු කරන දත්ත:</strong> Account එකක් සාදන විට Username, Email, නම, (ඔබ දැමුවොත්) profile photo, සහ ඔබේ My List / Seen List. Movie requests යවන විට ඔබ ලබාදෙන නම සහ විස්තර.</p>
-      <p><strong>භාවිතය:</strong> මේ දත්ත භාවිතා කරන්නේ login කිරීමට, ඔබේ profile සහ lists පෙන්වීමට සහ requests සැකසීමට පමණි. අපි ඒවා විකුණන්නේ හෝ ad සඳහා බෙදාගන්නේ නැහැ.</p>
-      <p><strong>ගබඩා කිරීම:</strong> දත්ත ගබඩා වන්නේ Google Firebase (Authentication සහ Firestore) මගිනි.</p>
-      <p><strong>Account මකා දැමීම:</strong> App/Site එකේ Profile → Settings → "Delete Account" මගින් ඔබේ account එක සහ ඒ හා සම්බන්ධ දත්ත ස්ථිරවම මකා දැමිය හැක.</p>
-      <p><strong>සම්බන්ධ වන්න:</strong> <a href="mailto:magicalmovieland@gmail.com">magicalmovieland@gmail.com</a></p>
+      <p><strong>MAGICAL MOVIE LAND</strong> ඔබේ පෞද්ගලිකත්වයට ගරු කරයි.</p>
     </div>
   </div>`;
 
 const channelsPage = () => app.innerHTML = `
   <section class="join-wrapper">
     <h1>Telegram &amp; WhatsApp</h1>
-    <p>Latest Movies &amp; Series Updates මෙතනින් ගන්න. Spam නැත, Admin posts විතරයි.</p>
+    <p>Latest Movies &amp; Series Updates මෙතනින් ගන්න.</p>
     <a href="https://t.me/cinemoviezzz" target="_blank" rel="noopener" class="channel-btn btn-tg"><i class="fa-brands fa-telegram"></i> Join Telegram</a>
     <a href="https://whatsapp.com/channel/0029Vb7ebZNFi8xYPhDWlR3Q" target="_blank" rel="noopener" class="channel-btn btn-wa"><i class="fa-brands fa-whatsapp"></i> Join WhatsApp</a>
   </section>`;
@@ -1303,16 +1307,13 @@ const channelsPage = () => app.innerHTML = `
 const contactPage = () => app.innerHTML = `
   <div class="contact-container">
     <h1 class="contact-title">Contact Us</h1>
-    <p class="contact-text">If you have any requests, issues, or business inquiries, the best way to reach us is via WhatsApp. Click the button below to message us directly.</p>
+    <p class="contact-text">If you have any requests or issues, message us via WhatsApp.</p>
     <a href="https://wa.me/94777865724" target="_blank" rel="noopener" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> Contact via WhatsApp</a>
-    <p class="email-text">Alternatively, you can email us at:</p>
-    <p class="email-address">magicalmovieland@gmail.com</p>
-    <a href="https://magicalmovieland.com" target="_blank" rel="noopener" class="website-btn">magicalmovieland.com</a>
   </div>`;
 
 let deferredInstall = null;
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredInstall = e; });
-const APP_VERSION = '1.3';
+const APP_VERSION = '1.4';
 
 function settingsPage() {
   const getLS = (k, d) => { try { return localStorage.getItem(k) || d; } catch (e) { return d; } };
@@ -1335,194 +1336,46 @@ function settingsPage() {
       <div class="settings-wrap">
         <div class="sec-title"><span class="cast-bar"></span> Account</div>
         ${accountHTML}
-
         <div class="sec-title"><span class="cast-bar"></span> Appearance</div>
         <button class="settings-item ${theme === 'dark' ? 'on' : ''}" data-theme="dark"><span><i class="fa fa-moon left"></i> Dark</span></button>
         <button class="settings-item ${theme === 'light' ? 'on' : ''}" data-theme="light"><span><i class="fa fa-sun left"></i> Light</span></button>
         <div class="swatches" role="radiogroup" aria-label="Accent colour">
           ${Object.entries(window.MML_ACCENTS).map(([k, c]) => `<button class="swatch ${accent === k ? 'on' : ''}" data-accent="${k}" title="${c.name}" aria-label="${c.name}" style="background:linear-gradient(135deg,${c.a2},${c.a})"></button>`).join('')}
         </div>
-
         <div class="sec-title"><span class="cast-bar"></span> Effects</div>
         <button class="settings-item" id="stSakura"><span><i class="fa fa-spa left"></i> Falling petals</span><span class="switch ${sakuraOn ? 'on' : ''}"></span></button>
-
-        <div class="sec-title"><span class="cast-bar"></span> Display</div>
-        <div class="settings-label">Phone grid columns</div>
-        <div class="seg">${['2', '3', '4'].map(n => `<button class="seg-btn ${cols === n ? 'on' : ''}" data-cols="${n}">${n}</button>`).join('')}</div>
-        <button class="settings-item" id="stBadges"><span><i class="fa fa-tag left"></i> Quality &amp; rating badges</span><span class="switch ${badgesOn ? 'on' : ''}"></span></button>
-        <button class="settings-item" id="stMotion"><span><i class="fa fa-wand-magic-sparkles left"></i> Animations</span><span class="switch ${motionOn ? 'on' : ''}"></span></button>
-        <button class="settings-item" id="stHero"><span><i class="fa fa-images left"></i> Banner auto-slide</span><span class="switch ${heroAuto ? 'on' : ''}"></span></button>
-
-        ${currentUser ? `
-        <div class="sec-title"><span class="cast-bar"></span> My Library</div>
-        <button class="settings-item danger" id="stClearList"><span><i class="fa fa-list-check left"></i> Clear My List</span><i class="fa fa-chevron-right right"></i></button>
-        <button class="settings-item danger" id="stClearSeen"><span><i class="fa fa-eye-slash left"></i> Clear Seen List</span><i class="fa fa-chevron-right right"></i></button>` : ''}
-
-        <div class="sec-title"><span class="cast-bar"></span> Home &amp; Playback</div>
-        <div class="settings-label">Start page</div>
-        <div class="seg">${[['home', 'Home'], ['movies', 'Movies'], ['anime', 'Anime'], ['series', 'TV']].map(([k, t]) => `<button class="seg-btn ${startPg === k ? 'on' : ''}" data-start="${k}">${t}</button>`).join('')}</div>
-        <div class="settings-label">Home sections</div>
-        ${HOME_SECTIONS.map(x => `<button class="settings-item" data-sec="${x.key}"><span><i class="fa fa-table-cells-large left"></i> ${x.title}</span><span class="switch ${lsGet('mml_sec_' + x.key, 'on') !== 'off' ? 'on' : ''}"></span></button>`).join('')}
-        <button class="settings-item" id="stTitles"><span><i class="fa fa-font left"></i> Titles on posters</span><span class="switch ${titlesOn ? 'on' : ''}"></span></button>
-        <button class="settings-item" id="stAuto"><span><i class="fa fa-forward-step left"></i> Auto-play next episode</span><span class="switch ${autoOn ? 'on' : ''}"></span></button>
-
-        <div class="sec-title"><span class="cast-bar"></span> Share &amp; Support</div>
-        <button class="settings-item" id="stShare"><span><i class="fa fa-share-nodes left"></i> Share this app</span><i class="fa fa-chevron-right right"></i></button>
-        <a class="settings-item" href="#/chanels"><span><i class="fa fa-users left"></i> Join Channels</span><i class="fa fa-chevron-right right"></i></a>
-        <a class="settings-item" href="https://wa.me/94777865724?text=${encodeURIComponent('Hi, I want to report a problem on CineMovieZ: ')}" target="_blank" rel="noopener"><span><i class="fa fa-bug left"></i> Report a problem</span><i class="fa fa-chevron-right right"></i></a>
-
         <div class="sec-title"><span class="cast-bar"></span> App</div>
         <button class="settings-item" id="stInstall"><span><i class="fa fa-download left"></i> ${isStandalone() ? 'App installed ✓' : 'Install App'}</span><i class="fa fa-chevron-right right"></i></button>
-        <button class="settings-item" id="stClear"><span><i class="fa fa-broom left"></i> Clear cached data</span><i class="fa fa-chevron-right right"></i></button>
-
-        <div class="sec-title"><span class="cast-bar"></span> About</div>
-        <a class="settings-item" href="#/about"><span><i class="fa fa-info-circle left"></i> About Us</span><i class="fa fa-chevron-right right"></i></a>
-        <a class="settings-item" href="#/privacy"><span><i class="fa fa-shield-halved left"></i> Privacy Policy</span><i class="fa fa-chevron-right right"></i></a>
-        <a class="settings-item" href="#/contact"><span><i class="fa fa-envelope left"></i> Contact Us</span><i class="fa fa-chevron-right right"></i></a>
-        <a class="settings-item" href="#/request"><span><i class="fa fa-plus-circle left"></i> Request a Movie</span><i class="fa fa-chevron-right right"></i></a>
-        <button class="settings-item danger" id="stReset"><span><i class="fa fa-rotate-left left"></i> Reset all settings</span><i class="fa fa-chevron-right right"></i></button>
         <div class="app-version">MAGICAL MOVIE LAND · v${APP_VERSION}</div>
       </div>`;
-
-    $$('[data-theme]').forEach(b => b.addEventListener('click', () => { applyTheme(b.dataset.theme); draw(); }));
-    $$('[data-accent]').forEach(b => b.addEventListener('click', () => { window.mmlApplyAccent(b.dataset.accent, true); draw(); }));
-    $('#stSakura').addEventListener('click', () => {
-      sakuraOn = !sakuraOn;
-      try { localStorage.setItem('mml_sakura', sakuraOn ? 'on' : 'off'); } catch (e) {}
-      if (!sakuraOn) $('#sakura-container').innerHTML = '';
-      draw();
-    });
-    $('#stInstall').addEventListener('click', async () => {
-      if (isStandalone()) { alert('App එක දැනටමත් install කරලා තියෙනවා ✅'); return; }
-      if (deferredInstall) { deferredInstall.prompt(); try { await deferredInstall.userChoice; } catch (e) {} deferredInstall = null; return; }
-      alert(isIOS
-        ? 'iPhone: Safari එකේ Share බටන් එක ඔබලා "Add to Home Screen" තෝරන්න.'
-        : 'Browser menu (⋮) එකෙන් "Install app" හෝ "Add to Home screen" තෝරන්න.');
-    });
-    $('#stClear').addEventListener('click', () => {
-      try { Object.keys(localStorage).filter(k => k === CACHE_KEY || k.startsWith(MOVIE_CACHE_PREFIX)).forEach(k => localStorage.removeItem(k)); } catch (e) {}
-      allMovies = []; dataState = 'loading'; loadMovies();
-      alert('Cache එක clear කළා ✅');
-    });
-    $$('[data-start]').forEach(b => b.addEventListener('click', () => { lsSet('mml_start', b.dataset.start); draw(); }));
-    $$('[data-sec]').forEach(b => b.addEventListener('click', () => { const k = 'mml_sec_' + b.dataset.sec; lsSet(k, lsGet(k, 'on') === 'off' ? 'on' : 'off'); draw(); }));
-    $('#stAuto').addEventListener('click', () => { lsSet('mml_autonext', lsGet('mml_autonext', 'on') === 'off' ? 'on' : 'off'); draw(); });
-    $('#stTitles').addEventListener('click', () => { lsSet('mml_titles', lsGet('mml_titles', 'on') === 'off' ? 'on' : 'off'); applyPrefs(); draw(); });
-    $$('[data-cols]').forEach(b => b.addEventListener('click', () => { lsSet('mml_cols', b.dataset.cols); applyPrefs(); draw(); }));
-    const flip = (id, key, after) => $(id).addEventListener('click', () => { lsSet(key, lsGet(key, 'on') === 'off' ? 'on' : 'off'); applyPrefs(); after && after(); draw(); });
-    flip('#stBadges', 'mml_badges');
-    flip('#stMotion', 'mml_motion', () => { if (lsGet('mml_motion', 'on') === 'off') $('#sakura-container').innerHTML = ''; });
-    flip('#stHero', 'mml_hero_auto');
-    const clearList = (field, name) => async () => {
-      if (!confirm(name + ' සම්පූර්ණයෙන්ම මකන්න ස්ථිර ද?')) return;
-      try {
-        await setDoc(doc(db, 'users', currentUser.uid), { [field]: [] }, { merge: true });
-        userDoc = { ...(userDoc || {}), [field]: [] };
-        alert(name + ' clear කළා ✅');
-      } catch (err) { console.error(err); alert('Error: ' + err.message); }
-    };
-    $('#stClearList')?.addEventListener('click', clearList('myList', 'My List'));
-    $('#stClearSeen')?.addEventListener('click', clearList('seenList', 'Seen List'));
-    $('#stShare').addEventListener('click', async () => {
-      const url = location.origin + location.pathname;
-      try {
-        if (navigator.share) { await navigator.share({ title: 'CineMovieZ', text: 'Watch movies & TV shows on CineMovieZ', url }); return; }
-        await navigator.clipboard.writeText(url); alert('Link එක copy කළා ✅');
-      } catch (e) { if (e && e.name !== 'AbortError') prompt('මේ link එක copy කරන්න:', url); }
-    });
-    $('#stReset').addEventListener('click', () => {
-      if (!confirm('සියලුම settings මුල් තත්ත්වයට ගේන්න ස්ථිර ද?')) return;
-      ['theme', 'mml_accent', 'mml_sakura', 'mml_cols', 'mml_badges', 'mml_motion', 'mml_hero_auto', 'mml_start', 'mml_titles', 'mml_autonext', ...HOME_SECTIONS.map(x => 'mml_sec_' + x.key)].forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
-      applyTheme('dark'); window.mmlApplyAccent('blue'); sakuraOn = true; applyPrefs(); draw();
-    });
-    $('#stLogin')?.addEventListener('click', () => openModal('login'));
-    $('#stLogout')?.addEventListener('click', async () => { if (confirm('Logout කරන්න ස්ථිර ද?')) await signOut(auth); });
   }
   routeAuthCb = draw;
   draw();
 }
 
-/* =========================================================
-   REQUEST page
-   ========================================================= */
 function requestPage() {
   app.innerHTML = `
     <h1 class="page-h1">🎬 Movie/Series Request</h1>
     <div class="request-box">
-      <div class="alert success" id="reqOk"><i class="fa fa-check-circle"></i> Request submitted! Will add soon 💪</div>
-      <div class="alert error" id="reqErr"><i class="fa fa-exclamation-circle"></i> <span id="reqErrText">Error!</span></div>
-      <form id="requestForm" novalidate>
-        <div class="form-group"><label>Your Name</label><input type="text" id="reqName" placeholder="Ex: John" maxlength="60" required></div>
+      <div class="alert success" id="reqOk"><i class="fa fa-check-circle"></i> Request submitted!</div>
+      <form id="requestForm">
+        <div class="form-group"><label>Your Name</label><input type="text" id="reqName" required></div>
         <div class="form-group"><label>Type</label>
           <select id="reqType" required>
             <option value="">Select Type</option><option value="movie">Movie</option>
             <option value="tvshow">TV Series</option><option value="anime">Anime</option>
           </select></div>
-        <div class="form-group"><label>Movie/Series Name</label><input type="text" id="reqTitle" placeholder="Ex: Widow's Bay S01" maxlength="120" required></div>
-        <div class="form-group"><label>Year</label><input type="number" id="reqYear" placeholder="Ex: 2024" min="1900" max="${new Date().getFullYear() + 2}"></div>
-        <div class="form-group"><label>IMDB / TMDB Link</label><input type="url" id="reqLink" placeholder="https://www.imdb.com/title/tt..." maxlength="300"></div>
-        <div class="form-group"><label>Note</label><textarea id="reqNote" placeholder="Ex: Sinhala subtitles or dubbed, 1080p" maxlength="500"></textarea></div>
-        <input class="hp-field" type="text" id="reqWebsite" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <button type="submit" class="btn-submit" id="reqBtn"><i class="fa fa-paper-plane"></i> Request Submit</button>
+        <div class="form-group"><label>Movie/Series Name</label><input type="text" id="reqTitle" required></div>
+        <button type="submit" class="btn-submit">Request Submit</button>
       </form>
-      <p class="info-text">⚡ The request will go to the admin. Once added, it will be displayed on the site.<br>Spam requests are rejected.</p>
     </div>`;
-  const form = $('#requestForm'), ok = $('#reqOk'), err = $('#reqErr'), btn = $('#reqBtn');
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    ok.style.display = 'none'; err.style.display = 'none';
-    const showErr = t => { $('#reqErrText').textContent = t; err.style.display = 'block'; };
-    if ($('#reqWebsite').value) return; // bot trap
-    const name = $('#reqName').value.trim(), type = $('#reqType').value, title = $('#reqTitle').value.trim();
-    if (!name || !type || !title) return showErr('Name, Type සහ Movie/Series Name අනිවාර්යයි.');
-    const link = $('#reqLink').value.trim();
-    if (link && !safeUrl(link)) return showErr('Link එක http:// හෝ https:// වලින් පටන් ගන්න ඕන.');
-    const last = +(localStorage.getItem('mml_last_request') || 0);
-    if (Date.now() - last < 60000) return showErr('විනාඩියක් ඉන්න, ආයෙ request එකක් යවන්න.');
-
-    btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending...';
-    try {
-      await addDoc(collection(db, 'requests'), {
-        name, type, title,
-        year: $('#reqYear').value || '', link,
-        note: $('#reqNote').value.trim(),
-        status: 'pending', createdAt: serverTimestamp()
-      });
-      try { localStorage.setItem('mml_last_request', String(Date.now())); } catch (e2) {}
-      ok.style.display = 'block'; form.reset(); window.scrollTo(0, 0);
-    } catch (ex) {
-      console.error(ex); showErr(ex.message);
-    } finally {
-      btn.disabled = false; btn.innerHTML = '<i class="fa fa-paper-plane"></i> Request Submit';
-    }
-  });
 }
 
-/* =========================================================
-   WATCH page
-   ========================================================= */
 let watchTimers = [];
 let playerOpen = false;
-
-
-
-// Movie එකට කලින් play වෙන intro video එක (index.html තියෙන folder එකේම)
 const DEFAULT_INTRO = 'https://pub-08576c48d56a414dabb33e79de2c0a73.r2.dev/Vinuka/intro-defult.MP4';
 let INTRO_URL = lsGet('mml_intro', DEFAULT_INTRO);
-(async () => {
-  try {
-    const s = await getDoc(doc(db, 'settings', 'intro'));
-    if (s.exists()) {
-      const d = s.data();
-      INTRO_URL = d.enabled === false ? 'off' : (safeUrl(d.url) || DEFAULT_INTRO);
-      lsSet('mml_intro', INTRO_URL);
-    }
-  } catch (e) {}
-})();
 
-
-
-      
 function ytIdFromUrl(url) {
   if (!url) return null;
   if (!/^https?:/i.test(url)) return /^[\w-]{11}$/.test(url) ? url : null;
@@ -1531,7 +1384,7 @@ function ytIdFromUrl(url) {
 }
 function isDirectFileUrl(url) {
   if (!url || /youtube\.com|youtu\.be/.test(url)) return false;
-  return /\.(mp4|mkv|webm|mov|m4v)(\?|$)/i.test(url) || url.includes('r2.dev') || url.includes('r2.cloudflarestorage.com');
+  return /\.(mp4|mkv|webm|mov|m4v)(\?|$)/i.test(url) || url.includes('r2.dev');
 }
 function buildPlayerHTML(rawUrl) {
   const url = safeUrl(rawUrl);
@@ -1545,28 +1398,19 @@ function attachVideoFallback(box, onEnded) {
   const v = box.querySelector('video');
   if (!v) return;
   if (onEnded) v.addEventListener('ended', onEnded, { once: true });
-  v.addEventListener('error', () => { box.innerHTML = '<div class="player-msg"><b>Error: Refresh page or check your network.</b></div>'; }, { once: true });
-  v.muted = false;
-  v.play().catch(err => {
-    if (err && err.name === 'NotAllowedError') {
-      v.muted = true; v.play().catch(() => {});
-      v.addEventListener('playing', () => { v.muted = false; }, { once: true });
-    }
-  });
+  v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });
 }
-// Intro එක එකම player එකේ play කරලා, ඉවර වුනාම (හෝ Skip) movie එක පටන් ගන්නවා
 function playIntroThen(box, startMain) {
-    if (!safeUrl(INTRO_URL)) { startMain(); return; }
-
+  if (!safeUrl(INTRO_URL)) { startMain(); return; }
   box.innerHTML = `<video src="${INTRO_URL}" playsinline autoplay preload="auto"></video><button class="skip-intro">Skip ›</button>`;
   const v = box.querySelector('video');
   let done = false;
   const next = () => { if (done) return; done = true; startMain(); };
   v.addEventListener('ended', next, { once: true });
-  v.addEventListener('error', next, { once: true });   // intro load වෙන්නේ නැත්නම් කෙලින්ම movie එකට
   box.querySelector('.skip-intro').addEventListener('click', next, { once: true });
   v.play().catch(() => { v.muted = true; v.play().catch(next); });
 }
+
 function buildCastHTML(m) {
   let members = Array.isArray(m.castMembers) ? m.castMembers.filter(c => c && c.name) : [];
   if (!members.length && m.cast) members = String(m.cast).split(',').map(s => s.trim()).filter(Boolean).map(name => ({ name }));
@@ -1575,25 +1419,19 @@ function buildCastHTML(m) {
     <div class="cast-wrap">
       <div class="sec-title"><span class="cast-bar"></span> Cast</div>
       <div class="cast-scroll">
-        ${members.map(c => {
-          const initial = (c.name || '?').trim().charAt(0).toUpperCase();
-          const fallback = 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="100%" height="100%" fill="#222"/><text x="50%" y="58%" fill="#fff" font-family="Arial" font-size="32" text-anchor="middle">${esc(initial)}</text></svg>`);
-          return `<div class="cast-item">
-            <img class="cast-photo" src="${esc(safeUrl(c.photo) || fallback)}" alt="${esc(c.name)}" loading="lazy">
+        ${members.map(c => `
+          <div class="cast-item">
             <div class="cast-name">${esc(c.name)}</div>
-            ${c.character ? `<div class="cast-role">${esc(c.character)}</div>` : ''}
-          </div>`;
-        }).join('')}
+          </div>`).join('')}
       </div>
     </div>`;
 }
 
-/* My List / Seen — users/{uid}.myList / seenList */
 const slim = m => ({ id: m.id, title: m.title || '', poster: safeUrl(m.poster) });
 async function loadUserDoc() {
   if (!currentUser) return {};
   try { const s = await getDoc(doc(db, 'users', currentUser.uid)); return s.exists() ? s.data() : {}; }
-  catch (e) { console.error(e); return {}; }
+  catch (e) { return {}; }
 }
 async function listHas(field, id) {
   const d = await loadUserDoc();
@@ -1606,7 +1444,7 @@ async function toggleInList(field, m) {
   const existing = arr.find(x => x.id === m.id);
   await setDoc(doc(db, 'users', currentUser.uid), { [field]: existing ? arrayRemove(existing) : arrayUnion(slim(m)) }, { merge: true });
   userDoc = { ...(userDoc || {}), [field]: existing ? arr.filter(x => x.id !== m.id) : [...arr, slim(m)] };
-  stateVer++;   // Home එකේ My List refresh වෙන්න
+  stateVer++;
   if (field === 'myList' && !existing) track('saves', m);
   return !existing;
 }
@@ -1617,7 +1455,7 @@ async function markSeen(m) {
     if ((Array.isArray(d.seenList) ? d.seenList : []).some(x => x.id === m.id)) return;
     await setDoc(doc(db, 'users', currentUser.uid), { seenList: arrayUnion(slim(m)) }, { merge: true });
     userDoc = { ...(userDoc || {}), seenList: [...(Array.isArray(d.seenList) ? d.seenList : []), slim(m)] };
-  } catch (e) { console.error(e); }
+  } catch (e) {}
 }
 
 function renderMovie(m) {
@@ -1630,7 +1468,6 @@ function renderMovie(m) {
 
   let meta = `<span>${esc(m.year || 'N/A')}</span>`;
   if (m.rating) meta += `<span class="rating"><i class="fa fa-star"></i> ${esc(m.rating)}</span>`;
-  if (m.duration && !series) meta += `<span>${esc(m.duration)}</span>`;
   if (series) meta += `<span>TV Series</span>`;
   genreTags.forEach(g => meta += `<span>${esc(g)}</span>`);
 
@@ -1658,8 +1495,6 @@ function renderMovie(m) {
     <div class="details-body">
       <div class="details-actions">
         <button class="btn btn-primary" id="watchNowBtn"><i class="fa fa-play"></i> Watch Now</button>
-        ${m.trailer ? `<button class="btn btn-secondary" id="trailerBtn"><i class="fa fa-film"></i> Trailer</button>` : ''}
-        <button class="btn btn-secondary" id="shareBtn" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
         <button class="btn btn-outline" id="myListBtn"><i class="fa-regular fa-bookmark"></i> My List</button>
       </div>
     </div>
@@ -1672,8 +1507,7 @@ function renderMovie(m) {
       <p class="details-desc">${esc(m.description || 'Description එකක් නෑ.')}</p>
     </div>
     ${episodesHTML}
-    ${buildCastHTML(m)}
-    <div id="relatedWrap"></div>`;
+    ${buildCastHTML(m)}`;
 
   const playerWrap = $('#playerWrap'), playerBox = $('#playerBox'), label = $('#nowPlayingLabel');
   const episodesSection = $('#episodesSection');
@@ -1693,10 +1527,9 @@ function renderMovie(m) {
     playerBox.innerHTML = `<div class="player-poster" ${bg ? `style="background-image:url('${bg}')"` : ''}><div class="player-play-btn"><i class="fa fa-play"></i></div></div>`;
     const startMain = () => { playerBox.innerHTML = buildPlayerHTML(url); attachVideoFallback(playerBox, onEnd); markSeen(m); track('plays', m); };
     const begin = () => playIntroThen(playerBox, startMain);
-    if (auto) startMain();            // auto-next episode එකට intro නෑ (ඕන නම් මේක begin() කරන්න)
+    if (auto) startMain();
     else $('.player-poster', playerBox).addEventListener('click', begin, { once: true });
     playerOpen = true;
-    playerWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
   function closePlayer() {
     playerWrap.classList.remove('active'); playerBox.innerHTML = ''; label.textContent = ''; playerOpen = false;
@@ -1710,7 +1543,6 @@ function renderMovie(m) {
     }
     if (series && episodesSection) {
       episodesVisible = true; episodesSection.style.display = ''; updateWatchBtn();
-      episodesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
       playUrl(m.videoUrl, m.title); updateWatchBtn();
     }
@@ -1729,18 +1561,13 @@ function renderMovie(m) {
         </div>
         <i class="fa fa-play episode-play-icon"></i>
       </div>`).join('');
-    const items = $$('.episode-item', list);
-    items.forEach((item, idx) => {
+    $$('.episode-item', list).forEach((item, idx) => {
       const play = auto => {
         const e = eps[+item.dataset.i];
-        items.forEach(x => x.classList.remove('playing'));
-        item.classList.add('playing');
-        const onEnd = lsGet('mml_autonext', 'on') !== 'off' && items[idx + 1] ? () => items[idx + 1].dispatchEvent(new CustomEvent('autoplay')) : null;
-        playUrl(e.videoUrl, `S${e.season || 1} · E${e.episode || 1}${e.title ? ' — ' + e.title : ''}`, onEnd, auto === true);
+        playUrl(e.videoUrl, `S${e.season || 1} · E${e.episode || 1}`, null, auto === true);
         updateWatchBtn();
       };
       item.addEventListener('click', () => play(false));
-      item.addEventListener('autoplay', () => play(true));
     });
   }
   if (series && episodes.length) {
@@ -1748,22 +1575,6 @@ function renderMovie(m) {
     $('#seasonSelect')?.addEventListener('change', e => renderEpisodes(e.target.value));
   }
 
-  if (m.trailer) {
-    const modal = $('#trailerModal'), box = $('#trailerPlayerBox');
-    const close = () => { modal.classList.remove('active'); box.innerHTML = ''; };
-    $('#trailerBtn').addEventListener('click', () => {
-      track('trailers', m);
-      const id = ytIdFromUrl(m.trailer);
-      box.innerHTML = id ? `<iframe src="https://www.youtube.com/embed/${esc(id)}?autoplay=1" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>` : buildPlayerHTML(m.trailer);
-      attachVideoFallback(box);
-      modal.classList.add('active');
-    });
-    $('#trailerClose').onclick = close;
-    modal.onclick = e => { if (e.target === modal) close(); };
-    watchTimers.push(close); // route මාරු වුනාම trailer එක නවත්තන්න
-  }
-
-  // My List button
   const listBtn = $('#myListBtn');
   const paint = inList => {
     listBtn.innerHTML = inList ? '<i class="fa-solid fa-bookmark"></i> Saved' : '<i class="fa-regular fa-bookmark"></i> My List';
@@ -1771,79 +1582,29 @@ function renderMovie(m) {
   };
   if (currentUser) listHas('myList', m.id).then(paint);
   listBtn.addEventListener('click', async () => {
-    listBtn.disabled = true;
-    try { const r = await toggleInList('myList', m); if (r !== null) paint(r); }
-    catch (e) { console.error(e); alert('Error: ' + e.message); }
-    finally { listBtn.disabled = false; }
+    const r = await toggleInList('myList', m);
+    if (r !== null) paint(r);
   });
-
-  // Share
-  $('#shareBtn').addEventListener('click', async () => {
-    track('shares', m);
-    const url = location.href;
-    try {
-      if (navigator.share) { await navigator.share({ title: m.title || 'CineMovieZ', text: (m.title || '') + ' — CineMovieZ', url }); return; }
-      await navigator.clipboard.writeText(url); alert('Link එක copy කළා ✅');
-    } catch (e) { if (e && e.name !== 'AbortError') prompt('මේ link එක copy කරන්න:', url); }
-  });
-
-  // More Like This
-  const tagsOf = x => String(x.genre || '').split(',').map(g => g.trim().toLowerCase()).filter(Boolean);
-  const myTags = tagsOf(m);
-  function fillRelated() {
-    const box = $('#relatedWrap');
-    if (!box) return;
-    const rel = dedupeByTitle(allMovies.filter(x => x.id !== m.id && isSeries(x) === series))
-      .map(x => ({ x, n: tagsOf(x).filter(t => myTags.includes(t)).length }))
-      .filter(o => o.n > 0).sort((a, b) => b.n - a.n || ts(b.x) - ts(a.x)).slice(0, 9).map(o => o.x);
-    box.innerHTML = rel.length ? `<div class="related-wrap"><div class="sec-title"><span class="cast-bar"></span> More Like This</div><div class="movie-grid">${rel.map(x => cardHTML(x, series)).join('')}</div></div>` : '';
-  }
-  fillRelated();
-  onDataUpdate = fillRelated;
 }
 
 async function watchPage(id, token) {
   playerOpen = false;
-  if (!id) return renderNotFound();
-  let shown = null;
-  const readCached = () => { try { return JSON.parse(localStorage.getItem(MOVIE_CACHE_PREFIX + id) || 'null'); } catch (e) { return null; } };
-  const cached = readCached() || allMovies.find(m => m.id === id) || null;
-  if (cached) { renderMovie(cached); shown = JSON.stringify(cached); trackOnce('views', cached); }
+  if (!id) return;
+  const cached = allMovies.find(m => m.id === id) || null;
+  if (cached) { renderMovie(cached); trackOnce('views', cached); }
   else app.innerHTML = '<div class="empty-note">Loading…</div>';
-
-  let result = null;
-  for (let i = 1; i <= 6; i++) {
-    if (token !== routeToken) return;
-    try {
-      const snap = await getDoc(doc(db, 'movies', id));
-      result = snap.exists() ? { exists: true, data: { ...snap.data(), id: snap.id } } : { exists: false };
-      break;
-    } catch (err) {
-      console.error(`Firebase fetch error (attempt ${i}):`, err);
-      if (i < 6) await sleep(1500);
+  try {
+    const snap = await getDoc(doc(db, 'movies', id));
+    if (snap.exists()) {
+      const data = { ...snap.data(), id: snap.id };
+      trackOnce('views', data);
+      if (!playerOpen) renderMovie(data);
     }
-  }
-  if (token !== routeToken) return;
-  if (result && !result.exists) { try { localStorage.removeItem(MOVIE_CACHE_PREFIX + id); } catch (e) {} return renderNotFound(); }
-  if (result && result.exists) {
-    try { localStorage.setItem(MOVIE_CACHE_PREFIX + id, JSON.stringify(result.data)); } catch (e) {}
-    // Player එක open නම් / data වෙනස් නැත්නම් re-render කරන්නේ නෑ (video එක නවතින එක වළක්වන්න)
-    trackOnce('views', result.data);
-    if (!playerOpen && JSON.stringify(result.data) !== shown) renderMovie(result.data);
-    return;
-  }
-  if (!cached) app.innerHTML = '<div class="empty-note">Load කරගන්න බැරි උනා. Network එක check කරලා page එක refresh කරන්න.</div>';
-}
-function renderNotFound() {
-  app.innerHTML = `<div class="empty-note"><i class="fa fa-ghost" style="font-size:34px;display:block;margin-bottom:10px"></i>Movie / TV Show එක හමු නොවීය.<br><a class="link-pink" href="#/home" style="font-weight:600">← Back to Home</a></div>`;
+  } catch (e) {}
 }
 
-/* =========================================================
-   AUTH (login / signup / logout / menu)
-   ========================================================= */
 let currentUser = null, authReady = false, userDoc = null;
 let routeAuthCb = null;
-
 const normUsername = u => (u || '').trim().toLowerCase();
 async function usernameTaken(u) { return (await getDoc(doc(db, 'usernames', normUsername(u)))).exists(); }
 async function emailForUsername(u) {
@@ -1863,14 +1624,13 @@ function openModal(section) {
 }
 const closeModal = () => authOverlay.classList.remove('active');
 $('#mmlAuthClose').addEventListener('click', closeModal);
-authOverlay.addEventListener('click', e => { if (e.target === authOverlay) closeModal(); });
 $('#mmlGoSignup').addEventListener('click', () => openModal('signup'));
 $('#mmlGoLogin').addEventListener('click', () => openModal('login'));
 
 function renderAuthBtnAvatar(label, photoURL) {
-  const u = safeUrl(photoURL) || (/^data:image\//.test(photoURL || '') ? photoURL : '');
+  const u = safeUrl(photoURL);
   if (u) authBtn.innerHTML = `<img src="${esc(u)}" alt="">`;
-  else authBtn.textContent = (label || '?').trim().charAt(0).toUpperCase() || '?';
+  else authBtn.textContent = (label || '?').trim().charAt(0).toUpperCase();
 }
 authBtn.addEventListener('click', () => {
   if (!currentUser) { openModal('login'); return; }
@@ -1879,76 +1639,17 @@ authBtn.addEventListener('click', () => {
   authMenu.style.right = (window.innerWidth - r.right) + 'px';
   authMenu.classList.toggle('active');
 });
-document.addEventListener('click', e => {
-  if (!authMenu.contains(e.target) && !authBtn.contains(e.target)) authMenu.classList.remove('active');
-});
 $('#mmlLogoutBtn').addEventListener('click', async () => { await signOut(auth); authMenu.classList.remove('active'); });
 $('#mmlProfileBtn').addEventListener('click', () => { authMenu.classList.remove('active'); if (currentUser) location.hash = '#/profile'; });
-
-$('#mmlSignupBtn').addEventListener('click', async () => {
-  const username = $('#mmlSignupUsername').value.trim();
-  const email = $('#mmlSignupEmail').value.trim();
-  const password = $('#mmlSignupPassword').value;
-  const firstName = $('#mmlSignupFirstName').value.trim();
-  const lastName = $('#mmlSignupLastName').value.trim();
-  const btn = $('#mmlSignupBtn');
-  signupError.textContent = '';
-  if (!username || !email || !password) { signupError.textContent = 'Username, Email, Password අනිවාර්යයි'; return; }
-  if (password.length < 6) { signupError.textContent = 'Password එකේ අඩුම වශයෙන් අකුරු 6ක් ඕන'; return; }
-  if (!/^[a-zA-Z0-9_.]{3,20}$/.test(username)) { signupError.textContent = 'Username එකේ letters/numbers/underscore/dot විතරයි (අකුරු 3-20)'; return; }
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
-  try {
-    if (await usernameTaken(username)) { signupError.textContent = 'මේ Username එක දැනටමත් පාවිච්චි කරලා. වෙන එකක් try කරන්න.'; return; }
-    const cred = await createUserWithEmailAndPassword(auth, email, password);
-    const uid = cred.user.uid;
-    await updateProfile(cred.user, { displayName: username }).catch(() => {});
-    await setDoc(doc(db, 'usernames', normUsername(username)), { email, uid });
-    await setDoc(doc(db, 'users', uid), { username, email, firstName, lastName, createdAt: new Date().toISOString() });
-    closeModal();
-  } catch (err) {
-    console.error(err);
-    signupError.textContent =
-      err.code === 'auth/email-already-in-use' ? 'මේ Email එක දැනටමත් register වෙලා තියෙනවා.' :
-      err.code === 'auth/invalid-email' ? 'Email address එක වැරදියි.' :
-      err.code === 'auth/weak-password' ? 'Password එක දුර්වලයි.' : 'Error: ' + err.message;
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa fa-user-plus"></i> Sign up';
-  }
-});
 
 $('#mmlLoginBtn').addEventListener('click', async () => {
   const username = $('#mmlLoginUsername').value.trim();
   const password = $('#mmlLoginPassword').value;
-  const stay = $('#mmlLoginStay').checked;
-  const btn = $('#mmlLoginBtn');
-  loginError.textContent = '';
-  if (!username || !password) { loginError.textContent = 'Username සහ Password දෙකම දාන්න'; return; }
-  btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
   try {
     const email = await emailForUsername(username);
-    if (!email) { loginError.textContent = 'Username හෝ Password වැරදියි.'; return; }
-    await setPersistence(auth, stay ? browserLocalPersistence : browserSessionPersistence);
     await signInWithEmailAndPassword(auth, email, password);
     closeModal();
-  } catch (err) {
-    console.error(err);
-    loginError.textContent = ['auth/wrong-password', 'auth/invalid-credential', 'auth/user-not-found'].includes(err.code)
-      ? 'Username හෝ Password වැරදියි.' : err.code === 'auth/too-many-requests' ? 'ඉතා වැඩි උත්සාහයන්. ටිකක් ඉඳලා try කරන්න.' : 'Error: ' + err.message;
-  } finally {
-    btn.disabled = false; btn.innerHTML = '<i class="fa fa-sign-in-alt"></i> Sign in';
-  }
-});
-['mmlLoginUsername', 'mmlLoginPassword'].forEach(id => $('#' + id).addEventListener('keydown', e => { if (e.key === 'Enter') $('#mmlLoginBtn').click(); }));
-
-$('#mmlForgotBtn').addEventListener('click', async () => {
-  const raw = (prompt('Password reset කරන්න ඔයාගේ Username එක හෝ Email එක දාන්න:') || '').trim();
-  if (!raw) return;
-  try {
-    const email = raw.includes('@') ? raw : await emailForUsername(raw);
-    if (!email) { alert('මේ Username/Email එකට account එකක් හම්බුනේ නෑ.'); return; }
-    await sendPasswordResetEmail(auth, email);
-    alert('Password reset link එකක් ' + email + ' වලට යවලා තියෙනවා.');
-  } catch (err) { alert('Error: ' + err.message); }
+  } catch (err) { loginError.textContent = 'Login failed.'; }
 });
 
 onAuthStateChanged(auth, async user => {
@@ -1966,186 +1667,20 @@ onAuthStateChanged(auth, async user => {
   authReady = true;
   stateVer++;
   routeAuthCb && routeAuthCb();
-  const pgA = pageCache[curName]; if (pgA) pgA.ver = stateVer;
 });
 
-/* =========================================================
-   PROFILE page
-   ========================================================= */
-function resizeImageToDataURL(file, size = 240, quality = 0.82) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error('Image එක read කරගන්න බැරි උනා'));
-    reader.onload = () => {
-      const img = new Image();
-      img.onerror = () => reject(new Error('Image file එක invalid'));
-      img.onload = () => {
-        const c = document.createElement('canvas'); c.width = c.height = size;
-        const scale = Math.max(size / img.width, size / img.height);
-        const w = img.width * scale, h = img.height * scale;
-        c.getContext('2d').drawImage(img, (size - w) / 2, (size - h) / 2, w, h);
-        resolve(c.toDataURL('image/jpeg', quality));
-      };
-      img.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function profilePage() {
-  let editing = false, tab = 'list';
-  const gridHTML = (items, emptyText) => items.length
-    ? `<div class="profile-list-grid">${items.map(it => `
-        <a class="movie-card" href="#/watch/${encodeURIComponent(it.id || '')}"><img src="${esc(safeUrl(it.poster) || PH)}" alt="${esc(it.title || '')}" loading="lazy"></a>`).join('')}</div>`
-    : `<div class="empty-note">${emptyText}</div>`;
-
-  function draw() {
-    if (!authReady) { app.innerHTML = '<div class="empty-note">Loading…</div>'; return; }
-    if (!currentUser) {
-      app.innerHTML = `
-        <div class="profile-wrap"><div class="profile-loggedout">
-          <i class="fa fa-user-circle"></i>
-          <h2>Log in to view your Profile</h2>
-          <p>Account එකකට log in වුනොත් My List, Seen List සහ Profile settings බලාගන්න පුළුවන්.</p>
-          <button class="btn btn-primary" id="goLoginBtn"><i class="fa fa-sign-in-alt"></i> Log in</button>
-        </div></div>`;
-      $('#goLoginBtn').addEventListener('click', () => openModal('login'));
-      return;
-    }
-    const d = userDoc || {};
-    const label = d.username || currentUser.displayName || (currentUser.email || '').split('@')[0] || '?';
-    const fullName = [d.firstName, d.lastName].filter(Boolean).join(' ');
-    const myList = Array.isArray(d.myList) ? d.myList : [];
-    const seenList = Array.isArray(d.seenList) ? d.seenList : [];
-    const photo = safeUrl(d.photoURL) || (/^data:image\//.test(d.photoURL || '') ? d.photoURL : '');
-    let joined = '';
-    if (d.createdAt) { const dt = new Date(d.createdAt); if (!isNaN(dt)) joined = 'Joined Date: ' + dt.toISOString().slice(0, 10); }
-
-    app.innerHTML = `
-      <div class="profile-wrap">
-        <div class="profile-card">
-          <div class="profile-avatar-wrap">
-            <div class="profile-avatar" id="pfAvatar">${photo ? `<img src="${esc(photo)}" alt="">` : esc(label.charAt(0).toUpperCase())}</div>
-            <div class="profile-edit-badge" id="pfBadge" title="Change profile photo"><i class="fa fa-pen"></i></div>
-          </div>
-          <input type="file" id="pfFile" accept="image/*" style="display:none">
-          ${editing ? `
-            <div class="profile-edit-form">
-              <div class="profile-error" id="pfError"></div>
-              <div class="profile-static-field"><b>Username:</b> ${esc(label)}</div>
-              <div class="profile-static-field"><b>Email:</b> ${esc(d.email || currentUser.email || '—')}</div>
-              <div class="row">
-                <input type="text" id="pfFirst" placeholder="Name" value="${esc(d.firstName || '')}">
-                <input type="text" id="pfLast" placeholder="Last name" value="${esc(d.lastName || '')}">
-              </div>
-              <div class="profile-edit-actions">
-                <button class="profile-cancel-btn" id="pfCancel">Cancel</button>
-                <button class="profile-save-btn" id="pfSave"><i class="fa fa-save"></i> Save</button>
-              </div>
-            </div>` : `
-            <div class="profile-name">${esc(fullName || label)}</div>
-            <button class="profile-edit-btn" id="pfEdit"><i class="fa fa-pen"></i> Edit Profile</button>
-            <div class="profile-joined">${esc(joined)}</div>`}
-        </div>
-
-        <div class="profile-stats">
-          <div class="profile-stat"><div class="profile-stat-num">${myList.length}</div><div class="profile-stat-label">My List</div></div>
-          <div class="profile-stat"><div class="profile-stat-num">${seenList.length}</div><div class="profile-stat-label">Seen List</div></div>
-          <div class="profile-stat"><div class="profile-stat-num">${Array.isArray(d.sharedLinks) ? d.sharedLinks.length : 0}</div><div class="profile-stat-label">Shared Links</div></div>
-          <div class="profile-stat"><div class="profile-stat-num">${Number(d.commentsCount) || 0}</div><div class="profile-stat-label">Comments</div></div>
-        </div>
-
-        <div class="profile-tabs">
-          ${[['list', 'fa-solid fa-table-cells-large', 'List'], ['seen', 'fa fa-eye', 'Seen'], ['links', 'fa fa-link', 'Links'], ['settings', 'fa fa-cog', 'Settings']]
-            .map(([k, ic, t]) => `<div class="profile-tab ${tab === k ? 'active' : ''}" data-tab="${k}"><i class="${ic}"></i> ${t}</div>`).join('')}
-        </div>
-        <div>
-          ${tab === 'list' ? gridHTML(myList, 'No content available on your list.') : ''}
-          ${tab === 'seen' ? gridHTML(seenList, 'No content available on your seen list.') : ''}
-          ${tab === 'links' ? '<div class="empty-note">No shared links yet.</div>' : ''}
-          ${tab === 'settings' ? `
-            <button class="settings-item" id="pfChangePw"><span><i class="fa fa-key left"></i> Change Password</span><i class="fa fa-chevron-right right"></i></button>
-            <button class="settings-item danger" id="pfDelete"><span><i class="fa fa-user-xmark left"></i> Delete Account</span><i class="fa fa-chevron-right right"></i></button>
-            <button class="settings-item danger" id="pfLogout"><span><i class="fa fa-right-from-bracket left"></i> Logout</span><i class="fa fa-chevron-right right"></i></button>` : ''}
-        </div>
-      </div>`;
-
-    $$('.profile-tab').forEach(t => t.addEventListener('click', () => { tab = t.dataset.tab; draw(); }));
-    $('#pfEdit')?.addEventListener('click', () => { editing = true; draw(); });
-    $('#pfCancel')?.addEventListener('click', () => { editing = false; draw(); });
-    $('#pfSave')?.addEventListener('click', async () => {
-      const btn = $('#pfSave');
-      const firstName = $('#pfFirst').value.trim(), lastName = $('#pfLast').value.trim();
-      btn.disabled = true; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Saving...';
-      try {
-        await setDoc(doc(db, 'users', currentUser.uid), { firstName, lastName }, { merge: true });
-        userDoc = { ...userDoc, firstName, lastName }; editing = false; draw();
-      } catch (err) {
-        console.error(err); $('#pfError').textContent = 'Error: ' + err.message;
-        btn.disabled = false; btn.innerHTML = '<i class="fa fa-save"></i> Save';
-      }
-    });
-    $('#pfBadge').addEventListener('click', () => $('#pfFile').click());
-    $('#pfFile').addEventListener('change', async e => {
-      const file = e.target.files[0]; e.target.value = '';
-      if (!file) return;
-      if (!file.type.startsWith('image/')) { alert('කරුණාකර Image file එකක් තෝරන්න'); return; }
-      $('#pfAvatar').innerHTML = '<i class="fa fa-spinner fa-spin"></i>';
-      try {
-        const dataUrl = await resizeImageToDataURL(file);
-        await setDoc(doc(db, 'users', currentUser.uid), { photoURL: dataUrl }, { merge: true });
-        userDoc = { ...userDoc, photoURL: dataUrl };
-        renderAuthBtnAvatar(label, dataUrl); draw();
-      } catch (err) { console.error(err); alert('Error: ' + err.message); draw(); }
-    });
-    $('#pfChangePw')?.addEventListener('click', async () => {
-      if (!currentUser.email) return;
-      try { await sendPasswordResetEmail(auth, currentUser.email); alert('Password reset link එකක් ' + currentUser.email + ' වලට යවලා තියෙනවා.'); }
-      catch (err) { alert('Error: ' + err.message); }
-    });
-    $('#pfDelete')?.addEventListener('click', async () => {
-      if (!confirm('ඔබේ account එක සහ දත්ත ස්ථිරවම මැකෙනවා. ඉදිරියට යනවාද?')) return;
-      const pw = prompt('තහවුරු කරන්න ඔබේ Password එක දාන්න:');
-      if (!pw) return;
-      const user = currentUser;
-      try {
-        await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, pw));
-        const uname = normUsername((userDoc && userDoc.username) || user.displayName);
-        await deleteDoc(doc(db, 'users', user.uid));
-        if (uname) await deleteDoc(doc(db, 'usernames', uname)).catch(() => {});
-        await deleteUser(user);
-        alert('Account එක මකා දැමුවා.');
-        location.hash = '#/home';
-      } catch (err) {
-        console.error(err);
-        alert(['auth/wrong-password', 'auth/invalid-credential'].includes(err.code) ? 'Password එක වැරදියි.' : 'Error: ' + err.message);
-      }
-    });
-    $('#pfLogout')?.addEventListener('click', async () => {
-      if (!confirm('Logout කරන්න ස්ථිර ද?')) return;
-      await signOut(auth); location.hash = '#/home';
-    });
-  }
-  routeAuthCb = draw;
-  draw();
-}
-
-/* =========================================================
-   ROUTER  (#/home, #/movies, #/watch/ID ...)
-   ========================================================= */
 const routes = {
   home:     { nav: 'home',     render: homePage },
   movies:   { nav: 'movies',   render: listPage({ title: 'All Movies', filter: m => hasSection(m, 'allmovies') }) },
   lkcinema: { nav: 'lkcinema', render: listPage({ title: 'LK Cinema', filter: m => hasSection(m, 'cinema') }) },
   anime:    { nav: 'anime',    render: listPage({ title: 'Anime', filter: m => hasSection(m, 'anime') }) },
-  series:   { nav: 'series',   render: listPage({ title: 'TV Shows', series: true, filter: m => hasSection(m, 'series') || m.type === 'series' }) },
+  series:   { nav: 'series',   render: seriesPage() }, // TV Shows with Filters
   request:  { nav: 'request',  render: requestPage },
   chanels:  { nav: 'chanels',  render: channelsPage },
   about:    { nav: 'about',    render: aboutPage },
   privacy:  { nav: '',         render: privacyPage },
   contact:  { nav: 'contact',  render: contactPage },
   settings: { nav: 'settings', render: settingsPage },
-  profile:  { nav: 'profile',  render: profilePage },
   watch:    { nav: '',         render: null }
 };
 let routeToken = 0;
@@ -2160,15 +1695,9 @@ function cleanupRoute() {
   setSidebar(false); closeSearch();
 }
 
-const CACHED_ROUTES = new Set(['home', 'movies', 'lkcinema', 'anime', 'series']);
 let tmpEl = null;
-
 function router() {
   const token = ++routeToken;
-  // පිටවෙන page එකේ scroll position එක save කරගන්නවා
-  const prev = pageCache[curName];
-  if (prev) prev.scrollY = window.scrollY;
-  if (curName === 'settings' || curName === 'profile') stateVer++;   // settings / lists වෙනස් වෙලා ඇති
   cleanupRoute();
   routeCount++;
   const parts = location.hash.replace(/^#\/?/, '').split('/');
@@ -2177,34 +1706,10 @@ function router() {
   const route = routes[key];
   curName = key;
   document.body.classList.toggle('on-watch', name === 'watch');
-  menuBtn.setAttribute('aria-label', name === 'watch' ? 'Back' : 'Menu');
   $$('[data-route]').forEach(el => el.classList.toggle('active', el.dataset.route === route.nav));
 
-  // සියලුම page hide කරනවා, තාවකාලික page එක අයින් කරනවා
   [...appRoot.children].forEach(el => { el.style.display = 'none'; });
   if (tmpEl) { tmpEl.remove(); tmpEl = null; }
-
-  if (CACHED_ROUTES.has(key)) {
-    let pg = pageCache[key];
-    if (!pg) {
-      const el = document.createElement('div');
-      el.className = 'route-page route-cached';
-      appRoot.appendChild(el);
-      app = el;
-      window.scrollTo(0, 0);
-      route.render();
-      pageCache[key] = { el, onData: onDataUpdate, auth: routeAuthCb, ver: stateVer, scrollY: 0 };
-    } else {
-      // කලින් හදපු page එකම ආයෙත් පෙන්නනවා — poster / hero ආයෙ load වෙන්නේ නෑ
-      pg.el.style.display = '';
-      app = pg.el;
-      onDataUpdate = pg.onData; routeAuthCb = pg.auth;
-      if (pg.ver !== stateVer) { pg.onData && pg.onData(); pg.ver = stateVer; }   // data වෙනස් වෙලා නම් විතරයි refresh
-      if (key === 'home' && heroRestart) heroRestart();
-      window.scrollTo(0, pg.scrollY || 0);
-    }
-    return;
-  }
 
   tmpEl = document.createElement('div');
   tmpEl.className = 'route-page';
@@ -2214,100 +1719,11 @@ function router() {
   if (name === 'watch') watchPage(decodeURIComponent(parts.slice(1).join('/')), token);
   else route.render();
 }
-try { history.scrollRestoration = 'manual'; } catch (e) {}
 window.addEventListener('hashchange', router);
-
-// පරණ watch.html?id=XXX links වලට support
-(function legacy() {
-  const id = new URLSearchParams(location.search).get('id');
-  if (id && !location.hash) { history.replaceState(null, '', location.pathname); location.hash = '#/watch/' + encodeURIComponent(id); }
-})();
-
-{
-  const sp = lsGet('mml_start', 'home');
-  if (!location.hash && sp !== 'home' && routes[sp]) history.replaceState(null, '', '#/' + sp);
-}
 loadMovies();
 router();
 trackVisit();
-
-/* PWA — service worker */
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW register failed', e)));
-}
 </script>
-
-
-
-
-
-
-
-<!-- ===== ADS SYSTEM - START ===== -->
-<div id="ads-container"></div>
-
-<script>
-  // Ad එක Close කරන Function එක
-  function closeAd() {
-    var ad = document.getElementById('requestAdPopup');
-    if (ad) ad.style.display = 'none';
-    // Skip කරාම මේ පාරට ආයේ පෙන්නේ නෑ, Site එක ආයේ Open කරාම ආයේ එනවා
-    sessionStorage.setItem('requestAdSkipped', 'yes');
-  }
-
-  // ads.html එක Load කරනවා
-  function loadAds() {
-    // Skip කරලා තියෙනවනම් Load කරන්නේ නෑ
-    if (sessionStorage.getItem('requestAdSkipped') === 'yes') return;
-
-    fetch('ads.html')
-      .then(function(res) { return res.text(); })
-      .then(function(html) {
-        document.getElementById('ads-container').innerHTML = html;
-
-        // Background එක Click කරත් Close වෙනවා
-        var popup = document.getElementById('requestAdPopup');
-        if (popup) {
-          popup.addEventListener('click', function(e) {
-            if (e.target.id === 'requestAdPopup') closeAd();
-          });
-        }
-      })
-      .catch(function(err) {
-        console.log('Ads load failed', err);
-      });
-  }
-
-  // Page එක Load වෙද්දි Ads Load කරනවා
-  window.addEventListener('load', loadAds);
-</script>
-<!-- ===== ADS SYSTEM - END ===== -->
-
-
-
-
-
-
-
-
-
-
-
-<!-- ===== LOOK SYSTEM - START ===== -->
-<div id="look-container"></div>
-<script>
-  // look.html එක Load කරනවා - Christmas / Depavali වගේ Look වෙනස් කරන්න
-  fetch('look.html')
-    .then(function(res){ return res.text(); })
-    .then(function(html){
-      document.getElementById('look-container').innerHTML = html;
-    })
-    .catch(function(){});
-</script>
-<!-- ===== LOOK SYSTEM - END ===== -->
-
-
-
 
 </body>
 </html>
