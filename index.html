@@ -103,7 +103,14 @@ header#mainHeader {
 .header-left, .header-right { display:flex; align-items:center; }
 .header-right i { font-size:20px; margin-left:20px; cursor:pointer; color:var(--text); }
 .logo a { display:flex; align-items:center; }
-.logo svg { height:40px; width:auto; display:block; }
+.logo img,
+.logo svg {
+    height: 40px;
+    width: auto;
+    max-width: 145px;
+    display: block;
+    object-fit: contain;
+}
 
 .mml-auth-btn {
   width:38px; height:38px; min-width:38px; border-radius:50%;
